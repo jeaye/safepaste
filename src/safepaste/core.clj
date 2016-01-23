@@ -1,40 +1,26 @@
 (ns safepaste.core
   (:gen-class)
-  (:require [clojure.data.codec.base64 :as b64])
-  (:import (javax.crypto Cipher KeyGenerator SecretKey)
-           (javax.crypto.spec SecretKeySpec)
-           (java.security SecureRandom)))
+  (:require [buddy.core.crypto :as crypto]
+            [buddy.core.codecs :as codecs]
+            [buddy.core.nonce :as nonce]
+            [buddy.core.hash :as hash]))
 
-(defn string->bytes [s]
-  (.getBytes s "UTF-8"))
+(def original-text
+  (codecs/str->bytes "Hello World."))
 
-(defn base64 [b]
-  (String. (b64/encode b) "UTF-8"))
+(def iv (nonce/random-bytes 16))   ;; 16 byte random iv
+(def secret-key (hash/sha512 "mysecret")) ;; 64 byte key
 
-(defn debase64 [b]
-  (String. (b64/decode b) "UTF-8"))
+;; Encrypt the original-text content using previously
+;; declared iv and key.
+(def encrypted (crypto/encrypt original-text secret-key iv
+                               {:algorithm :aes256-cbc-hmac-sha512}))
 
-(defn get-raw-key [seed]
-  (let [keygen (KeyGenerator/getInstance "AES")
-        sr (SecureRandom/getInstance "SHA1PRNG")]
-    (.setSeed sr (string->bytes seed))
-    (.init keygen 128 sr)
-    (.. keygen generateKey getEncoded)))
-
-(defn get-cipher [mode seed]
-  (let [key-spec (SecretKeySpec. (get-raw-key seed) "AES")
-        cipher (Cipher/getInstance "AES")]
-    (.init cipher mode key-spec)
-    cipher))
-
-(defn encrypt [text key]
-  (let [bytes (string->bytes text)
-        cipher (get-cipher Cipher/ENCRYPT_MODE key)]
-    (base64 (.doFinal cipher bytes))))
-
-(defn decrypt [text key]
-  (let [cipher (get-cipher Cipher/DECRYPT_MODE key)]
-    (String. (.doFinal cipher (debase64 (string->bytes text))))))
+;; And now, decrypt it using the same parameters:
+(def decrypted
+  (-> (crypto/decrypt encrypted secret-key iv {:algorithm :aes256-cbc-hmac-sha512})
+      (codecs/bytes->str)))
 
 (defn -main [& args]
-  (println (encrypt "message" "key")))
+  (println (str encrypted))
+  (println decrypted))
