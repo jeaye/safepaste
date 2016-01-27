@@ -13,9 +13,10 @@
 ;      (prn response)))
 
 ; TODO: Read text box; encrypt data
-(go (let [response (<! (http/post "/api/new"
-                                  {:json-params {:data "meow"}}))]
+(go (let [post-reply (<! (http/post "/api/new"
+                                    {:json-params {:data "meow"}}))]
       ; TODO: Verify json; show url
-      (prn response)))
+      (go (let [get-reply (<! (http/get (str "/api/" (:body post-reply))))]
+            (println (:body get-reply))))))
 
 (println "sent!")

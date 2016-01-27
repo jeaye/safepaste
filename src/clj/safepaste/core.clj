@@ -11,7 +11,8 @@
             [compojure.response :refer [render]]
             [clojure.java.io :as io]
 
-            [clojure.data.json :as json]))
+            [clojure.data.json :as json]
+            [clojure.pprint :refer [pprint]]))
 
 (defn hexify [b]
   (apply str (map #(format "%02x" %) b)))
@@ -24,6 +25,7 @@
                      (partition 2 s)))]
     bytes))
 
+; TODO: Read from private file
 (def iv (codecs/str->bytes "1234567890123456"))
 
 (defn encrypt [data]
@@ -55,11 +57,14 @@
 (defroutes app-routes
   (GET "/" [] home)
   (GET "/api/:id" [id]
-    (str "this is from the server for id " id))
+    (slurp (str "target/" id)))
   (POST "/api/new" {body :body}
     ; TODO: Generate new key; save to file; return key as json
-    (println "new body" (json/read-str (slurp body)))
-    body)
+    (let [id (hexify (nonce/random-bytes 4)) ; TODO: improve
+          json-body (json/read-str (slurp body))]
+      (spit (str "target/" id) (get json-body "data"))
+      id))
+  ; TODO: remove these and handle everything within clojure (css, html, etc)
   (route/files "/" {:root "target"})
   (route/resources "/" {:root "target"})
   (route/not-found home))

@@ -41,7 +41,7 @@
            :reload true
            :resource-root "target")
     (watch)
-    (reload)
+    ;(reload)
     (cljs-repl) ; Before cljs task
     (cljs)
     (target :dir #{"target"})))
