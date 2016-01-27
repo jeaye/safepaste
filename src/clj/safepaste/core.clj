@@ -54,6 +54,9 @@
 ;; Defines a handler that acts as router
 (defroutes app-routes
   (GET "/" [] home)
+  (GET "/test/:data" [data]
+    (println "test call:" data)
+    "this is from the server")
   (route/files "/" {:root "target"})
   (route/resources "/" {:root "target"})
   (route/not-found home))

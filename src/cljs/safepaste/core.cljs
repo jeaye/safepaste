@@ -7,9 +7,8 @@
 
 (println "sending...")
 
-(go (let [response (<! (http/get "http://localhost:5050"
-                                 {:with-credentials? false
-                                  :query-params {"since" 135}}))]
+(go (let [response (<! (http/get "/test/meow"
+                                 {:with-credentials? false}))]
       (prn response)))
 
 (println "sent!")
