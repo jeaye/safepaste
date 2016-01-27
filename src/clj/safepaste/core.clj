@@ -5,7 +5,7 @@
             [buddy.core.nonce :as nonce]
             [buddy.core.hash :as hash]
 
-            [qbits.jet.server :refer [run-jetty]]
+            ;[qbits.jet.server :refer [run-jetty]]
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
             [compojure.core :refer :all]
             [compojure.route :as route]
@@ -54,13 +54,15 @@
   (render (io/resource "index.html") req))
 
 ;; Defines a handler that acts as router
-(defroutes app
+(defroutes app-routes
   (GET "/" [] home)
-  (route/resources "/static")
-  (route/not-found "<h1>Page not found</h1>"))
+  (route/files "/" {:root "target"})
+  (route/resources "/" {:root "target"})
+  (route/not-found "Page Not Found"))
+
+(def app (wrap-defaults app-routes site-defaults))
 
 ;; Application entry point
-(defn -main
-  [& args]
-  (let [app (wrap-defaults app site-defaults)]
-    (run-jetty {:ring-handler app :port 5050})))
+;(defn -main
+;  [& args]
+;  (run-jetty {:ring-handler app :port 5050}))
