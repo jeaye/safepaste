@@ -7,8 +7,7 @@
 
 (println "sending...")
 
-(go (let [response (<! (http/get "/test/meow"
-                                 {:with-credentials? false}))]
+(go (let [response (<! (http/get "/test/meow"))]
       (prn response)))
 
 (println "sent!")
