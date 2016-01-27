@@ -12,8 +12,10 @@
 ;(go (let [response (<! (http/get "/api/42"))]
 ;      (prn response)))
 
+; TODO: Read text box; encrypt data
 (go (let [response (<! (http/post "/api/new"
                                   {:json-params {:data "meow"}}))]
+      ; TODO: Verify json; show url
       (prn response)))
 
 (println "sent!")

@@ -17,10 +17,11 @@
   (apply str (map #(format "%02x" %) b)))
 
 (defn unhexify [s]
-  (let [bytes (into-array Byte/TYPE
-                          (map (fn [[x y]]
-                                 (unchecked-byte (Integer/parseInt (str x y) 16)))
-                               (partition 2 s)))]
+  (let [bytes (into-array
+                Byte/TYPE
+                (map (fn [[x y]]
+                       (unchecked-byte (Integer/parseInt (str x y) 16)))
+                     (partition 2 s)))]
     bytes))
 
 (def iv (codecs/str->bytes "1234567890123456"))
@@ -59,6 +60,7 @@
   (GET "/api/:id" [id]
     (str "this is from the server for id " id))
   (POST "/api/new" {body :body}
+    ; TODO: Generate new key; save to file; return key as json
     (println "new body" (json/read-str (slurp body)))
     body)
   (route/files "/" {:root "target"})
