@@ -9,7 +9,11 @@
 
 (println "sending...")
 
-(go (let [response (<! (http/get "/test/meow"))]
+;(go (let [response (<! (http/get "/api/42"))]
+;      (prn response)))
+
+(go (let [response (<! (http/post "/api/new"
+                                  {:json-params {:data "meow"}}))]
       (prn response)))
 
 (println "sent!")

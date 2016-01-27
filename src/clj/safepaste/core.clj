@@ -54,11 +54,16 @@
 ;; Defines a handler that acts as router
 (defroutes app-routes
   (GET "/" [] home)
-  (GET "/test/:data" [data]
-    (println "test call:" data)
-    "this is from the server")
+  (GET "/api/:id" [id]
+    (str "this is from the server for id " id))
+  (POST "/api/new" {body :body}
+    (println "new body" body)
+    body)
   (route/files "/" {:root "target"})
   (route/resources "/" {:root "target"})
   (route/not-found home))
 
-(def app (wrap-defaults app-routes site-defaults))
+(def app (wrap-defaults
+           app-routes
+           ; TODO: Turn this back on
+           (assoc-in site-defaults [:security :anti-forgery] false)))
