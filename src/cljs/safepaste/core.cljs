@@ -5,6 +5,8 @@
 
 (enable-console-print!)
 
+(println "hash:" (.substring js/window.location.hash 1))
+
 (println "sending...")
 
 (go (let [response (<! (http/get "/test/meow"))]
