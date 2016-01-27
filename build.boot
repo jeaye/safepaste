@@ -20,6 +20,7 @@
                  ; Back end
                  [buddy/buddy-core "0.9.0"] ; Authentication
                  [compojure "1.4.0"] ; Routing
+                 [org.clojure/data.json "0.2.6"] ; Reading client json
 
                  ; HTTP
                  [ring/ring-core "1.4.0"]

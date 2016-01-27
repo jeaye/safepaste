@@ -9,7 +9,9 @@
             [compojure.core :refer :all]
             [compojure.route :as route]
             [compojure.response :refer [render]]
-            [clojure.java.io :as io]))
+            [clojure.java.io :as io]
+
+            [clojure.data.json :as json]))
 
 (defn hexify [b]
   (apply str (map #(format "%02x" %) b)))
@@ -57,7 +59,7 @@
   (GET "/api/:id" [id]
     (str "this is from the server for id " id))
   (POST "/api/new" {body :body}
-    (println "new body" body)
+    (println "new body" (json/read-str (slurp body)))
     body)
   (route/files "/" {:root "target"})
   (route/resources "/" {:root "target"})
