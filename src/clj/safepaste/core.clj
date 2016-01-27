@@ -49,12 +49,9 @@
 ;      (println (hexify random-key))
 ;      (spit (hexify random-key) (hexify encrypted-data)))))
 
-;; This is a handler that returns the
-;; contents of `resources/index.html`
 (defn home [req]
   (render (io/resource "index.html") req))
 
-;; Defines a handler that acts as router
 (defroutes app-routes
   (GET "/" [] home)
   (GET "/api/:id" [id]
