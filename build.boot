@@ -12,7 +12,6 @@
                   [pandeiro/boot-http "0.7.0"] ; HTTP server
                   [adzerk/boot-reload "0.4.2"] ; Automatic reloading
                   [cljs-http "0.1.39"] ; Communication with back end
-                  [cljsjs/chance "0.7.3-0"] ; Random hashes
 
                   ; REPL
                   [adzerk/boot-cljs-repl "0.3.0"]

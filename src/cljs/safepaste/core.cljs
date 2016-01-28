@@ -2,14 +2,11 @@
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [cljs-http.client :as http]
             [cljs.core.async :refer [<!]]
-            cljsjs.chance
             js.crypto))
 
 (enable-console-print!)
 
 (def sha-key (.substring js/window.location.hash 1))
-
-(println "chance:" (.hash js/chance))
 
 (println "cryptojs:" (.toString (.random js/CryptoJS.lib.WordArray 8)))
 
