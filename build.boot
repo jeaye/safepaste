@@ -1,5 +1,5 @@
 (set-env!
-  :source-paths #{"src/clj" "src/cljs"}
+  :source-paths #{"src/clj" "src/cljs" "src/js"}
   :resource-paths #{"html"}
 
   ; TODO: garden and hiccup
@@ -44,6 +44,6 @@
            :resource-root "target")
     (watch)
     ;(reload)
-    (cljs-repl) ; Before cljs task
-    (cljs)
+    ;(cljs-repl) ; Before cljs task
+    (cljs :compiler-options {:optimizations :advanced})
     (target :dir #{"target"})))

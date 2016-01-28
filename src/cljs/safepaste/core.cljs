@@ -27,39 +27,6 @@
             (println "decrypted:" (.toString decrypted js/CryptoJS.enc.Utf8))
             ))))
 
-;(println "decrypting")
-;(def decrypted (.decrypt js/CryptoJS.AES (.toString encrypted) safe-key))
-;(println "decrypted:" (.toString decrypted js/CryptoJS.enc.Utf8))
-
-;(defn hexify [b]
-;  (apply str (map #(format "%02x" %) b)))
-;
-;(defn unhexify [s]
-;  (let [bytes (into-array
-;                Byte/TYPE
-;                (map (fn [[x y]]
-;                       (unchecked-byte (Integer/parseInt (str x y) 16)))
-;                     (partition 2 s)))]
-;    bytes))
-;
-;(def iv (codecs/str->bytes "1234567890123456"))
-
-;(defn encrypt [data]
-;  (let [random-iv iv
-;        random-key (nonce/random-bytes 64)]
-;    [random-key
-;     (crypto/encrypt (codecs/str->bytes data)
-;                    random-key
-;                    random-iv
-;                    {:algorithm :aes256-cbc-hmac-sha512})]))
-;
-;(defn decrypt [file]
-;  (-> (crypto/decrypt (unhexify (slurp file))
-;                      (unhexify file)
-;                      iv
-;                      {:algorithm :aes256-cbc-hmac-sha512})
-;      (codecs/bytes->str)))
-
 ; TODO: Read text box; encrypt data
 ;(go (let [post-reply (<! (http/post "/api/new"
 ;                                    {:json-params {:data "meow"}}))]

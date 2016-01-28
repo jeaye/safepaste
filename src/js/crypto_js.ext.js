@@ -4,36 +4,36 @@ function CryptoJSInterface(seed) {}
 /** @type {!CryptoJSInterface} */
 var CryptoJS =
 {
-  "lib" =
+  "lib":
   {
-    "WordArray" =
+    "WordArray":
     {
-      "prototype" =
+      "prototype":
       {
-        "random" = function(byte_count){},
+        "random": function(byte_count){},
       },
     },
   },
-  "AES" =
+  "AES":
   {
-    "prototype" =
+    "prototype":
     {
-      "encrypt" = function(msg, key){},
-      "decrypt" = function(msg, key){},
+      "encrypt": function(msg, key){},
+      "decrypt": function(msg, key){},
     },
   },
-  "enc" =
+  "enc":
   {
-    "Utf8" = {},
-    "Hex" =
+    "Utf8": {},
+    "Hex":
     {
-      "stringify" = function(array){},
-      "parse" = function(string){},
+      "stringify": function(array){},
+      "parse": function(string){},
     },
-    "Base64" =
+    "Base64":
     {
-      "stringify" = function(array){},
-      "parse" = function(string){},
+      "stringify": function(array){},
+      "parse": function(string){},
     },
   },
 };
