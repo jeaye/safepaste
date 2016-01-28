@@ -4,14 +4,15 @@
 
   ; TODO: garden and hiccup
   ; TODO: harden everything!
-  :dependencies '[[org.clojure/clojure "1.7.0"]
-                  [org.clojure/clojurescript "1.7.170"]
+  :dependencies '[[org.clojure/clojure "1.8.0"]
+                  [org.clojure/clojurescript "1.7.228"]
 
                   ; Front end
-                  [adzerk/boot-cljs "1.7.170-3"] ; CLJS compiler
+                  [adzerk/boot-cljs "1.7.228-1"] ; CLJS compiler
                   [pandeiro/boot-http "0.7.0"] ; HTTP server
-                  [adzerk/boot-reload "0.4.2"] ; Automatic reloading
+                  [adzerk/boot-reload "0.4.4"] ; Automatic reloading
                   [cljs-http "0.1.39"] ; Communication with back end
+                  [cljsjs/boot-cljsjs "0.5.1"] ; JS minification
 
                   ; REPL
                   [adzerk/boot-cljs-repl "0.3.0"]
