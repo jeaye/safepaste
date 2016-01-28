@@ -1,8 +1,6 @@
 (set-env!
   :source-paths #{"src/clj" "src/cljs" "src/js"}
-  :resource-paths #{"html"}
 
-  ; TODO: garden and hiccup
   ; TODO: harden everything!
   ; TODO: prevent just anyone from using the api?
   ; TODO: minify crypto-js
@@ -11,7 +9,6 @@
 
                   ; Front end
                   [adzerk/boot-cljs "1.7.228-1"] ; CLJS compiler
-                  [pandeiro/boot-http "0.7.0"] ; HTTP server
                   [adzerk/boot-reload "0.4.4"] ; Automatic reloading
                   [cljs-http "0.1.39"] ; Communication with back end
 
@@ -22,10 +19,12 @@
                   [org.clojure/tools.nrepl "0.2.12"]
 
                   ; Back end
+                  [pandeiro/boot-http "0.7.0"] ; HTTP server
                   [compojure "1.4.0"] ; Routing
                   [org.clojure/data.json "0.2.6"] ; Reading client json
                   [buddy/buddy-core "0.9.0"] ; Encryption
                   [hiccup "1.0.5"] ; HTML generation
+                  [garden "1.3.0"] ; CSS generation
 
                   ; HTTP
                   [ring/ring-core "1.4.0"]

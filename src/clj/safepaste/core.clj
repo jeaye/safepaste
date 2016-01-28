@@ -1,6 +1,7 @@
 (ns safepaste.core
   (:gen-class)
   (:require [safepaste.home :as home]
+            [safepaste.css :as css]
 
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
             [compojure.core :refer :all]
@@ -17,6 +18,7 @@
 
 (defroutes app-routes
   (GET "/" [] home/render)
+  (GET "/main.css" [] css/render)
   (GET "/api/:id" [id]
     ; TODO: Input validation
     (slurp (str "target/" id)))
