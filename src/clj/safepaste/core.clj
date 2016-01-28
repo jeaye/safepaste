@@ -1,6 +1,8 @@
 (ns safepaste.core
   (:gen-class)
-  (:require [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
+  (:require [safepaste.home :as home]
+
+            [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
             [compojure.core :refer :all]
             [compojure.route :as route]
             [compojure.response :refer [render]]
@@ -13,11 +15,8 @@
 (defn hexify [b]
   (apply str (map #(format "%02x" %) b)))
 
-(defn home [req]
-  (render (io/resource "index.html") req))
-
 (defroutes app-routes
-  (GET "/" [] home)
+  (GET "/" [] home/render)
   (GET "/api/:id" [id]
     ; TODO: Input validation
     (slurp (str "target/" id)))
@@ -29,7 +28,7 @@
       id))
   ; TODO: remove these and handle everything within clojure (css, html, etc)
   (route/files "/" {:root "target"})
-  (route/not-found home))
+  (route/not-found home/render))
 
 (def app (wrap-defaults
            app-routes

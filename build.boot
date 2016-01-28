@@ -25,6 +25,7 @@
                   [compojure "1.4.0"] ; Routing
                   [org.clojure/data.json "0.2.6"] ; Reading client json
                   [buddy/buddy-core "0.9.0"] ; Encryption
+                  [hiccup "1.0.5"] ; HTML generation
 
                   ; HTTP
                   [ring/ring-core "1.4.0"]
