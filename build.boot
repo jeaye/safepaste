@@ -4,6 +4,7 @@
 
   ; TODO: garden and hiccup
   ; TODO: harden everything!
+  ; TODO: prevent just anyone from using the api?
   :dependencies '[[org.clojure/clojure "1.8.0"]
                   [org.clojure/clojurescript "1.7.228"]
 
@@ -12,7 +13,6 @@
                   [pandeiro/boot-http "0.7.0"] ; HTTP server
                   [adzerk/boot-reload "0.4.4"] ; Automatic reloading
                   [cljs-http "0.1.39"] ; Communication with back end
-                  [cljsjs/boot-cljsjs "0.5.1"] ; JS minification
 
                   ; REPL
                   [adzerk/boot-cljs-repl "0.3.0"]
@@ -30,8 +30,8 @@
                   [ring/ring-servlet "1.4.0"]
                   [ring/ring-defaults "0.1.5"]])
 
-(require '[adzerk.boot-cljs :refer [cljs]]
-         '[safepaste.core]
+(require '[safepaste.core]
+         '[adzerk.boot-cljs :refer [cljs]]
          '[pandeiro.boot-http :refer [serve]]
          '[adzerk.boot-reload :refer [reload]]
          '[adzerk.boot-cljs-repl :refer [cljs-repl start-repl]])
