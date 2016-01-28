@@ -26,8 +26,4 @@ var CryptoJS =
   {
     "Utf8" = {},
   },
-  "EvpKDF" =
-  {
-    "create" = function(options){},
-  },
 };
