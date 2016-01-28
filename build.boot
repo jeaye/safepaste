@@ -5,6 +5,7 @@
   ; TODO: garden and hiccup
   ; TODO: harden everything!
   ; TODO: prevent just anyone from using the api?
+  ; TODO: minify crypto-js
   :dependencies '[[org.clojure/clojure "1.8.0"]
                   [org.clojure/clojurescript "1.7.228"]
 
