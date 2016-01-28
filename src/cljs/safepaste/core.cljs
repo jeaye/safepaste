@@ -2,13 +2,20 @@
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [cljs-http.client :as http]
             [cljs.core.async :refer [<!]]
-            js.crypto))
+            crypto-js.aes))
 
 (enable-console-print!)
 
 (def sha-key (.substring js/window.location.hash 1))
 
-(println "cryptojs:" (.toString (.random js/CryptoJS.lib.WordArray 8)))
+(println "generating key")
+;(def safe-key (.random js/CryptoJS.lib.WordArray 8))
+(def safe-key "super secret")
+(println "encrypting")
+(def encrypted (.encrypt js/CryptoJS.AES ">3< Misa" safe-key))
+(println "decrypting")
+(def decrypted (.decrypt js/CryptoJS.AES (.toString encrypted) safe-key))
+(println "decrypted:" (.toString decrypted js/CryptoJS.enc.Utf8))
 
 ;(defn hexify [b]
 ;  (apply str (map #(format "%02x" %) b)))
@@ -40,8 +47,8 @@
 ;      (codecs/bytes->str)))
 
 ; TODO: Read text box; encrypt data
-(go (let [post-reply (<! (http/post "/api/new"
-                                    {:json-params {:data "meow"}}))]
-      ; TODO: Verify json; show url
-      (go (let [get-reply (<! (http/get (str "/api/" (:body post-reply))))]
-            (println (:body get-reply))))))
+;(go (let [post-reply (<! (http/post "/api/new"
+;                                    {:json-params {:data "meow"}}))]
+;      ; TODO: Verify json; show url
+;      (go (let [get-reply (<! (http/get (str "/api/" (:body post-reply))))]
+;            (println (:body get-reply))))))
