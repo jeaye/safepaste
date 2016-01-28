@@ -7,15 +7,29 @@
 (enable-console-print!)
 
 (def sha-key (.substring js/window.location.hash 1))
+(def data ">3< Misa")
 
 (println "generating key")
-;(def safe-key (.random js/CryptoJS.lib.WordArray 8))
-(def safe-key "super secret")
-(println "encrypting")
-(def encrypted (.encrypt js/CryptoJS.AES ">3< Misa" safe-key))
-(println "decrypting")
-(def decrypted (.decrypt js/CryptoJS.AES (.toString encrypted) safe-key))
-(println "decrypted:" (.toString decrypted js/CryptoJS.enc.Utf8))
+(def safe-key (.toString (.random js/CryptoJS.lib.WordArray 32)))
+(println "encrypting with key:" safe-key)
+(def encrypted (.encrypt js/CryptoJS.AES data safe-key))
+(println "encoding in base64")
+(def encoded (.toString encrypted))
+
+(println "posting")
+(go (let [post-reply (<! (http/post "/api/new"
+                                    {:json-params {:data encoded}}))]
+      (println "requesting")
+      (go (let [get-reply (<! (http/get (str "/api/" (:body post-reply))))]
+            (println "encoded response:" (:body get-reply))
+            (println "decrypting")
+            (def decrypted (.decrypt js/CryptoJS.AES (.toString (:body get-reply)) safe-key))
+            (println "decrypted:" (.toString decrypted js/CryptoJS.enc.Utf8))
+            ))))
+
+;(println "decrypting")
+;(def decrypted (.decrypt js/CryptoJS.AES (.toString encrypted) safe-key))
+;(println "decrypted:" (.toString decrypted js/CryptoJS.enc.Utf8))
 
 ;(defn hexify [b]
 ;  (apply str (map #(format "%02x" %) b)))

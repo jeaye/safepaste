@@ -25,5 +25,15 @@ var CryptoJS =
   "enc" =
   {
     "Utf8" = {},
+    "Hex" =
+    {
+      "stringify" = function(array){},
+      "parse" = function(string){},
+    },
+    "Base64" =
+    {
+      "stringify" = function(array){},
+      "parse" = function(string){},
+    },
   },
 };
