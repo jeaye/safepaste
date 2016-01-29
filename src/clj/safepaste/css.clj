@@ -12,7 +12,7 @@
 (def cyan      "#2aa198") (def green     "#859900")
 
 (defn main []
-  (let [header-height "2em"
+  (let [header-height "3em"
         input-height (str "calc(100% - " header-height ")")
         header-background-color base2
         header-color base00
@@ -41,9 +41,9 @@
           {:background-color header-button-background-color
            :border (str "1px solid " header-button-border-color)
            :border-radius "4px"
-           :padding ".1em .1em"}]]]
-       [:.input {:background-color content-background-color
-                 :height input-height
+           :padding ".1em .1em"
+           :font-size "2em"}]]]
+       [:.input {:height input-height
                  :min-height input-height
                  :width "100%"}]]
       [:.input :textarea {:background-color content-background-color
@@ -51,6 +51,6 @@
                           :border "0px"
                           :margin "0px"
                           :padding "0px"
-                          :overflow "auto"
                           :width "100%"
-                          :height "100%"}])))
+                          :height "100%"
+                          :font-size "1.5em"}])))
