@@ -1,10 +1,14 @@
 (ns safepaste.home
-  (:use [hiccup.core]))
+  (:require [safepaste.css :as css]
+            [hiccup.core :as hiccup]
+            [hiccup.page :as page]))
 
 (defn render [request]
-  (html
+  (page/html5
     [:head
-     [:link {:rel "stylesheet" :type "test/css" :href "/main.css"}]
-     [:script {:src "main.js"}]
+     [:style (css/main)]
+     (page/include-js "/main.js")
      [:title "safepaste"]]
-    [:body]))
+    [:body
+     [:div {:class "header"} "header"]
+     [:div {:class "input"} "input"]]))

@@ -18,7 +18,6 @@
 
 (defroutes app-routes
   (GET "/" [] home/render)
-  (GET "/main.css" [] css/render)
   (GET "/api/:id" [id]
     ; TODO: Input validation
     (slurp (str "target/" id)))
