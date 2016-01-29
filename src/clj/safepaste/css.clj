@@ -18,7 +18,6 @@
         header-color base00
         header-font-size "2em"
         header-button-background-color base2
-        header-button-border-color base2
         content-background-color base3
         content-color base00
         content-font-size "1.5em"]
