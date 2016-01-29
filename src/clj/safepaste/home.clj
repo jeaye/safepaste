@@ -10,5 +10,5 @@
      (page/include-js "/main.js")
      [:title "safepaste"]]
     [:body
-     [:div {:class "header"} "header"]
-     [:div {:class "input"} "input"]]))
+     [:div {:class "header"}]
+     [:div {:class "input"}]]))
