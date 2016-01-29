@@ -26,6 +26,7 @@
       [:body
        {:color content-color
         :width "100%"
+        :min-height "100%"
         :margin "0%"
         :padding "0%"}
        [:.header {:background-color header-background-color
@@ -44,11 +45,12 @@
        [:.input {:height input-height
                  :min-height input-height
                  :width "100%"}]]
-      [:.input :textarea {:background-color content-background-color
-                          :color content-color
-                          :border "0px"
-                          :margin "0px"
-                          :padding "0px"
-                          :width "100%"
-                          :height "100%"
-                          :font-size content-font-size}])))
+      [:textarea {:background-color content-background-color
+                  :color content-color
+                  :border "0px"
+                  :margin "0px"
+                  :padding "0px"
+                  :width "100%"
+                  :height "100%"
+                  :min-height "100%"
+                  :font-size content-font-size}])))
