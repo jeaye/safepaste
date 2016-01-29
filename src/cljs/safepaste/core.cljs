@@ -37,7 +37,7 @@
         encrypted (.encrypt js/CryptoJS.AES data safe-key)
         encoded (.toString encrypted)]
     ; TODO: input validation
-    (when (not-empty data)
+    (when (and (not-empty data) (not (viewing?)))
       (go (let [post-reply (<! (http/post "/api/new"
                                           {:json-params {:data encoded}}))
                 post-reply-body (:body post-reply)]
@@ -46,7 +46,6 @@
             (lock-input!))))))
 
 (defn get! []
-  (println "requesting")
   (let [id (.substring js/window.location.pathname 1)
         safe-key (.substring js/window.location.hash 1)]
     ; TODO: input validation
@@ -55,7 +54,6 @@
                                   (.toString (:body get-reply))
                                   safe-key)]
           ; TODO: error checking
-          (println "encoded response:" (:body get-reply))
           (dommy/set-value! (sel1 :#input)
                             (.toString decrypted js/CryptoJS.enc.Utf8))))))
 
