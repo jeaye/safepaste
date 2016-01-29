@@ -2,7 +2,7 @@
   (:require [safepaste.css :as css]
             [hiccup.page :as page]))
 
-(defn render [request]
+(defn render [id request]
   (page/html5
     [:head
      [:style (css/main)]

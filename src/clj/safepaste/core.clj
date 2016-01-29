@@ -17,7 +17,7 @@
   (apply str (map #(format "%02x" %) b)))
 
 (defroutes app-routes
-  (GET "/" [] home/render)
+  (GET "/:id{(?:.{8})?}" [id] (partial home/render id))
   (GET "/api/:id" [id]
     ; TODO: Input validation
     (slurp (str "target/" id)))
@@ -27,9 +27,8 @@
           json-body (json/read-str (slurp body))]
       (spit (str "target/" id) (get json-body "data"))
       id))
-  ; TODO: remove these and handle everything within clojure (css, html, etc)
   (route/files "/js" {:root "target/js"})
-  (route/not-found home/render))
+  (route/not-found "not found"))
 
 (def app (wrap-defaults
            app-routes
