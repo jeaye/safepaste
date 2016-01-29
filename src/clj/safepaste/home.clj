@@ -10,6 +10,7 @@
      [:title "safepaste"]]
     [:body
      [:div {:class "header"}
+      [:p "Your post will be encrypted using AES-256."]
       [:nav
        [:a "about"]
        [:a "donate"]

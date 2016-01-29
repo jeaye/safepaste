@@ -20,12 +20,14 @@
         content-background-color base3
         content-color base00
         content-font-size "1.5em"
+        status-color green
         link-hover-color orange]
     (css
       {:pretty-print? false}
       [:html :body {:height "100%"}]
       [:body
-       {:color content-color
+       {:background-color "red"
+        :color content-color
         :width "100%"
         :min-height "100%"
         :margin "0%"
@@ -35,6 +37,13 @@
                   :height header-height
                   :max-height header-height
                   :width "100%"}
+        [:p {:color status-color
+             :float "left"
+             :font-weight :bold
+             :margin "0px"
+             :margin-top "1em"
+             :margin-left "1em"
+             :padding "0px"}]
         [:nav
          {:color header-color
           :text-align "right"
