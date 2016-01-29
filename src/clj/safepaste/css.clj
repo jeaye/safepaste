@@ -1,6 +1,7 @@
 (ns safepaste.css
   (:require [garden.core :refer [css]]))
 
+; TODO: minify
 (defn main []
   (let [header-height "30px"
         input-height "calc(100% - 30px)"]
