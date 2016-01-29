@@ -28,6 +28,7 @@
       (spit (str "target/" id) (get json-body "data"))
       id))
   (route/files "/js" {:root "target/js"})
+  ; TODO: Call into home with an error string (red)
   (route/not-found "not found"))
 
 (def app (wrap-defaults

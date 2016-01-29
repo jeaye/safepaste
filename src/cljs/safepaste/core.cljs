@@ -9,6 +9,12 @@
 
 (def title js/window.title)
 
+(defn push-history! [path]
+  (.pushState js/window.history nil title path))
+
+(defn reset [e]
+  (push-history! "/"))
+
 (defn post [e]
   (let [sha-key (.substring js/window.location.hash 1)
         data (dommy/value (sel1 :#input))
@@ -20,13 +26,11 @@
                                         {:json-params {:data encoded}}))
               post-reply-body (:body post-reply)]
           ; TODO: reply validation
-          (.pushState js/window.history
-                      nil
-                      title
-                      (str "/" post-reply-body "#" safe-key))))))
+          (push-history! (str "/" post-reply-body "#" safe-key))))))
 
 (defn onload [e]
   ; TODO: Setup other events: new/about/donate
+  (dommy/listen! (sel1 :#new) :click reset)
   (dommy/listen! (sel1 :#post) :click post))
 
 (dommy/listen! js/window :load onload)

@@ -18,4 +18,4 @@
        [:a {:id "donate"} "donate"]
        [:a {:id "post"} "post"]]]
      [:div {:class "input"}
-      [:textarea#input {:placeholder "Enter your paste here…"}]]]))
+      [:textarea#input :readonly {:placeholder "Enter your paste here…"}]]]))
