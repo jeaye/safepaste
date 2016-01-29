@@ -17,7 +17,6 @@
         header-background-color base2
         header-color base00
         header-font-size "2em"
-        header-button-background-color base2
         content-background-color base3
         content-color base00
         content-font-size "1.5em"]
@@ -39,8 +38,7 @@
           :padding-right "10px"
           :padding-top "5px"}
          [:a
-          {:background-color header-button-background-color
-           :padding ".1em .1em"
+          {:padding ".1em .1em"
            :margin-left ".5em"
            :font-size header-font-size}]]]
        [:.input {:height input-height
