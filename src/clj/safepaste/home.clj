@@ -12,6 +12,7 @@
      [:div {:class "header"}
       [:p "Your post will be encrypted using AES-256."]
       [:nav
+       [:a "new"]
        [:a "about"]
        [:a "donate"]
        [:a "post"]]]
