@@ -46,6 +46,7 @@
   (dommy/listen! (sel1 :#new) :click reset-page!)
   (dommy/listen! (sel1 :#post) :click post!))
 
+; TODO: listen to browser back/forward and refresh everything
 (dommy/listen! js/window :load onload)
 
 ;      (println "requesting")
