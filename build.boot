@@ -12,6 +12,7 @@
                   [adzerk/boot-cljs "1.7.228-1"] ; CLJS compiler
                   [adzerk/boot-reload "0.4.4"] ; Automatic reloading
                   [cljs-http "0.1.39"] ; Communication with back end
+                  [prismatic/dommy "1.1.0"] ; DOM events
 
                   ; REPL
                   [adzerk/boot-cljs-repl "0.3.0"]

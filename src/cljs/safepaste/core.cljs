@@ -2,31 +2,41 @@
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [cljs-http.client :as http]
             [cljs.core.async :refer [<!]]
+            [dommy.core :as dommy :refer-macros [sel1]]
             crypto-js.aes))
 
 (enable-console-print!)
 
-(def sha-key (.substring js/window.location.hash 1))
-(def data ">3< Misa")
+(def title js/window.title)
 
-(println "generating key")
-(def safe-key (.toString (.random js/CryptoJS.lib.WordArray 32)))
-(println "encrypting with key:" safe-key)
-(def encrypted (.encrypt js/CryptoJS.AES data safe-key))
-(println "encoding in base64")
-(def encoded (.toString encrypted))
+(defn post [e]
+  (let [sha-key (.substring js/window.location.hash 1)
+        data (dommy/value (sel1 :#input))
+        safe-key (.toString (.random js/CryptoJS.lib.WordArray 32))
+        encrypted (.encrypt js/CryptoJS.AES data safe-key)
+        encoded (.toString encrypted)]
+    (go (let [post-reply (<! (http/post "/api/new"
+                                        {:json-params {:data encoded}}))
+              post-reply-body (:body post-reply)]
+          (.pushState js/window.history
+                      nil
+                      title
+                      (str "/" post-reply-body "#" safe-key))))))
 
-(println "posting")
-(go (let [post-reply (<! (http/post "/api/new"
-                                    {:json-params {:data encoded}}))]
-      (println "requesting")
-      (go (let [get-reply (<! (http/get (str "/api/" (:body post-reply))))]
-            (println "encoded response:" (:body get-reply))
-            (println "decrypting")
-            (def decrypted (.decrypt js/CryptoJS.AES (.toString (:body get-reply)) safe-key))
-            (println "decrypted:" (.toString decrypted js/CryptoJS.enc.Utf8))
-            ))))
+(defn onload [e]
+  ; TODO: Setup other events: new/about/donate
+  (dommy/listen! (sel1 :#post) :click post))
 
+(dommy/listen! js/window :load onload)
+
+;      (println "requesting")
+;      (go (let [get-reply (<! (http/get (str "/api/" (:body post-reply))))]
+;            (println "encoded response:" (:body get-reply))
+;            (println "decrypting")
+;            (def decrypted (.decrypt js/CryptoJS.AES (.toString (:body get-reply)) safe-key))
+;            (println "decrypted:" (.toString decrypted js/CryptoJS.enc.Utf8))
+;            ))))
+;
 ; TODO: Read text box; encrypt data
 ;(go (let [post-reply (<! (http/post "/api/new"
 ;                                    {:json-params {:data "meow"}}))]
