@@ -11,4 +11,5 @@
      [:title "safepaste"]]
     [:body
      [:div {:class "header"}]
-     [:div {:class "input"}]]))
+     [:div {:class "input"}
+      [:textarea#input {:placeholder "Enter your paste here…"}]]]))
