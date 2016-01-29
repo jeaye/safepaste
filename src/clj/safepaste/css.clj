@@ -16,10 +16,12 @@
         input-height (str "calc(100% - " header-height ")")
         header-background-color base2
         header-color base00
+        header-font-size "2em"
         header-button-background-color base2
-        header-button-border-color base0
+        header-button-border-color base2
         content-background-color base3
-        content-color base00]
+        content-color base00
+        content-font-size "1.5em"]
     (css
       {:pretty-print? false}
       [:html :body {:height "100%"}]
@@ -39,10 +41,9 @@
           :padding-top "5px"}
          [:a
           {:background-color header-button-background-color
-           :border (str "1px solid " header-button-border-color)
-           :border-radius "4px"
            :padding ".1em .1em"
-           :font-size "2em"}]]]
+           :margin-left ".5em"
+           :font-size header-font-size}]]]
        [:.input {:height input-height
                  :min-height input-height
                  :width "100%"}]]
@@ -53,4 +54,4 @@
                           :padding "0px"
                           :width "100%"
                           :height "100%"
-                          :font-size "1.5em"}])))
+                          :font-size content-font-size}])))

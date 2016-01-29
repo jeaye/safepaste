@@ -11,6 +11,8 @@
     [:body
      [:div {:class "header"}
       [:nav
-        [:a "post"]]]
+       [:a "about"]
+       [:a "donate"]
+       [:a "post"]]]
      [:div {:class "input"}
       [:textarea#input {:placeholder "Enter your paste here…"}]]]))
