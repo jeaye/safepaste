@@ -13,16 +13,17 @@
   (.pushState js/window.history nil title path))
 
 (defn lock-input! []
-  (if (not= "/" js/window.location.pathname)
-    (dommy/set-attr! (sel1 :#input) :readonly)
-    (dommy/remove-attr! (sel1 :#input) :readonly)))
+  (let [input (sel1 :#input)
+        readonly (not= "/" js/window.location.pathname)]
+    (if readonly
+      (dommy/set-attr! input :readonly)
+      (dommy/remove-attr! input :readonly))))
 
 (defn reset-input! []
   (dommy/set-value! (sel1 :#input) "")
   (lock-input!))
 
 (defn reset-page! [e]
-  (println "resetting page")
   (push-history! "/")
   (reset-input!))
 
