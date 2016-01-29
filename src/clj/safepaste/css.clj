@@ -19,7 +19,8 @@
         header-font-size "2em"
         content-background-color base3
         content-color base00
-        content-font-size "1.5em"]
+        content-font-size "1.5em"
+        link-hover-color orange]
     (css
       {:pretty-print? false}
       [:html :body {:height "100%"}]
@@ -29,6 +30,7 @@
         :min-height "100%"
         :margin "0%"
         :padding "0%"}
+       [:a:hover {:color link-hover-color}]
        [:.header {:background-color header-background-color
                   :height header-height
                   :max-height header-height
