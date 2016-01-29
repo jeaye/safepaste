@@ -9,6 +9,7 @@
      (page/include-js "/main.js")
      [:title "safepaste"]]
     [:body
-     [:div {:class "header"}]
+     [:div {:class "header"}
+      [:nav "post"]]
      [:div {:class "input"}
       [:textarea#input {:placeholder "Enter your paste here…"}]]]))
