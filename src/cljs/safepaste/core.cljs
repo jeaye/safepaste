@@ -30,18 +30,20 @@
   (reset-input!))
 
 (defn post! [e]
+  ; TODO: Don't post empty content
   (let [sha-key (.substring js/window.location.hash 1)
         data (dommy/value (sel1 :#input))
         safe-key (.toString (.random js/CryptoJS.lib.WordArray 32))
         encrypted (.encrypt js/CryptoJS.AES data safe-key)
         encoded (.toString encrypted)]
     ; TODO: input validation
-    (go (let [post-reply (<! (http/post "/api/new"
-                                        {:json-params {:data encoded}}))
-              post-reply-body (:body post-reply)]
-          ; TODO: reply validation
-          (push-history! (str "/" post-reply-body "#" safe-key))
-          (lock-input!)))))
+    (when (not-empty data)
+      (go (let [post-reply (<! (http/post "/api/new"
+                                          {:json-params {:data encoded}}))
+                post-reply-body (:body post-reply)]
+            ; TODO: reply validation
+            (push-history! (str "/" post-reply-body "#" safe-key))
+            (lock-input!))))))
 
 (defn get! []
   (println "requesting")
@@ -66,11 +68,3 @@
 
 ; TODO: listen to browser back/forward and refresh everything
 (dommy/listen! js/window :load onload)
-
-;
-; TODO: Read text box; encrypt data
-;(go (let [post-reply (<! (http/post "/api/new"
-;                                    {:json-params {:data "meow"}}))]
-;      ; TODO: Verify json; show url
-;      (go (let [get-reply (<! (http/get (str "/api/" (:body post-reply))))]
-;            (println (:body get-reply))))))

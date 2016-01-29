@@ -49,5 +49,5 @@
     (watch)
     ;(reload)
     ;(cljs-repl) ; Before cljs task
-    (cljs :compiler-options {:optimizations :none})
+    (cljs :compiler-options {:optimizations :simple})
     (target :dir #{"target"})))
