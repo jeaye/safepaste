@@ -16,5 +16,4 @@
          (for [a ["new" "about" "donate" "post"]]
            [:a {:id a} a])]]
        [:div {:class "input"}
-        [:textarea#input {:placeholder placeholder
-                          :readonly (some? id)}]]])))
+        [:textarea#input {:placeholder placeholder}]]])))

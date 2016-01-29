@@ -12,12 +12,19 @@
 (defn push-history! [path]
   (.pushState js/window.history nil title path))
 
-(defn reset-page! [e]
-  ; TODO: reset input
-  (push-history! "/"))
+(defn lock-input! []
+  (if (not= "/" js/window.location.pathname)
+    (dommy/set-attr! (sel1 :#input) :readonly)
+    (dommy/remove-attr! (sel1 :#input) :readonly)))
 
-(defn reset-input! [e]
-  (dommy/set-value! (sel1 :#input) ""))
+(defn reset-input! []
+  (dommy/set-value! (sel1 :#input) "")
+  (lock-input!))
+
+(defn reset-page! [e]
+  (println "resetting page")
+  (push-history! "/")
+  (reset-input!))
 
 (defn post! [e]
   (let [sha-key (.substring js/window.location.hash 1)
@@ -30,7 +37,8 @@
                                         {:json-params {:data encoded}}))
               post-reply-body (:body post-reply)]
           ; TODO: reply validation
-          (push-history! (str "/" post-reply-body "#" safe-key))))))
+          (push-history! (str "/" post-reply-body "#" safe-key))
+          (lock-input!)))))
 
 (defn onload [e]
   ; TODO: Setup other events: about/donate
