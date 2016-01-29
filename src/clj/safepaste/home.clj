@@ -13,11 +13,8 @@
        [:div {:class "header"}
         [:p "Your post will be encrypted using AES-256."]
         [:nav
-         ; TODO: cleanup
-         [:a {:id "new"} "new"]
-         [:a {:id "about"} "about"]
-         [:a {:id "donate"} "donate"]
-         [:a {:id "post"} "post"]]]
+         (for [a ["new" "about" "donate" "post"]]
+           [:a {:id a} a])]]
        [:div {:class "input"}
         [:textarea#input {:placeholder placeholder
                           :readonly (some? id)}]]])))
