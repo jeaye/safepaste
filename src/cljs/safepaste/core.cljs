@@ -12,10 +12,14 @@
 (defn push-history! [path]
   (.pushState js/window.history nil title path))
 
-(defn reset [e]
+(defn reset-page! [e]
+  ; TODO: reset input
   (push-history! "/"))
 
-(defn post [e]
+(defn reset-input! [e]
+  (dommy/set-value! (sel1 :#input) ""))
+
+(defn post! [e]
   (let [sha-key (.substring js/window.location.hash 1)
         data (dommy/value (sel1 :#input))
         safe-key (.toString (.random js/CryptoJS.lib.WordArray 32))
@@ -29,9 +33,9 @@
           (push-history! (str "/" post-reply-body "#" safe-key))))))
 
 (defn onload [e]
-  ; TODO: Setup other events: new/about/donate
-  (dommy/listen! (sel1 :#new) :click reset)
-  (dommy/listen! (sel1 :#post) :click post))
+  ; TODO: Setup other events: about/donate
+  (dommy/listen! (sel1 :#new) :click reset-page!)
+  (dommy/listen! (sel1 :#post) :click post!))
 
 (dommy/listen! js/window :load onload)
 

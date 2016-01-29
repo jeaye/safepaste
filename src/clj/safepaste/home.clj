@@ -3,19 +3,21 @@
             [hiccup.page :as page]))
 
 (defn render [id request]
-  (page/html5
-    [:head
-     [:style (css/main)]
-     (page/include-js "/js/main.js")
-     [:title "safepaste"]]
-    [:body
-     [:div {:class "header"}
-      [:p "Your post will be encrypted using AES-256."]
-      [:nav
-       ; TODO: cleanup
-       [:a {:id "new"} "new"]
-       [:a {:id "about"} "about"]
-       [:a {:id "donate"} "donate"]
-       [:a {:id "post"} "post"]]]
-     [:div {:class "input"}
-      [:textarea#input :readonly {:placeholder "Enter your paste here…"}]]]))
+  (let [placeholder "Enter your paste here…"]
+    (page/html5
+      [:head
+       [:style (css/main)]
+       (page/include-js "/js/main.js")
+       [:title "safepaste"]]
+      [:body
+       [:div {:class "header"}
+        [:p "Your post will be encrypted using AES-256."]
+        [:nav
+         ; TODO: cleanup
+         [:a {:id "new"} "new"]
+         [:a {:id "about"} "about"]
+         [:a {:id "donate"} "donate"]
+         [:a {:id "post"} "post"]]]
+       [:div {:class "input"}
+        [:textarea#input {:placeholder placeholder
+                          :readonly (some? id)}]]])))
