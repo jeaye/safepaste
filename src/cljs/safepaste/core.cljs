@@ -15,9 +15,11 @@
         safe-key (.toString (.random js/CryptoJS.lib.WordArray 32))
         encrypted (.encrypt js/CryptoJS.AES data safe-key)
         encoded (.toString encrypted)]
+    ; TODO: input validation
     (go (let [post-reply (<! (http/post "/api/new"
                                         {:json-params {:data encoded}}))
               post-reply-body (:body post-reply)]
+          ; TODO: reply validation
           (.pushState js/window.history
                       nil
                       title

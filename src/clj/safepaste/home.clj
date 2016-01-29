@@ -6,7 +6,7 @@
   (page/html5
     [:head
      [:style (css/main)]
-     (page/include-js "/main.js")
+     (page/include-js "/js/main.js")
      [:title "safepaste"]]
     [:body
      [:div {:class "header"}

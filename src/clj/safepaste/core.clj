@@ -28,7 +28,7 @@
       (spit (str "target/" id) (get json-body "data"))
       id))
   ; TODO: remove these and handle everything within clojure (css, html, etc)
-  (route/files "/" {:root "target"})
+  (route/files "/js" {:root "target/js"})
   (route/not-found home/render))
 
 (def app (wrap-defaults
