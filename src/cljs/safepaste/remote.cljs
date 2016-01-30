@@ -22,14 +22,17 @@
             (dom/update-input!))))))
 
 (defn get! []
+  (dom/set-status! "Downloading paste...")
   (let [id (.substring js/window.location.pathname 1)
         safe-key (.substring js/window.location.hash 1)]
     ; TODO: input validation
     (go (let [get-reply (<! (http/get (str "/api/" id)))
+              _ (dom/set-status! "Decrypting paste...")
               decrypted (.decrypt js/CryptoJS.AES
                                   (.toString (:body get-reply))
                                   safe-key)]
           ; TODO: error checking
           (dommy/set-value! (sel1 :#input)
-                            (.toString decrypted js/CryptoJS.enc.Utf8))))))
+                            (.toString decrypted js/CryptoJS.enc.Utf8))
+          (dom/set-status! "This paste is encrypted for your eyes only.")))))
 

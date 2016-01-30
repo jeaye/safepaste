@@ -11,7 +11,7 @@
        [:title "safepaste"]]
       [:body
        [:div {:class "header"}
-        [:p "Your post will be encrypted using AES-256."]
+        [:p {:id "status"} "Your post will be encrypted using AES-256."]
         [:nav
          (for [a ["new" "about" "donate" "post"]]
            [:a {:id a} a])]]

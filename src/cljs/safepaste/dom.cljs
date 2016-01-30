@@ -10,6 +10,16 @@
   (not= "/" js/window.location.pathname))
 (def editing? (comp not viewing?))
 
+(defn set-status! [status]
+  (let [item (sel1 :#status)]
+    (dommy/set-text! item status)
+    (dommy/remove-class! item :.status-error)))
+
+(defn set-error! [error]
+  (let [item (sel1 :#status)]
+    (dommy/set-text! item error)
+    (dommy/add-class! item :.status-error)))
+
 (defn update-input! []
   (let [input (sel1 :#input)]
     (if (viewing?)
