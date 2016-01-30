@@ -7,6 +7,8 @@
 
 (enable-console-print!)
 
+; TODO: namespaces: dom remote
+
 (def title js/window.title)
 
 (defn push-history! [path]
@@ -15,7 +17,9 @@
 (defn viewing? []
   (not= "/" js/window.location.pathname))
 
-(defn lock-input! []
+(def editing? (comp not viewing?))
+
+(defn update-input! []
   (let [input (sel1 :#input)]
     (if (viewing?)
       (dommy/set-attr! input :readonly)
@@ -23,7 +27,7 @@
 
 (defn reset-input! []
   (dommy/set-value! (sel1 :#input) "")
-  (lock-input!))
+  (update-input!))
 
 (defn reset-page! [e]
   (push-history! "/")
@@ -43,7 +47,7 @@
                 post-reply-body (:body post-reply)]
             ; TODO: reply validation
             (push-history! (str "/" post-reply-body "#" safe-key))
-            (lock-input!))))))
+            (update-input!))))))
 
 (defn get! []
   (let [id (.substring js/window.location.pathname 1)
