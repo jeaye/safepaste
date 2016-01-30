@@ -8,7 +8,6 @@
 
 (defn viewing? []
   (not= "/" js/window.location.pathname))
-
 (def editing? (comp not viewing?))
 
 (defn update-input! []

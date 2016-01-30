@@ -5,12 +5,21 @@
 
 (enable-console-print!)
 
+(def about-post
+  "/about---#439d738e6e11e2583c9d2414541d7cae6b612a524c4af930a4fdedaeabccd31b")
+
+(defn view-post! [path]
+  (dom/set-url! path)
+  (dom/update-input!)
+  (remote/get!))
+
 (defn onload [e]
   ; TODO: Setup other events: about/donate
   (dom/update-input!)
   (when (dom/viewing?)
     (remote/get!))
   (dommy/listen! (sel1 :#new) :click dom/reset-page!)
+  (dommy/listen! (sel1 :#about) :click (fn [_] (view-post! about-post)))
   (dommy/listen! (sel1 :#post) :click remote/post!))
 
 ; TODO: listen to browser back/forward and refresh everything

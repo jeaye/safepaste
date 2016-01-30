@@ -16,16 +16,19 @@
 (defn hexify [b]
   (apply str (map #(format "%02x" %) b)))
 
+; TODO: make sure this exists
+(def output-dir "post/")
+
 (defroutes app-routes
   (GET "/:id{(?:.{8})?}" [id] (partial home/render id))
   (GET "/api/:id" [id]
     ; TODO: Input validation
-    (slurp (str "target/" id)))
+    (slurp (str output-dir id)))
   (POST "/api/new" {body :body}
     ; TODO: Input validation
     (let [id (hexify (nonce/random-bytes 4)) ; TODO: improve
           json-body (json/read-str (slurp body))]
-      (spit (str "target/" id) (get json-body "data"))
+      (spit (str output-dir id) (get json-body "data"))
       id))
   (route/files "/js" {:root "target/js"})
   ; TODO: Call into home with an error string (red)
