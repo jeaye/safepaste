@@ -7,7 +7,6 @@
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
 (defn post! [e]
-  ; TODO: Don't post empty content
   (let [sha-key (.substring js/window.location.hash 1)
         data (dommy/value (sel1 :#input))
         safe-key (.toString (.random js/CryptoJS.lib.WordArray 32))
