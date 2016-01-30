@@ -7,6 +7,7 @@
 
 (defn onload [e]
   ; TODO: Setup other events: about/donate
+  (dom/update-input!)
   (when (dom/viewing?)
     (remote/get!))
   (dommy/listen! (sel1 :#new) :click dom/reset-page!)
