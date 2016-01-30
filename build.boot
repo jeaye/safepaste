@@ -1,6 +1,9 @@
 (set-env!
   :source-paths #{"src/clj" "src/cljs" "src/js"}
 
+  ; TODO: Show error messages from server
+  ; - show error messages when anything goes wrong on the client
+
   ; TODO: harden everything!
   ;   CSP for XSS protection
   ; TODO: prevent just anyone from using the api?
