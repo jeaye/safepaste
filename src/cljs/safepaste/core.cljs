@@ -16,7 +16,6 @@
   (remote/get!))
 
 (defn onload [e]
-  ; TODO: Setup other events: about/donate
   (dom/update-input!)
   (when (dom/viewing?)
     (remote/get!))
