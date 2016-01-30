@@ -21,6 +21,7 @@
         content-color base00
         content-font-size "1.5em"
         status-color green
+        status-error-color red
         link-hover-color orange]
     (css
       {:pretty-print? false}
@@ -56,6 +57,7 @@
        [:.input {:height input-height
                  :min-height input-height
                  :width "100%"}]]
+      [:.status-error {:color (str status-error-color " !important")}]
       [:textarea {:background-color content-background-color
                   :color content-color
                   :border "0px"

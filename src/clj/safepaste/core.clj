@@ -32,7 +32,7 @@
       id))
   (route/files "/js" {:root "target/js"})
   ; TODO: Call into home with an error string (red)
-  (route/not-found "not found"))
+  (route/not-found (partial home/render nil "Unknown paste.")))
 
 (def app (wrap-defaults
            app-routes
