@@ -17,8 +17,9 @@
 
 (defn onload [e]
   (dom/update-input!)
-  (when (dom/viewing?)
-    (remote/get!))
+  (if (dom/viewing?)
+    (view-post! (+ js/window.location.pathname js/window.location.hash))
+    (dom/reset-status!))
   (dommy/listen! (sel1 :#new) :click dom/reset-page!)
   (dommy/listen! (sel1 :#about) :click (fn [_] (view-post! about-post)))
   (dommy/listen! (sel1 :#donate) :click (fn [_] (view-post! donate-post)))

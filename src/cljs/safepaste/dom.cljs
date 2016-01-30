@@ -15,6 +15,9 @@
     (dommy/set-text! item status)
     (dommy/remove-class! item :.status-error)))
 
+(defn reset-status! []
+  (set-status! "Your post will be encrypted using AES-256."))
+
 (defn set-error! [error]
   (let [item (sel1 :#status)]
     (dommy/set-text! item error)
@@ -32,4 +35,5 @@
 
 (defn reset-page! [e]
   (set-url! "/")
-  (reset-input!))
+  (reset-input!)
+  (reset-status!))
