@@ -7,6 +7,7 @@
             [clojure.java.io :as io]))
 
 (def output-dir "post/")
+(def id-size 4)
 
 ; XXX: repeated in the client
 (def max-post-bytes (* 2 1024 1024))
@@ -25,6 +26,9 @@
   (with-open [w (io/output-stream f)]
     (.write w content)))
 
+(defn random-id []
+  (codecs/bytes->hex nonce/random-bytes id-size))
+
 (defn view [id]
   (let [path (str output-dir id)]
     (json/write-str
@@ -33,7 +37,7 @@
         {:error "Invalid post ID."}))))
 
 (defn post [body]
-  (let [id (codecs/bytes->hex (nonce/random-bytes 4)) ; TODO: improve
+  (let [id (first (remove fs/exists? (repeatedly gen-rand-id))
         json-body (json/read-str (slurp body))]
     (if (>= (count (get json-body "data")) max-post-bytes)
       (json/write-str {:error "Post is too large."})
