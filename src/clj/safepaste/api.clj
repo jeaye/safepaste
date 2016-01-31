@@ -8,6 +8,9 @@
 
 (def output-dir "post/")
 
+; XXX: repeated in the client
+(def max-post-bytes (* 2 1024 1024))
+
 ; https://stackoverflow.com/questions/23018870/how-to-read-a-whole-binary-file-nippy-into-byte-array-in-clojure/26372677#26372677
 (defn slurp-bytes
   "Slurp the bytes from a slurpable thing."
@@ -31,9 +34,11 @@
         {:error "Invalid post ID."}))))
 
 (defn post [body]
-  ; TODO: size validation
   (let [id (codecs/bytes->hex (nonce/random-bytes 4)) ; TODO: improve
         json-body (json/read-str (slurp body))]
-    (spit-bytes (str output-dir id)
-                (codecs/base64->bytes (get json-body "data")))
-    (json/write-str {:id id})))
+    (if (>= (count (get json-body "data")) max-post-bytes)
+      (json/write-str {:error "Post is too large."})
+      (do
+        (spit-bytes (str output-dir id)
+                    (codecs/base64->bytes (get json-body "data")))
+        (json/write-str {:id id})))))

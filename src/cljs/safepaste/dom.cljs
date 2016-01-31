@@ -33,10 +33,14 @@
 (defn reset-status! []
   (set-status! :editing))
 
-(defn set-error! [key-id]
+(defn set-error! [error-key-or-msg]
   (let [item (sel1 :#status)]
-    (dommy/set-text! item (error key-id))
-    (dommy/add-class! item :status-error)))
+    (dommy/set-text!
+      item
+      (if (keyword? error-key-or-msg)
+        (error error-key-or-msg)
+        error-key-or-msg)
+      (dommy/add-class! item :status-error))))
 
 (defn update-input! []
   (let [input (sel1 :#input)]

@@ -6,7 +6,9 @@
             [crypto-js.aes])
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
-(def max-post-bytes (* 2 1024 1024))
+; XXX: repeated in the server
+(def max-post-bytes (* 3 1024 1024))
+(def key-size 64)
 
 (defn post! [e]
   (let [data (dommy/value (sel1 :#input))]
@@ -22,15 +24,18 @@
             (let [reply (<! (http/post "/api/new"
                                        {:json-params {:data encoded}}))
                   reply-json (.parse js/JSON (:body reply))]
-              (dom/set-url! (str "/" (.-id reply-json) "#" safe-key))
-              (dom/update-input!)
-              (dom/set-status! :uploaded))))))))
+              (if-let [error (.-error reply-json)]
+                (dom/set-error! error)
+                (do
+                  (dom/set-url! (str "/" (.-id reply-json) "#" safe-key))
+                  (dom/update-input!)
+                  (dom/set-status! :uploaded))))))))))
 
 (defn get! []
   (dom/set-status! :downloading)
   (let [id (.substring js/window.location.pathname 1)
         safe-key (.substring js/window.location.hash 1)]
-    (if (not= 64 (count safe-key))
+    (if (not= key-size (count safe-key))
       (dom/set-error! :invalid-key)
       (go
         (let [get-reply (<! (http/get (str "/api/" id)))
