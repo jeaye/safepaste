@@ -12,6 +12,10 @@
       [:body
        [:div {:class "header"}
         [:p {:id "status"}]
+        [:div {:class "expiry"}
+         [:select
+          (for [o ["Burn after reading" "One hour" "One day" "One week" "One month"]]
+            [:option {:value o} o])]]
         [:nav
          (for [a ["new" "about" "donate" "post"]]
            [:a {:id a} a])]]

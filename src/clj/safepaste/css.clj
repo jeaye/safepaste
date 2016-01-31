@@ -37,23 +37,41 @@
        [:.header {:background-color header-background-color
                   :height header-height
                   :max-height header-height
-                  :width "100%"}
+                  :width "100%"
+                  :display "flex"
+                  :justify-content "center"}
         [:p {:color status-color
-             :float "left"
+             :width "33%"
              :font-weight :bold
              :margin "0px"
              :margin-top "1em"
              :margin-left "1em"
              :padding "0px"}]
         [:nav
-         {:color header-color
+         {:width "33%"
+          :color header-color
           :text-align "right"
           :padding-right "10px"
           :padding-top "5px"}
          [:a
           {:padding ".1em .1em"
            :margin-left ".5em"
-           :font-size header-font-size}]]]
+           :font-size header-font-size}]]
+        [:.expiry
+         {:width "33%"
+          :padding-top ".5em"
+          :text-align "center"}
+         [:select
+          ; TODO: variables for these
+          {:color content-background-color
+           :border (str "1px solid " base01)
+           :background-color base01
+           :appearance "none"
+           :-webkit-appearance "none"
+           :-moz-appearance "none"
+           :padding "5px 35px 5px 5px"
+           :margin "0px"}]
+        ]]
        [:.input {:height input-height
                  :min-height input-height
                  :width "100%"}]]
