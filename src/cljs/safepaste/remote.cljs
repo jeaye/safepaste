@@ -7,7 +7,7 @@
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
 ; XXX: repeated in the server
-(def max-post-bytes (* 3 1024 1024))
+(def max-post-bytes (* 2 1024 1024))
 (def key-size 64)
 
 (defn post! [e]

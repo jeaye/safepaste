@@ -6,6 +6,8 @@
 
   ; TODO: Compress posts?
 
+  ; TODO: autofocus input
+
   ; TODO: harden everything!
   ;   CSP for XSS protection
   ; TODO: prevent just anyone from using the api?

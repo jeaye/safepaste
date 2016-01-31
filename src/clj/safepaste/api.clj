@@ -27,7 +27,7 @@
     (.write w content)))
 
 (defn random-id []
-  (codecs/bytes->hex nonce/random-bytes id-size))
+  (codecs/bytes->hex (nonce/random-bytes id-size)))
 
 (defn view [id]
   (let [path (str output-dir id)]
