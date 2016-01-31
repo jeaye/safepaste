@@ -15,11 +15,10 @@
             encoded (.toString encrypted)]
         (dom/set-status! :uploading)
         (go
-          (let [post-reply (<! (http/post "/api/new"
+          (let [reply (<! (http/post "/api/new"
                                           {:json-params {:data encoded}}))
-                post-reply-body (:body post-reply)]
-            ; TODO: reply validation
-            (dom/set-url! (str "/" post-reply-body "#" safe-key))
+                reply-json (.parse js/JSON (:body reply))]
+            (dom/set-url! (str "/" (.-id reply-json) "#" safe-key))
             (dom/update-input!)
             (dom/set-status! :uploaded)))))))
 

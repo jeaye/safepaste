@@ -37,4 +37,4 @@
         json-body (json/read-str (slurp body))]
     (spit-bytes (str output-dir id)
                 (codecs/base64->bytes (get json-body "data")))
-    id))
+    (json/write-str {:id id})))
