@@ -37,7 +37,7 @@
         {:error "Invalid post ID."}))))
 
 (defn post [body]
-  (let [id (first (remove fs/exists? (repeatedly gen-rand-id))
+  (let [id (first (remove fs/exists? (repeatedly random-id)))
         json-body (json/read-str (slurp body))]
     (if (>= (count (get json-body "data")) max-post-bytes)
       (json/write-str {:error "Post is too large."})
