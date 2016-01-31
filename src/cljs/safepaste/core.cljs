@@ -6,9 +6,9 @@
 (enable-console-print!)
 
 (def about-post
-  "/about---#439d738e6e11e2583c9d2414541d7cae6b612a524c4af930a4fdedaeabccd31b")
+  "/about---#c92f48c6631086b2c193556ac639c186d195e029b0569cdcca49dd31b2a54ffa")
 (def donate-post
-  "/donate--#6930b5545b073d1345d03cc6adf5409d58ba9ecc49b5b4fabb72fcaed0c8c1e8")
+  "/donate--#634397c795e76b77627a356f5eb5d92e336ce1dc552f0c7bb28e2b306891f24f")
 
 (defn view-post! [path]
   (dom/set-url! path)
