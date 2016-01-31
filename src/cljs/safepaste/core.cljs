@@ -25,5 +25,4 @@
   (dommy/listen! (sel1 :#donate) :click (fn [_] (view-post! donate-post)))
   (dommy/listen! (sel1 :#post) :click remote/post!))
 
-; TODO: listen to browser back/forward and refresh everything
 (dommy/listen! js/window :load onload)
