@@ -2,7 +2,9 @@
   (:require [buddy.core
              [nonce :as nonce]
              [codecs :as codecs]]
-            [clojure.data.json :as json]))
+            [me.raynes.fs :as fs]
+            [clojure.data.json :as json]
+            [clojure.java.io :as io]))
 
 ; TODO: make sure this exists
 (def output-dir "post/")
@@ -12,13 +14,13 @@
   "Slurp the bytes from a slurpable thing."
   [path]
   (with-open [out (java.io.ByteArrayOutputStream.)]
-    (clojure.java.io/copy (clojure.java.io/input-stream path) out)
+    (io/copy (io/input-stream path) out)
     (.toByteArray out)))
 
 (defn spit-bytes
   "Opposite of slurp-bytes, opening f as a writer and writing all byte content."
   [f content]
-  (with-open [w (clojure.java.io/output-stream f)]
+  (with-open [w (io/output-stream f)]
     (.write w content)))
 
 (defn view [id]

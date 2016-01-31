@@ -7,6 +7,8 @@
   ; TODO: Add a file dated for each post's expiration
   ; - 1 read, hour, day, week, month
 
+  ; TODO: Compress posts?
+
   ; TODO: harden everything!
   ;   CSP for XSS protection
   ; TODO: prevent just anyone from using the api?
@@ -33,21 +35,24 @@
                   [buddy/buddy-core "0.9.0"] ; Encryption
                   [hiccup "1.0.5"] ; HTML generation
                   [garden "1.3.0"] ; CSS generation
+                  [me.raynes/fs "1.4.6"] ; Filesystem work
 
                   ; HTTP
                   [ring/ring-core "1.4.0"]
                   [ring/ring-servlet "1.4.0"]
                   [ring/ring-defaults "0.1.5"]])
 
-(require '[safepaste.core]
+(require '[safepaste core api]
          '[adzerk.boot-cljs :refer [cljs]]
          '[pandeiro.boot-http :refer [serve]]
          '[adzerk.boot-reload :refer [reload]]
-         '[adzerk.boot-cljs-repl :refer [cljs-repl start-repl]])
+         '[adzerk.boot-cljs-repl :refer [cljs-repl start-repl]]
+         '[me.raynes.fs :as fs])
 
 (deftask dev
   "Start dev environment"
   []
+  (fs/mkdir safepaste.api/output-dir)
   (comp
     (serve :handler 'safepaste.core/app
            :reload true
