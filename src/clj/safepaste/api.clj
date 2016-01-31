@@ -24,8 +24,12 @@
     (.write w content)))
 
 (defn view [id]
-  ; TODO: Input validation
-  (codecs/bytes->base64 (slurp-bytes (str output-dir id))))
+  ; TODO: Test that the path can't be something like ../../../secret-data
+  (let [path (str output-dir id)]
+    (json/write-str
+      (if (fs/exists? path)
+        {:data (codecs/bytes->base64 (slurp-bytes path))}
+        {:error "Invalid post ID."}))))
 
 (defn post [body]
   ; TODO: Input validation
