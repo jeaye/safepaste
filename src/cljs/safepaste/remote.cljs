@@ -10,19 +10,18 @@
   (let [data (dommy/value (sel1 :#input))]
     (when (and (not-empty data) (not (dom/viewing?)))
       (dom/set-status! :encrypting)
-      (let [sha-key (.substring js/window.location.hash 1)
-            safe-key (.toString (.random js/CryptoJS.lib.WordArray 32))
+      (let [safe-key (.toString (.random js/CryptoJS.lib.WordArray 32))
             encrypted (.encrypt js/CryptoJS.AES data safe-key)
             encoded (.toString encrypted)]
-        ; TODO: input validation
         (dom/set-status! :uploading)
-        (go (let [post-reply (<! (http/post "/api/new"
-                                            {:json-params {:data encoded}}))
-                  post-reply-body (:body post-reply)]
-              ; TODO: reply validation
-              (dom/set-url! (str "/" post-reply-body "#" safe-key))
-              (dom/update-input!)
-              (dom/set-status! :uploaded)))))))
+        (go
+          (let [post-reply (<! (http/post "/api/new"
+                                          {:json-params {:data encoded}}))
+                post-reply-body (:body post-reply)]
+            ; TODO: reply validation
+            (dom/set-url! (str "/" post-reply-body "#" safe-key))
+            (dom/update-input!)
+            (dom/set-status! :uploaded)))))))
 
 (defn get! []
   (dom/set-status! :downloading)
