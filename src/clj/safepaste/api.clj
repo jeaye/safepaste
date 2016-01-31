@@ -26,7 +26,6 @@
     (.write w content)))
 
 (defn view [id]
-  ; TODO: Test that the path can't be something like ../../../secret-data
   (let [path (str output-dir id)]
     (json/write-str
       (if (fs/exists? path)

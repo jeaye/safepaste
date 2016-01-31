@@ -1,9 +1,6 @@
 (set-env!
   :source-paths #{"src/clj" "src/cljs" "src/js"}
 
-  ; TODO: Show error messages from server
-  ; - show error messages when anything goes wrong on the client
-
   ; TODO: Add a file dated for each post's expiration
   ; - 1 read, hour, day, week, month
 
