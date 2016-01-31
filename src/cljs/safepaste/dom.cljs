@@ -10,13 +10,23 @@
   (not= "/" js/window.location.pathname))
 (def editing? (comp not viewing?))
 
-(defn set-status! [status]
+(defn status [key-id]
+  (condp #(= %1 %2) key-id
+    :editing "Your post will be encrypted using AES-256."
+    :encrypting "Encrypting paste..."
+    :uploading "Uploading paste..."
+    :uploaded "Your encrypted paste has been uploaded. Share this URL cautiously!"
+    :downloading "Downloading paste..."
+    :decrypting "Decrypting paste..."
+    :viewing "This paste is encrypted for your eyes only."))
+
+(defn set-status! [key-id]
   (let [item (sel1 :#status)]
-    (dommy/set-text! item status)
+    (dommy/set-text! item (status key-id))
     (dommy/remove-class! item :status-error)))
 
 (defn reset-status! []
-  (set-status! "Your post will be encrypted using AES-256."))
+  (set-status! :editing))
 
 (defn set-error! [error]
   (let [item (sel1 :#status)]
