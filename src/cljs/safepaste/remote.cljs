@@ -42,12 +42,18 @@
               reply-json (.parse js/JSON (:body get-reply))] ; TODO: Use transit?
           (if-let [error (.-error reply-json)]
             (dom/set-error! error)
-            (do
+
+            ; crytpo-js doesn't always throw, even when things are blatantly
+            ; wrong. Given the same wrong data, it throws about 10% of the time.
+            (try
               (dom/set-status! :decrypting)
               (let [decrypted (.decrypt js/CryptoJS.AES
                                         (.-data reply-json)
-                                        safe-key)]
-                ; TODO: error checking
-                (dommy/set-value! (sel1 :#input)
-                                  (.toString decrypted js/CryptoJS.enc.Utf8))
-                (dom/set-status! :viewing)))))))))
+                                        safe-key)
+                    decrypted-str (.toString decrypted js/CryptoJS.enc.Utf8)]
+                (when (empty? decrypted-str)
+                  (throw (js/Error.)))
+                (dommy/set-value! (sel1 :#input) decrypted-str)
+                (dom/set-status! :viewing))
+              (catch js/Error e
+                (dom/set-error! :unable-to-decrypt)))))))))
