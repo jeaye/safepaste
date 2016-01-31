@@ -6,22 +6,25 @@
             [crypto-js.aes])
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
+(def max-post-bytes (* 2 1024 1024))
+
 (defn post! [e]
-  ; TODO: size validation
   (let [data (dommy/value (sel1 :#input))]
-    (when (and (not-empty data) (not (dom/viewing?)))
-      (dom/set-status! :encrypting)
-      (let [safe-key (.toString (.random js/CryptoJS.lib.WordArray 32))
-            encrypted (.encrypt js/CryptoJS.AES data safe-key)
-            encoded (.toString encrypted)]
-        (dom/set-status! :uploading)
-        (go
-          (let [reply (<! (http/post "/api/new"
-                                          {:json-params {:data encoded}}))
-                reply-json (.parse js/JSON (:body reply))]
-            (dom/set-url! (str "/" (.-id reply-json) "#" safe-key))
-            (dom/update-input!)
-            (dom/set-status! :uploaded)))))))
+    (if (>= (count data) max-post-bytes)
+      (dom/set-error! :too-large)
+      (when (and (not-empty data) (not (dom/viewing?)))
+        (dom/set-status! :encrypting)
+        (let [safe-key (.toString (.random js/CryptoJS.lib.WordArray 32))
+              encrypted (.encrypt js/CryptoJS.AES data safe-key)
+              encoded (.toString encrypted)]
+          (dom/set-status! :uploading)
+          (go
+            (let [reply (<! (http/post "/api/new"
+                                       {:json-params {:data encoded}}))
+                  reply-json (.parse js/JSON (:body reply))]
+              (dom/set-url! (str "/" (.-id reply-json) "#" safe-key))
+              (dom/update-input!)
+              (dom/set-status! :uploaded))))))))
 
 (defn get! []
   (dom/set-status! :downloading)

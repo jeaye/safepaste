@@ -22,7 +22,8 @@
 
 (defn error [key-id]
   (condp #(= %1 %2) key-id
-    :invalid-key "Invalid secret key."))
+    :invalid-key "Invalid secret key."
+    :too-large "Post is too large."))
 
 (defn set-status! [key-id]
   (let [item (sel1 :#status)]
