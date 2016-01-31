@@ -28,18 +28,19 @@
   (dom/set-status! :downloading)
   (let [id (.substring js/window.location.pathname 1)
         safe-key (.substring js/window.location.hash 1)]
-    ; TODO: input validation
-    (go
-      (let [get-reply (<! (http/get (str "/api/" id)))
-            reply-json (.parse js/JSON (:body get-reply))] ; TODO: Use transit?
-        (if-let [error (.-error reply-json)]
-          (dom/set-error! error)
-          (do
-            (dom/set-status! :decrypting)
-            (let [decrypted (.decrypt js/CryptoJS.AES
-                                      (.-data reply-json)
-                                      safe-key)]
-              ; TODO: error checking
-              (dommy/set-value! (sel1 :#input)
-                                (.toString decrypted js/CryptoJS.enc.Utf8))
-              (dom/set-status! :viewing))))))))
+    (if (not= 64 (count safe-key))
+      (dom/set-error! :invalid-key)
+      (go
+        (let [get-reply (<! (http/get (str "/api/" id)))
+              reply-json (.parse js/JSON (:body get-reply))] ; TODO: Use transit?
+          (if-let [error (.-error reply-json)]
+            (dom/set-error! error)
+            (do
+              (dom/set-status! :decrypting)
+              (let [decrypted (.decrypt js/CryptoJS.AES
+                                        (.-data reply-json)
+                                        safe-key)]
+                ; TODO: error checking
+                (dommy/set-value! (sel1 :#input)
+                                  (.toString decrypted js/CryptoJS.enc.Utf8))
+                (dom/set-status! :viewing)))))))))

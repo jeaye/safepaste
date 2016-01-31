@@ -20,6 +20,10 @@
     :decrypting "Decrypting paste..."
     :viewing "This paste is encrypted for your eyes only."))
 
+(defn error [key-id]
+  (condp #(= %1 %2) key-id
+    :invalid-key "Invalid secret key."))
+
 (defn set-status! [key-id]
   (let [item (sel1 :#status)]
     (dommy/set-text! item (status key-id))
@@ -28,9 +32,9 @@
 (defn reset-status! []
   (set-status! :editing))
 
-(defn set-error! [error]
+(defn set-error! [key-id]
   (let [item (sel1 :#status)]
-    (dommy/set-text! item error)
+    (dommy/set-text! item (error key-id))
     (dommy/add-class! item :status-error)))
 
 (defn update-input! []
