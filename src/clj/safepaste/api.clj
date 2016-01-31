@@ -6,7 +6,6 @@
             [clojure.data.json :as json]
             [clojure.java.io :as io]))
 
-; TODO: make sure this exists
 (def output-dir "post/")
 
 ; https://stackoverflow.com/questions/23018870/how-to-read-a-whole-binary-file-nippy-into-byte-array-in-clojure/26372677#26372677
@@ -32,7 +31,7 @@
         {:error "Invalid post ID."}))))
 
 (defn post [body]
-  ; TODO: Input validation
+  ; TODO: size validation
   (let [id (codecs/bytes->hex (nonce/random-bytes 4)) ; TODO: improve
         json-body (json/read-str (slurp body))]
     (spit-bytes (str output-dir id)

@@ -7,6 +7,7 @@
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
 (defn post! [e]
+  ; TODO: size validation
   (let [data (dommy/value (sel1 :#input))]
     (when (and (not-empty data) (not (dom/viewing?)))
       (dom/set-status! :encrypting)
