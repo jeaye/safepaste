@@ -4,6 +4,9 @@
   ; TODO: Show error messages from server
   ; - show error messages when anything goes wrong on the client
 
+  ; TODO: Add a file dated for each post's expiration
+  ; - 1 read, hour, day, week, month
+
   ; TODO: harden everything!
   ;   CSP for XSS protection
   ; TODO: prevent just anyone from using the api?
