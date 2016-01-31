@@ -1,38 +1,22 @@
 (ns safepaste.core
   (:gen-class)
-  (:require [safepaste.home :as home]
-            [safepaste.css :as css]
-
+  (:require [safepaste
+             [home :as home]
+             [css :as css]
+             [api :as api]]
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
-            [compojure.core :refer :all]
-            [compojure.route :as route]
-            [compojure.response :refer [render]]
-            [clojure.java.io :as io]
-            [buddy.core.nonce :as nonce]
-
-            [clojure.data.json :as json]
-            [clojure.pprint :refer [pprint]]))
-
-(defn hexify [b]
-  (apply str (map #(format "%02x" %) b)))
-
-; TODO: make sure this exists
-(def output-dir "post/")
+            [compojure
+             [core :refer :all]
+             [route :as route]
+             [response :refer [render]]]
+            [clojure.java.io :as io]))
 
 (defroutes app-routes
   (GET "/:id{(?:.{8})?}" [id] (partial home/render id))
-  (GET "/api/:id" [id]
-    ; TODO: Input validation
-    (slurp (str output-dir id)))
-  (POST "/api/new" {body :body}
-    ; TODO: Input validation
-    (let [id (hexify (nonce/random-bytes 4)) ; TODO: improve
-          json-body (json/read-str (slurp body))]
-      (spit (str output-dir id) (get json-body "data"))
-      id))
+  (GET "/api/:id" [id] (api/view id))
+  (POST "/api/new" {body :body} (api/post body))
   (route/files "/js" {:root "target/js"})
-  ; TODO: Call into home with an error string (red)
-  (route/not-found (partial home/render nil "Unknown paste.")))
+  (route/not-found (partial home/render nil)))
 
 (def app (wrap-defaults
            app-routes
