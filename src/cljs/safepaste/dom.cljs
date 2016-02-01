@@ -15,10 +15,12 @@
     :editing "Your post will be encrypted using AES-256."
     :encrypting "Encrypting paste..."
     :uploading "Uploading paste..."
-    :uploaded "Your encrypted paste has been uploaded. Share this URL cautiously!"
+    :uploaded "Your encrypted paste has been uploaded."
+    :uploaded-burn "Your encrypted paste will only be readable once."
     :downloading "Downloading paste..."
     :decrypting "Decrypting paste..."
-    :viewing "This paste is encrypted for your eyes only."))
+    :viewing "This paste is encrypted for your eyes only."
+    :viewing-burned "This paste is encrypted and will never be readable again."))
 
 (defn error [key-id]
   (condp #(= %1 %2) key-id

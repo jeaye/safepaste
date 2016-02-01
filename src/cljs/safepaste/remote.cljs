@@ -31,7 +31,9 @@
                 (do
                   (dom/set-url! (str "/" (.-id reply-json) "#" safe-key))
                   (dom/update-inputs!)
-                  (dom/set-status! :uploaded))))))))))
+                  (if (= expiry "burn")
+                    (dom/set-status! :uploaded-burn)
+                    (dom/set-status! :uploaded)))))))))))
 
 (defn get! []
   (dom/set-status! :downloading)
@@ -56,6 +58,8 @@
                 (when (empty? decrypted-str)
                   (throw (js/Error.)))
                 (dommy/set-value! (sel1 :#input) decrypted-str)
-                (dom/set-status! :viewing))
+                (if (.-burned reply-json)
+                  (dom/set-status! :viewing-burned)
+                  (dom/set-status! :viewing)))
               (catch js/Error e
                 (dom/set-error! :unable-to-decrypt)))))))))
