@@ -51,6 +51,8 @@
 
       :else
       (do
+        ; Each post file also gets a .expire file which is dated for
+        ; when it should be deleted.
         ; There's a bug where the modification time isn't set when it's
         ; creating a new file. I've opened an issue here:
         ; https://github.com/Raynes/fs/issues/101
