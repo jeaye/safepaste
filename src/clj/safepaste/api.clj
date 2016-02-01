@@ -1,5 +1,6 @@
 (ns safepaste.api
-  (:require [buddy.core
+  (:require [safepaste.expiry :as expiry]
+            [buddy.core
              [nonce :as nonce]
              [codecs :as codecs]]
             [me.raynes.fs :as fs]
@@ -11,12 +12,6 @@
 
 ; XXX: repeated in the client
 (def max-post-bytes (* 2 1024 1024))
-
-(def second-ms 1000)
-(def hour-ms (* 3600 second-ms))
-(def day-ms (* 24 hour-ms))
-(def week-ms (* 7 day-ms))
-(def month-ms (* 30 day-ms))
 
 ; https://stackoverflow.com/questions/23018870/how-to-read-a-whole-binary-file-nippy-into-byte-array-in-clojure/26372677#26372677
 (defn slurp-bytes
@@ -35,20 +30,6 @@
 (defn random-id []
   (codecs/bytes->hex (nonce/random-bytes id-size)))
 
-(defn valid-expiry? [expiry]
-  (some #(= % expiry) ["burn" "hour" "day" "week" "month"]))
-
-(defn future-ms [offset]
-  (+ (System/currentTimeMillis) offset))
-
-(defn expiry-time [expiry]
-  (case expiry
-    "burn" (future-ms day-ms)
-    "hour" (future-ms hour-ms)
-    "day" (future-ms day-ms)
-    "week" (future-ms week-ms)
-    "month" (future-ms month-ms)))
-
 (defn view [id]
   (let [path (str output-dir id)]
     (json/write-str
@@ -65,7 +46,7 @@
       (>= (count data) max-post-bytes)
       (json/write-str {:error "Post is too large."})
 
-      (not (valid-expiry? expiry))
+      (not (expiry/valid? expiry))
       (json/write-str {:error "Invalid expiry."})
 
       :else
@@ -74,7 +55,7 @@
         ; creating a new file. I've opened an issue here:
         ; https://github.com/Raynes/fs/issues/101
         (dotimes [_ 2]
-          (fs/touch (str output-dir id ".expire") (expiry-time expiry)))
+          (fs/touch (str output-dir id ".expire") (expiry/offset expiry)))
 
         (spit-bytes (str output-dir id) (codecs/base64->bytes data))
         (json/write-str {:id id})))))
