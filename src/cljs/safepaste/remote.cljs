@@ -11,7 +11,8 @@
 (def key-size 64)
 
 (defn post! [e]
-  (let [data (dommy/value (sel1 :#input))]
+  (let [data (dommy/value (sel1 :#input))
+        expiry (dommy/value (sel1 :#expiry))]
     (if (>= (count data) max-post-bytes)
       (dom/set-error! :too-large)
       (when (and (not-empty data) (not (dom/viewing?)))
@@ -22,7 +23,8 @@
           (dom/set-status! :uploading)
           (go
             (let [reply (<! (http/post "/api/new"
-                                       {:json-params {:data encoded}}))
+                                       {:json-params {:data encoded
+                                                      :expiry expiry}}))
                   reply-json (.parse js/JSON (:body reply))]
               (if-let [error (.-error reply-json)]
                 (dom/set-error! error)

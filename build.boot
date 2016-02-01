@@ -12,6 +12,8 @@
 
   ; TODO: Send post expiry with contents and set the select box
 
+  ; TODO: Document!
+
   ; TODO: harden everything!
   ;   CSP for XSS protection
   ; TODO: prevent just anyone from using the api?

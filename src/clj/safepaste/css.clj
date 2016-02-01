@@ -42,14 +42,14 @@
                   :display "flex"
                   :justify-content "center"}
         [:p {:color status-color
-             :width "33%"
+             :width "40%"
              :font-weight :bold
              :margin "0px"
              :margin-top "1em"
              :margin-left "1em"
              :padding "0px"}]
         [:nav
-         {:width "33%"
+         {:width "40%"
           :color header-color
           :text-align "right"
           :padding-right "10px"
@@ -59,7 +59,7 @@
            :margin-left ".5em"
            :font-size header-font-size}]]
         [:.expiry
-         {:width "33%"
+         {:width "20%"
           :padding-top ".5em"
           :text-align "center"}
          [:select

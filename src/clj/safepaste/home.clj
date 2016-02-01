@@ -19,9 +19,9 @@
           [:option {:value "burn"} "Burn after reading"]
           (for [o ["hour" "day" "week" "month"]]
             [:option
-             (cond-> {:value o}
-               (= o default-expiry)
-               (assoc :selected "selected"))
+             (conj {:value o}
+                   (when (= o default-expiry)
+                     {:selected "selected"}))
              (str "Expires after 1 " o)])]]
         [:nav
          (for [a ["new" "about" "donate" "post"]]
