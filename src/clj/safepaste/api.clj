@@ -30,12 +30,20 @@
 (defn random-id []
   (codecs/bytes->hex (nonce/random-bytes id-size)))
 
+(defn delete [path]
+  (doseq [p [path (str path ".expiry") (str path ".burn")]]
+    (fs/delete p)))
+
 (defn view [id]
-  ; TODO: Handle burn after reading
   (let [path (str output-dir id)]
     (json/write-str
       (if (fs/exists? path)
-        {:data (codecs/bytes->base64 (slurp-bytes path))}
+        (let [data (codecs/bytes->base64 (slurp-bytes path))
+              burn (fs/exists? (str path ".burn"))]
+          (when burn
+            (delete path))
+          {:data data
+           :burned burn})
         {:error "Invalid post ID."}))))
 
 (defn post [body]
@@ -59,7 +67,11 @@
         ; https://github.com/Raynes/fs/issues/101
         (dotimes [_ 2]
           (fs/touch (str output-dir id ".expire") (expiry/offset expiry)))
-        ; TODO: Handle burn after reading
+
+        ; If the file needs to be burned after reading, a .burn file is
+        ; also created.
+        (when (= expiry "burn")
+          (fs/touch (str output-dir id ".burn")))
 
         (spit-bytes (str output-dir id) (codecs/base64->bytes data))
         (json/write-str {:id id})))))
