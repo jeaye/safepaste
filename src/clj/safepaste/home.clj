@@ -2,6 +2,8 @@
   (:require [safepaste.css :as css]
             [hiccup.page :as page]))
 
+(def default-expiry "day")
+
 (defn render [id request]
   (let [placeholder "Enter your paste here…"]
     (page/html5
@@ -15,9 +17,12 @@
         [:div {:class "expiry"}
          [:select
           [:option {:value "burn"} "Burn after reading"]
-          [:option {:value "hour" :selected "selected"} "Expires after 1 hour"]
-          (for [o ["day" "week" "month"]]
-            [:option {:value o} (str "Expires after 1 " o)])]]
+          (for [o ["hour" "day" "week" "month"]]
+            [:option
+             (cond-> {:value o}
+               (= o default-expiry)
+               (assoc :selected "selected"))
+             (str "Expires after 1 " o)])]]
         [:nav
          (for [a ["new" "about" "donate" "post"]]
            [:a {:id a} a])]]
