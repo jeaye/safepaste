@@ -10,8 +10,6 @@
 
   ; TODO: add <noscript> info
 
-  ; TODO: Send post expiry with contents and set the select box
-
   ; TODO: Document!
 
   ; TODO: harden everything!
