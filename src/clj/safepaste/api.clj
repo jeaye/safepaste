@@ -31,7 +31,7 @@
   (codecs/bytes->hex (nonce/random-bytes id-size)))
 
 (defn delete [path]
-  (doseq [p [path (str path ".expiry") (str path ".burn")]]
+  (doseq [p [path (str path ".expire") (str path ".burn")]]
     (fs/delete p)))
 
 (defn view [id]
