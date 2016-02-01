@@ -31,6 +31,7 @@
   (codecs/bytes->hex (nonce/random-bytes id-size)))
 
 (defn view [id]
+  ; TODO: Handle burn after reading
   (let [path (str output-dir id)]
     (json/write-str
       (if (fs/exists? path)
@@ -58,6 +59,7 @@
         ; https://github.com/Raynes/fs/issues/101
         (dotimes [_ 2]
           (fs/touch (str output-dir id ".expire") (expiry/offset expiry)))
+        ; TODO: Handle burn after reading
 
         (spit-bytes (str output-dir id) (codecs/base64->bytes data))
         (json/write-str {:id id})))))
