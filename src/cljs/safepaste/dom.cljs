@@ -49,12 +49,10 @@
     (if (viewing?)
       (do
         (dommy/set-attr! input :readonly)
-        (dommy/set-attr! expiry :disabled)
-        )
+        (dommy/set-attr! expiry :style "display:none;"))
       (do
         (dommy/remove-attr! input :readonly)
-        (dommy/remove-attr! expiry :disabled)
-        ))))
+        (dommy/remove-attr! expiry :style)))))
 
 (defn reset-input! []
   (dommy/set-value! (sel1 :#input) "")
