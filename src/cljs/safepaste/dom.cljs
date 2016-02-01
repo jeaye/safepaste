@@ -40,8 +40,8 @@
       item
       (if (keyword? error-key-or-msg)
         (error error-key-or-msg)
-        error-key-or-msg)
-      (dommy/add-class! item :status-error))))
+        error-key-or-msg))
+    (dommy/add-class! item :status-error)))
 
 (defn update-input! []
   (let [input (sel1 :#input)]

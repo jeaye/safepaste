@@ -14,8 +14,10 @@
         [:p {:id "status"}]
         [:div {:class "expiry"}
          [:select
-          (for [o ["Burn after reading" "One hour" "One day" "One week" "One month"]]
-            [:option {:value o} o])]]
+          [:option {:value "burn"} "Burn after reading"]
+          [:option {:value "hour" :selected "selected"} "Expires after 1 hour"]
+          (for [o ["day" "week" "month"]]
+            [:option {:value o} (str "Expires after 1 " o)])]]
         [:nav
          (for [a ["new" "about" "donate" "post"]]
            [:a {:id a} a])]]

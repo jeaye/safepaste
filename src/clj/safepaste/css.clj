@@ -11,6 +11,7 @@
 (def violet    "#6c71c4") (def blue      "#268bd2")
 (def cyan      "#2aa198") (def green     "#859900")
 
+; TODO: Break these bits into individual functions
 (defn main []
   (let [header-height "3em"
         input-height (str "calc(100% - " header-height ")")
@@ -27,7 +28,7 @@
       {:pretty-print? false}
       [:html :body {:height "100%"}]
       [:body
-       {:background-color "red"
+       {:background-color content-background-color
         :color content-color
         :width "100%"
         :min-height "100%"
@@ -62,16 +63,16 @@
           :padding-top ".5em"
           :text-align "center"}
          [:select
-          ; TODO: variables for these
-          {:color content-background-color
-           :border (str "1px solid " base01)
-           :background-color base01
+          {:color header-color
+           :font-size "1em"
+           :font-weight "bold"
+           :border "0px"
+           :background-color content-background-color
            :appearance "none"
            :-webkit-appearance "none"
            :-moz-appearance "none"
            :padding "5px 35px 5px 5px"
-           :margin "0px"}]
-        ]]
+           :margin "0px"}]]]
        [:.input {:height input-height
                  :min-height input-height
                  :width "100%"}]]

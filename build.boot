@@ -8,6 +8,8 @@
 
   ; TODO: autofocus input
 
+  ; TODO: add <noscript> info
+
   ; TODO: harden everything!
   ;   CSP for XSS protection
   ; TODO: prevent just anyone from using the api?
