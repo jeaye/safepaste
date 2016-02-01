@@ -15,7 +15,7 @@
        [:div {:class "header"}
         [:p {:id "status"}]
         [:div {:class "expiry"}
-         [:select
+         [:select {:id "expiry"}
           [:option {:value "burn"} "Burn after reading"]
           (for [o ["hour" "day" "week" "month"]]
             [:option

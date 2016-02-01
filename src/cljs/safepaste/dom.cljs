@@ -43,15 +43,22 @@
         error-key-or-msg))
     (dommy/add-class! item :status-error)))
 
-(defn update-input! []
-  (let [input (sel1 :#input)]
+(defn update-inputs! []
+  (let [input (sel1 :#input)
+        expiry (sel1 :#expiry)]
     (if (viewing?)
-      (dommy/set-attr! input :readonly)
-      (dommy/remove-attr! input :readonly))))
+      (do
+        (dommy/set-attr! input :readonly)
+        (dommy/set-attr! expiry :disabled)
+        )
+      (do
+        (dommy/remove-attr! input :readonly)
+        (dommy/remove-attr! expiry :disabled)
+        ))))
 
 (defn reset-input! []
   (dommy/set-value! (sel1 :#input) "")
-  (update-input!))
+  (update-inputs!))
 
 (defn reset-page! [e]
   (set-url! "/")

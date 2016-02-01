@@ -28,7 +28,7 @@
                 (dom/set-error! error)
                 (do
                   (dom/set-url! (str "/" (.-id reply-json) "#" safe-key))
-                  (dom/update-input!)
+                  (dom/update-inputs!)
                   (dom/set-status! :uploaded))))))))))
 
 (defn get! []

@@ -12,11 +12,11 @@
 
 (defn view-post! [path]
   (dom/set-url! path)
-  (dom/update-input!)
+  (dom/update-inputs!)
   (remote/get!))
 
 (defn onload [e]
-  (dom/update-input!)
+  (dom/update-inputs!)
   (if (dom/viewing?)
     (view-post! (+ js/window.location.pathname js/window.location.hash))
     (dom/reset-status!))
