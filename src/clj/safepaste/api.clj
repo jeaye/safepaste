@@ -3,14 +3,16 @@
             [buddy.core
              [nonce :as nonce]
              [codecs :as codecs]]
+            [compojure
+             [response :refer [render]]]
             [me.raynes.fs :as fs]
+            [ring.middleware.anti-forgery :refer [*anti-forgery-token*]]
             [clojure.data.json :as json]
             [clojure.java.io :as io]))
 
 (def output-dir "post/")
 (def id-size 4)
 
-; XXX: repeated in the client
 (def max-post-bytes (* 2 1024 1024))
 
 ; https://stackoverflow.com/questions/23018870/how-to-read-a-whole-binary-file-nippy-into-byte-array-in-clojure/26372677#26372677
@@ -35,6 +37,11 @@
   [path]
   (doseq [p [path (str path ".expire") (str path ".burn")]]
     (fs/delete p)))
+
+(defn login []
+  {:status 200
+   :headers {"X-CSRF-Token" *anti-forgery-token*}
+   :body (json/write-str {:max_post_size max-post-bytes})})
 
 (defn view [id]
   (let [path (str output-dir id)]

@@ -6,9 +6,19 @@
             [crypto-js.aes])
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
-; XXX: repeated in the server
-(def max-post-bytes (* 2 1024 1024))
+; Sane default; provided by the server during login
+(def max-post-bytes (atom (* 2 1024 1024)))
 (def key-size 64)
+
+; Unique session token required for posting
+(def csrf-token (atom ""))
+
+(defn login! []
+  (go
+    (let [get-reply (<! (http/get "/api/login"))
+          reply-json (.parse js/JSON (:body get-reply))]
+      (swap! csrf-token (fn [_] (get (:headers get-reply) "x-csrf-token")))
+      (swap! max-post-bytes (fn [_] (.-max-post-size reply-json))))))
 
 (defn post! [e]
   (let [data (dommy/value (sel1 :#input))
@@ -26,7 +36,8 @@
           (go
             (let [reply (<! (http/post "/api/new"
                                        {:json-params {:data encoded
-                                                      :expiry expiry}}))
+                                                      :expiry expiry}
+                                        :headers {"X-CSRF-Token" @csrf-token}}))
                   reply-json (.parse js/JSON (:body reply))]
               (if-let [error (.-error reply-json)]
                 (dom/set-error! error)

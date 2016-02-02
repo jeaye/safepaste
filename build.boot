@@ -2,12 +2,12 @@
   :source-paths #{"src/clj" "src/cljs" "src/js"}
 
   ; TODO: Compress posts?
+  ; lz-string
 
-  ; TODO: Document!
+  ; TODO: Use base85, not base64
 
   ; TODO: harden everything!
   ;   CSP for XSS protection
-  ;   anti-forgery
   ; TODO: prevent just anyone from using the api?
   ; TODO: minify crypto-js
   :dependencies '[[org.clojure/clojure "1.8.0"]
@@ -37,7 +37,8 @@
                   ; HTTP
                   [ring/ring-core "1.4.0"]
                   [ring/ring-servlet "1.4.0"]
-                  [ring/ring-defaults "0.1.5"]])
+                  [ring/ring-defaults "0.1.5"]
+                  [ring/ring-anti-forgery "1.0.0"]])
 
 (require '[safepaste core api]
          '[adzerk.boot-cljs :refer [cljs]]

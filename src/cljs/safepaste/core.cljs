@@ -18,6 +18,7 @@
   (remote/get!))
 
 (defn onload [e]
+  (remote/login!)
   (dom/update-inputs!)
   (if (dom/viewing?)
     (view-post! (+ js/window.location.pathname js/window.location.hash))
