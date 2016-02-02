@@ -10,7 +10,9 @@
 (def donate-post
   "/donate--#634397c795e76b77627a356f5eb5d92e336ce1dc552f0c7bb28e2b306891f24f")
 
-(defn view-post! [path]
+(defn view-post!
+  "Puts the UI in readonly mode and changes the URL to load the post in place."
+  [path]
   (dom/set-url! path)
   (dom/update-inputs!)
   (remote/get!))

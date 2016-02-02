@@ -21,6 +21,8 @@
               encrypted (.encrypt js/CryptoJS.AES data safe-key)
               encoded (.toString encrypted)]
           (dom/set-status! :uploading)
+
+          ; This is an async post; we won't block.
           (go
             (let [reply (<! (http/post "/api/new"
                                        {:json-params {:data encoded
@@ -41,6 +43,8 @@
         safe-key (.substring js/window.location.hash 1)]
     (if (not= key-size (count safe-key))
       (dom/set-error! :invalid-key)
+
+      ; This is an async get; we won't block.
       (go
         (let [get-reply (<! (http/get (str "/api/" id)))
               reply-json (.parse js/JSON (:body get-reply))] ; TODO: Use transit?

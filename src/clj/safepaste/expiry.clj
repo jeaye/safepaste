@@ -9,7 +9,9 @@
 (defn valid? [expiry]
   (some #(= % expiry) ["burn" "hour" "day" "week" "month"]))
 
-(defn future-ms [offset]
+(defn future-ms
+  "Returns the time, in ms, of (+ now offset)."
+  [offset]
   (+ (System/currentTimeMillis) offset))
 
 (defn offset [expiry]

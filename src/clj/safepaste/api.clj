@@ -15,7 +15,7 @@
 
 ; https://stackoverflow.com/questions/23018870/how-to-read-a-whole-binary-file-nippy-into-byte-array-in-clojure/26372677#26372677
 (defn slurp-bytes
-  "Slurp the bytes from a slurpable thing."
+  "Slurps the bytes from a slurpable thing."
   [path]
   (with-open [out (java.io.ByteArrayOutputStream.)]
     (io/copy (io/input-stream path) out)
@@ -30,7 +30,9 @@
 (defn random-id []
   (codecs/bytes->hex (nonce/random-bytes id-size)))
 
-(defn delete [path]
+(defn delete
+  "Deletes a post and all of its corresponding files. Only used when burning."
+  [path]
   (doseq [p [path (str path ".expire") (str path ".burn")]]
     (fs/delete p)))
 
@@ -40,6 +42,7 @@
       (if (fs/exists? path)
         (let [data (codecs/bytes->base64 (slurp-bytes path))
               burn (fs/exists? (str path ".burn"))]
+          ; If a .burn file exists, we'll delete the post immediately
           (when burn
             (delete path))
           {:data data

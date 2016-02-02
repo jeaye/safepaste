@@ -3,7 +3,9 @@
 
 (def title js/window.title)
 
-(defn set-url! [path]
+(defn set-url!
+  "Uses an HTML5 feature to change the browser's URL without reloading."
+  [path]
   (.replaceState js/window.history nil title path))
 
 (defn viewing? []
@@ -36,6 +38,7 @@
 (defn reset-status! []
   (set-status! :editing))
 
+; May take a string, as given by the server
 (defn set-error! [error-key-or-msg]
   (let [item (sel1 :#status)]
     (dommy/set-text!
@@ -45,7 +48,9 @@
         error-key-or-msg))
     (dommy/add-class! item :status-error)))
 
-(defn update-inputs! []
+(defn update-inputs!
+  "Updates the UI to enable or disable input, based on viewing mode."
+  []
   (let [input (sel1 :#input)
         expiry (sel1 :#expiry)]
     (if (viewing?)

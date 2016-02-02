@@ -7,6 +7,7 @@
 
   ; TODO: harden everything!
   ;   CSP for XSS protection
+  ;   anti-forgery
   ; TODO: prevent just anyone from using the api?
   ; TODO: minify crypto-js
   :dependencies '[[org.clojure/clojure "1.8.0"]
