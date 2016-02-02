@@ -3,8 +3,6 @@
 
   ; TODO: Compress posts?
 
-  ; TODO: autofocus input
-
   ; TODO: add <noscript> info
 
   ; TODO: Document!

@@ -27,4 +27,5 @@
          (for [a ["new" "about" "donate" "post"]]
            [:a {:id a} a])]]
        [:div {:class "input"}
-        [:textarea#input {:placeholder placeholder}]]])))
+        [:textarea#input {:placeholder placeholder
+                          :autofocus "autofocus"}]]])))
