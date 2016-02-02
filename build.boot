@@ -3,8 +3,6 @@
 
   ; TODO: Compress posts?
 
-  ; TODO: add <noscript> info
-
   ; TODO: Document!
 
   ; TODO: harden everything!

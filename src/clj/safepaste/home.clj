@@ -13,7 +13,10 @@
        [:title "safepaste"]]
       [:body
        [:div {:class "header"}
-        [:p {:id "status"}]
+        [:p {:id "status"
+             :class "status-error"}
+         [:noscript
+          "JavaScript is required for client-side encryption."]]
         [:div {:class "expiry"}
          [:select {:id "expiry"}
           [:option {:value "burn"} "Burn after reading"]
