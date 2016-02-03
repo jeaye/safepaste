@@ -28,4 +28,10 @@
   (dommy/listen! (sel1 :#donate) :click (fn [_] (view-post! donate-post)))
   (dommy/listen! (sel1 :#post) :click remote/post!))
 
-(dommy/listen! js/window :load onload)
+; XXX: There's an issue with dommy which breaks this when :advanced
+; optimizations are enabled. It seems to be affecting only :load.
+; To resolve it, we'll just use a more primitive approach for now.
+; https://github.com/plumatic/dommy/issues/101
+;(dommy/listen! (sel1 :body) :load onload)
+
+(aset js/window "onload" onload)

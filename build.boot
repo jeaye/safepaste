@@ -6,6 +6,8 @@
 
   ; TODO: Use base85, not base64
 
+  ; TODO: core.typed?
+
   ; TODO: harden everything!
   ;   CSP for XSS protection
   ; TODO: prevent just anyone from using the api?
@@ -15,7 +17,7 @@
 
                   ; Front end
                   [adzerk/boot-cljs "1.7.228-1"] ; CLJS compiler
-                  [adzerk/boot-reload "0.4.4"] ; Automatic reloading
+                  [adzerk/boot-reload "0.4.5"] ; Automatic reloading
                   [cljs-http "0.1.39"] ; Communication with back end
                   [prismatic/dommy "1.1.0"] ; DOM events
 
@@ -56,7 +58,5 @@
            :reload true
            :resource-root "target")
     (watch)
-    ;(reload)
-    ;(cljs-repl) ; Before cljs task
     (cljs :compiler-options {:optimizations :none})
     (target :dir #{"target"})))
