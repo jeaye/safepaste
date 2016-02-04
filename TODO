@@ -1,0 +1,14 @@
+Write proper about/donate posts
+
+Compress posts?
+  lz-string (takes 1s for 2MB)
+
+Use base85 to transfer, not base64
+
+core.typed?
+
+harden everything!
+  CSP for XSS protection
+prevent just anyone from using the api?
+minify crypto-js
+  proven to be a terribly annoying task

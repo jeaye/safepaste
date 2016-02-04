@@ -1,17 +1,6 @@
 (set-env!
   :source-paths #{"src/clj" "src/cljs" "src/js"}
 
-  ; TODO: Compress posts?
-  ;   lz-string (takes 1s for 2MB)
-
-  ; TODO: Use base85, not base64
-
-  ; TODO: core.typed?
-
-  ; TODO: harden everything!
-  ;   CSP for XSS protection
-  ; TODO: prevent just anyone from using the api?
-  ; TODO: minify crypto-js
   :dependencies '[[org.clojure/clojure "1.8.0"]
                   [org.clojure/clojurescript "1.7.228"]
 
