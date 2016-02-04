@@ -4,6 +4,7 @@
 
 (def default-expiry "day")
 
+; TODO: Clean up with the # and . syntax of hiccup
 (defn render [id request]
   (let [placeholder "Enter your paste here…"]
     (page/html5
