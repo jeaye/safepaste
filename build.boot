@@ -2,7 +2,7 @@
   :source-paths #{"src/clj" "src/cljs" "src/js"}
 
   ; TODO: Compress posts?
-  ; lz-string
+  ;   lz-string (takes 1s for 2MB)
 
   ; TODO: Use base85, not base64
 
@@ -35,6 +35,7 @@
                   [hiccup "1.0.5"] ; HTML generation
                   [garden "1.3.0"] ; CSS generation
                   [me.raynes/fs "1.4.6"] ; Filesystem work
+                  [cljsjs/boot-cljsjs "0.5.1"] ; Minification
 
                   ; HTTP
                   [ring/ring-core "1.4.0"]
@@ -43,11 +44,39 @@
                   [ring/ring-anti-forgery "1.0.0"]])
 
 (require '[safepaste core api]
+         '[boot.pod :as pod]
          '[adzerk.boot-cljs :refer [cljs]]
          '[pandeiro.boot-http :refer [serve]]
          '[adzerk.boot-reload :refer [reload]]
          '[adzerk.boot-cljs-repl :refer [cljs-repl start-repl]]
-         '[me.raynes.fs :as fs])
+         '[me.raynes.fs :as fs]
+         '[cljsjs.boot-cljsjs.packaging :refer [minify]])
+
+(defn minifier-pod []
+  (pod/make-pod (assoc-in (get-env)
+                          [:dependencies]
+                          '[[asset-minifier "0.1.7"]])))
+
+(defn minify [js-file]
+  (pod/with-eval-in min-pod
+    (require 'asset-minifier.core)
+    (asset-minifier.core/minify-js ~in-path ~out-path {})))
+
+(deftask minify-js
+  "Minify all JS sources"
+  []
+  (with-pre-wrap fileset
+    (loop [files (by-ext [".js"] (ls fileset))
+           file (first files)
+           new-fileset fileset]
+      (if (some? file)
+        (let [path (tmp-path file)
+              out-path (str "js/main.out/" (.getName (tmp-file file)))]
+          (println path "=>" out-path)
+          (recur (rest files)
+                 (first (rest files))
+                 (minify :in path :out out-path)))
+        new-fileset))))
 
 (deftask dev
   "Start dev environment"
@@ -57,6 +86,7 @@
     (serve :handler 'safepaste.core/app
            :reload true
            :resource-root "target")
+    (minify :in ".*inc.js" :out "js/main.out/")
     (watch)
     (cljs :compiler-options {:optimizations :none})
     (target :dir #{"target"})))
