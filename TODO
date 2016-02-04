@@ -1,5 +1,7 @@
 Write proper about/donate posts
 
+Status checker for each remote call
+
 Compress posts?
   lz-string (takes 1s for 2MB)
 
