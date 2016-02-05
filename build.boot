@@ -6,15 +6,8 @@
 
                   ; Front end
                   [adzerk/boot-cljs "1.7.228-1"] ; CLJS compiler
-                  [adzerk/boot-reload "0.4.5"] ; Automatic reloading
                   [cljs-http "0.1.39"] ; Communication with back end
                   [prismatic/dommy "1.1.0"] ; DOM events
-
-                  ; REPL
-                  [adzerk/boot-cljs-repl "0.3.0"]
-                  [com.cemerick/piggieback "0.2.1"]
-                  [weasel "0.7.0"]
-                  [org.clojure/tools.nrepl "0.2.12"]
 
                   ; Back end
                   [pandeiro/boot-http "0.7.0"] ; HTTP server
@@ -34,8 +27,6 @@
 (require '[safepaste core api]
          '[adzerk.boot-cljs :refer [cljs]]
          '[pandeiro.boot-http :refer [serve]]
-         '[adzerk.boot-reload :refer [reload]]
-         '[adzerk.boot-cljs-repl :refer [cljs-repl start-repl]]
          '[me.raynes.fs :as fs]
          '[clojure.java.shell :as shell])
 
