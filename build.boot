@@ -43,6 +43,10 @@
   "Minify the compiled JS"
   []
   (with-post-wrap fileset
+    (when (not (fs/exists? "./node_modules"))
+      (println "Installing uglify-js...")
+      (shell/sh "npm" "install" "uglify-js"))
+
     (println "Minifying JS...")
     (shell/sh "./node_modules/uglify-js/bin/uglifyjs"
               "target/js/main.js"
