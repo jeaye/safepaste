@@ -1,7 +1,5 @@
 Write proper about/donate posts
 
-Status checker for each remote call
-
 Add ! where needed, in server
 
 What if we try to post before the login reply? no csrf token
