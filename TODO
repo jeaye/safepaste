@@ -4,3 +4,5 @@ Compress posts?
   lz-string (takes 1s for 2MB -- too long)
 
 prevent just anyone from using the api?
+
+rate limiting
