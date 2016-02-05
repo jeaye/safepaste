@@ -32,7 +32,7 @@
 (defn random-id []
   (codecs/bytes->hex (nonce/random-bytes id-size)))
 
-(defn delete
+(defn delete!
   "Deletes a post and all of its corresponding files. Only used when burning."
   [path]
   (doseq [p [path (str path ".expire") (str path ".burn")]]
@@ -55,7 +55,7 @@
         (json/write-str {:data data :burned burn}))
       {:status 410})))
 
-(defn post [body]
+(defn post! [body]
   (let [id (first (remove fs/exists? (repeatedly random-id)))
         json-body (json/read-str (slurp body))
         data (get json-body "data")

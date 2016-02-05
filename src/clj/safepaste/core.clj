@@ -19,7 +19,7 @@
   (GET "/api/login" [] (api/login))
   (GET (str "/:id" id-regex) [id] (partial home/render id))
   (GET (str "/api/:id" id-regex) [id] (api/view id))
-  (POST "/api/new" {body :body} (api/post body))
+  (POST "/api/new" {body :body} (api/post! body))
   (route/files "/js" {:root "target/js"})
   (route/not-found (partial home/render nil)))
 
