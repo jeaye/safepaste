@@ -4,7 +4,7 @@
              [home :as home]
              [css :as css]
              [api :as api]]
-            [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
+            [ring.middleware.defaults :refer [wrap-defaults secure-site-defaults]]
             [compojure
              [core :refer :all]
              [route :as route]]
@@ -23,5 +23,9 @@
   (route/not-found (partial home/render nil)))
 
 (def app (-> app-routes
-             ; TODO: secure-site-defaults
-             (wrap-defaults site-defaults)))
+             (wrap-defaults
+               (-> secure-site-defaults
+                   (assoc :cookies false)
+                   (assoc :session {})
+                   (assoc-in [:security :hsts] false)
+                   (assoc-in [:security :ssl-redirect] false)))))
