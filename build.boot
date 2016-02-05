@@ -42,6 +42,9 @@
 (deftask minify
   "Minify the compiled JS"
   []
+  ; This is an awful hack which brings in an npm package to do the job.
+  ; Oddly enough, its mangling and minifying shaves 20% off Closure's
+  ; advanced compilation. So... huge wins. I'm ok with this.
   (with-post-wrap fileset
     (let [old-file "target/js/main.js"
           new-file "target/js/main.min.js"]
