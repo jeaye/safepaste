@@ -77,7 +77,7 @@
             ; wrong. Given the same wrong data, it throws about 10% of the time.
             (try
               (dom/set-status! :decrypting)
-              (let [reply-json (.parse js/JSON (:body reply)) ; TODO: Use transit?
+              (let [reply-json (.parse js/JSON (:body reply))
                     decrypted (.decrypt js/CryptoJS.AES
                                         (.-data reply-json)
                                         safe-key)
