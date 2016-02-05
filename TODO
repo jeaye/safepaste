@@ -1,7 +1,5 @@
 Write proper about/donate posts
 
-What if we try to post before the login reply? no csrf token
-
 Compress posts?
   lz-string (takes 1s for 2MB -- too long)
 
