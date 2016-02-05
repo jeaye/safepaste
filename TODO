@@ -10,6 +10,3 @@ Compress posts?
 core.typed?
 
 prevent just anyone from using the api?
-
-minify crypto-js
-  proven to be a terribly annoying task
