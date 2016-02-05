@@ -11,6 +11,9 @@ Find it online [here](https://safepaste.org).
 * Optional "Burn after reading"
 * Always free
 
+## More information
+TODO: link to about here
+
 ## Donate
 Feel free to shoot Bitcoins my way: **1HaMvpDjy7QJBDkcZALJr3s26FxLpv5WtJ**
 
