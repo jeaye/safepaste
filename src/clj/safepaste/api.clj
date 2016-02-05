@@ -41,20 +41,19 @@
 (defn login []
   {:status 200
    :headers {"X-CSRF-Token" *anti-forgery-token*}
+   ; TODO: This isn't the same as the other rendering
    :body (json/write-str {:max_post_size max-post-bytes})})
 
 (defn view [id]
   (let [path (str output-dir id)]
-    (json/write-str
-      (if (fs/exists? path)
-        (let [data (codecs/bytes->base64 (slurp-bytes path))
-              burn (fs/exists? (str path ".burn"))]
-          ; If a .burn file exists, we'll delete the post immediately
-          (when burn
-            (delete path))
-          {:data data
-           :burned burn})
-        {:error "Invalid post ID."}))))
+    (if (fs/exists? path)
+      (let [data (codecs/bytes->base64 (slurp-bytes path))
+            burn (fs/exists? (str path ".burn"))]
+        ; If a .burn file exists, we'll delete the post immediately
+        (when burn
+          (delete path))
+        (json/write-str {:data data :burned burn}))
+      {:status 410})))
 
 (defn post [body]
   (let [id (first (remove fs/exists? (repeatedly random-id)))
@@ -63,10 +62,10 @@
         expiry (get json-body "expiry")]
     (cond
       (>= (count data) max-post-bytes)
-      (json/write-str {:error "Post is too large."})
+      {:status 413}
 
       (not (expiry/valid? expiry))
-      (json/write-str {:error "Invalid expiry."})
+      {:status 400}
 
       :else
       (do

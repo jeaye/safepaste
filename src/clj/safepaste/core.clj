@@ -23,4 +23,5 @@
   (route/not-found (partial home/render nil)))
 
 (def app (-> app-routes
+             ; TODO: secure-site-defaults
              (wrap-defaults site-defaults)))

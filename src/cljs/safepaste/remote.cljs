@@ -13,12 +13,28 @@
 ; Unique session token required for posting
 (def csrf-token (atom ""))
 
+(def error-from-status
+  {400 :bad-request
+   410 :invalid-id
+   413 :too-large})
+
+(defn check-error!
+  "Checks the :status code of the reply and updates the dom to convey
+   errors. Returns whether or not an error was handled."
+  [reply]
+  (let [status (:status reply)
+        error? (not= 200 status)]
+    (when error?
+      (dom/set-error! (error-from-status status :bad-request)))
+    error?))
+
 (defn login! []
   (go
-    (let [get-reply (<! (http/get "/api/login"))
-          reply-json (.parse js/JSON (:body get-reply))]
-      (swap! csrf-token (fn [_] (get (:headers get-reply) "x-csrf-token")))
-      (swap! max-post-bytes (fn [_] (.-max-post-size reply-json))))))
+    (let [reply (<! (http/get "/api/login"))
+          reply-json (.parse js/JSON (:body reply))]
+      (when (not (check-error! reply))
+        (swap! csrf-token (fn [_] (get (:headers reply) "x-csrf-token")))
+        (swap! max-post-bytes (fn [_] (.-max-post-size reply-json)))))))
 
 (defn post! [e]
   (let [data (dommy/value (sel1 :#input))
@@ -37,11 +53,9 @@
             (let [reply (<! (http/post "/api/new"
                                        {:json-params {:data encoded
                                                       :expiry expiry}
-                                        :headers {"X-CSRF-Token" @csrf-token}}))
-                  reply-json (.parse js/JSON (:body reply))]
-              (if-let [error (.-error reply-json)]
-                (dom/set-error! error)
-                (do
+                                        :headers {"X-CSRF-Token" @csrf-token}}))]
+              (when (not (check-error! reply))
+                (let [reply-json (.parse js/JSON (:body reply))]
                   (dom/set-url! (str "/" (.-id reply-json) "#" safe-key))
                   (dom/update-inputs!)
                   (if (= expiry "burn")
@@ -57,16 +71,14 @@
 
       ; This is an async get; we won't block.
       (go
-        (let [get-reply (<! (http/get (str "/api/" id)))
-              reply-json (.parse js/JSON (:body get-reply))] ; TODO: Use transit?
-          (if-let [error (.-error reply-json)]
-            (dom/set-error! error)
-
+        (let [reply (<! (http/get (str "/api/" id)))]
+          (when (not (check-error! reply))
             ; crytpo-js doesn't always throw, even when things are blatantly
             ; wrong. Given the same wrong data, it throws about 10% of the time.
             (try
               (dom/set-status! :decrypting)
-              (let [decrypted (.decrypt js/CryptoJS.AES
+              (let [reply-json (.parse js/JSON (:body reply)) ; TODO: Use transit?
+                    decrypted (.decrypt js/CryptoJS.AES
                                         (.-data reply-json)
                                         safe-key)
                     decrypted-str (.toString decrypted js/CryptoJS.enc.Utf8)]

@@ -28,7 +28,9 @@
   (condp #(= %1 %2) key-id
     :invalid-key "Invalid secret key."
     :too-large "Post is too large."
-    :unable-to-decrypt "Unable to decrypt."))
+    :unable-to-decrypt "Unable to decrypt."
+    :bad-request "Bad request."
+    :invalid-id "Invalid post ID."))
 
 (defn set-status! [key-id]
   (let [item (sel1 :#status)]
@@ -38,14 +40,9 @@
 (defn reset-status! []
   (set-status! :editing))
 
-; May take a string, as given by the server
-(defn set-error! [error-key-or-msg]
+(defn set-error! [error-key]
   (let [item (sel1 :#status)]
-    (dommy/set-text!
-      item
-      (if (keyword? error-key-or-msg)
-        (error error-key-or-msg)
-        error-key-or-msg))
+    (dommy/set-text! item (error error-key))
     (dommy/add-class! item :status-error)))
 
 (defn update-inputs!
