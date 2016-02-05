@@ -13,11 +13,12 @@
 (use 'ring.middleware.anti-forgery
      'ring.middleware.session)
 
+(def id-regex "{(?:[0-9a-fA-F]{8})?}")
+
 (defroutes app-routes
   (GET "/api/login" [] (api/login))
-  ; TODO: Use the same regex for the API
-  (GET "/:id{(?:[0-9a-fA-F]{8})?}" [id] (partial home/render id))
-  (GET "/api/:id" [id] (api/view id))
+  (GET (str "/:id" id-regex) [id] (partial home/render id))
+  (GET (str "/api/:id" id-regex) [id] (api/view id))
   (POST "/api/new" {body :body} (api/post body))
   (route/files "/js" {:root "target/js"})
   (route/not-found (partial home/render nil)))
