@@ -51,7 +51,7 @@
             burn (fs/exists? (str path ".burn"))]
         ; If a .burn file exists, we'll delete the post immediately
         (when burn
-          (delete path))
+          (delete! path))
         (json/write-str {:data data :burned burn}))
       {:status 410})))
 
