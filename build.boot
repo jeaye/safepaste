@@ -62,7 +62,7 @@
       (let [original-size (fs/size old-file)
             new-size (fs/size new-file)]
         (println
-          (format "Saved: %.2f%% by minifying"
+          (format "Shaved off %.2f%% by minifying"
                   (* 100 (- 1 (float (/ new-size original-size))))))))))
 
 (deftask dev
