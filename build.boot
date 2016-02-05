@@ -36,7 +36,19 @@
          '[pandeiro.boot-http :refer [serve]]
          '[adzerk.boot-reload :refer [reload]]
          '[adzerk.boot-cljs-repl :refer [cljs-repl start-repl]]
-         '[me.raynes.fs :as fs])
+         '[me.raynes.fs :as fs]
+         '[clojure.java.shell :as shell])
+
+(deftask minify
+  "Minify the compiled JS"
+  []
+  (with-post-wrap fileset
+    (println "Minifying JS...")
+    (shell/sh "./node_modules/uglify-js/bin/uglifyjs"
+              "target/js/main.js"
+              "--screw-ie8"
+              "-c" "-m" "--stats"
+              "-o" "target/js/main.min.js")))
 
 (deftask dev
   "Start dev environment"
@@ -47,5 +59,6 @@
            :reload true
            :resource-root "target")
     (watch)
-    (cljs :compiler-options {:optimizations :none})
-    (target :dir #{"target"})))
+    (cljs :compiler-options {:optimizations :advanced})
+    (target :dir #{"target"})
+    (minify)))

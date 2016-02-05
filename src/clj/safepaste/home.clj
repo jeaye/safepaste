@@ -9,7 +9,7 @@
     (page/html5
       [:head
        [:style (css/main)]
-       (page/include-js "/js/main.js")
+       (page/include-js "/js/main.min.js")
        [:title "safepaste"]]
       [:body
        [:div.header
