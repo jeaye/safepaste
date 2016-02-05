@@ -52,7 +52,7 @@
         (println "Installing uglify-js...")
         (shell/sh "npm" "install" "uglify-js"))
 
-      (println "Minifying JS...")
+      (println "\nMinifying JS...")
       (shell/sh "./node_modules/uglify-js/bin/uglifyjs"
                 old-file
                 "--screw-ie8"
@@ -62,7 +62,7 @@
       (let [original-size (fs/size old-file)
             new-size (fs/size new-file)]
         (println
-          (format "Shaved off %.2f%% by minifying"
+          (format "Shaved off %.2f%%\n"
                   (* 100 (- 1 (float (/ new-size original-size))))))))))
 
 (deftask dev
