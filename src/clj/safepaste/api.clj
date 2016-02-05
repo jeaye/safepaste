@@ -3,8 +3,6 @@
             [buddy.core
              [nonce :as nonce]
              [codecs :as codecs]]
-            [compojure
-             [response :refer [render]]]
             [me.raynes.fs :as fs]
             [ring.middleware.anti-forgery :refer [*anti-forgery-token*]]
             [clojure.data.json :as json]

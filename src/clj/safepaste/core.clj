@@ -4,7 +4,8 @@
              [home :as home]
              [css :as css]
              [api :as api]]
-            [ring.middleware.defaults :refer [wrap-defaults secure-site-defaults]]
+            [ring.middleware
+             [defaults :refer [wrap-defaults secure-site-defaults]]]
             [compojure
              [core :refer :all]
              [route :as route]]
