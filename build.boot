@@ -43,16 +43,24 @@
   "Minify the compiled JS"
   []
   (with-post-wrap fileset
-    (when (not (fs/exists? "./node_modules"))
-      (println "Installing uglify-js...")
-      (shell/sh "npm" "install" "uglify-js"))
+    (let [old-file "target/js/main.js"
+          new-file "target/js/main.min.js"]
+      (when (not (fs/exists? "./node_modules"))
+        (println "Installing uglify-js...")
+        (shell/sh "npm" "install" "uglify-js"))
 
-    (println "Minifying JS...")
-    (shell/sh "./node_modules/uglify-js/bin/uglifyjs"
-              "target/js/main.js"
-              "--screw-ie8"
-              "-c" "-m" "--stats"
-              "-o" "target/js/main.min.js")))
+      (println "Minifying JS...")
+      (shell/sh "./node_modules/uglify-js/bin/uglifyjs"
+                old-file
+                "--screw-ie8"
+                "-c" "-m"
+                "-o" new-file)
+
+      (let [original-size (fs/size old-file)
+            new-size (fs/size new-file)]
+        (println
+          (format "Saved: %.2f%% by minifying"
+                  (* 100 (- 1 (float (/ new-size original-size))))))))))
 
 (deftask dev
   "Start dev environment"
