@@ -6,7 +6,7 @@ Find it online [here](https://safepaste.org).
 
 ## Features
 
-* AES-256 with random 256 secret keys
+* AES-256 with random 256 bit secret keys
 * Always over HTTPS
 * Optional "Burn after reading"
 * Always free
