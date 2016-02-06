@@ -6,9 +6,9 @@
 (enable-console-print!)
 
 (def about-paste
-  "/a828b669#cfc9d7219aaebf10454b5ca196a99f7bac90e4e44fb829bc552ccbb2cab72d4b")
+  "/14e3c3ce#371864573d2a445868316521cc3cc374413f3eb04978281c964527cdc79a64bb")
 (def donate-paste
-  "/99c14048#623e8078679c1d53d141bab759380e2fbc4689c95861971c5d5c2517516b96aa")
+  "/f1a8f535#31bcdb56b77528a3c1b540bc460ed07d5b74fcf65eb91733bc4d10884e764caf")
 
 (defn view-paste!
   "Puts the UI in readonly mode and changes the URL to load the paste in place."
