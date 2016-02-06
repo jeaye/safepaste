@@ -39,22 +39,23 @@
   (with-post-wrap fileset
     (let [old-file "target/js/main.js"
           new-file "target/js/main.min.js"]
-      (when (not (fs/exists? "./node_modules"))
-        (println "Installing uglify-js...")
-        (shell/sh "npm" "install" "uglify-js"))
-
-      (println "\nMinifying JS...")
-      (shell/sh "./node_modules/uglify-js/bin/uglifyjs"
-                old-file
-                "--screw-ie8"
-                "-c" "-m"
-                "-o" new-file)
-
-      (let [original-size (fs/size old-file)
-            new-size (fs/size new-file)]
-        (println
-          (format "Shaved off %.2f%%\n"
-                  (* 100 (- 1 (float (/ new-size original-size))))))))))
+      (if (= 1 (:exit (shell/sh "which" "npm")))
+        (println "npm isn't installed; not minifying...")
+        (do
+          (when (not (fs/exists? "./node_modules"))
+            (println "Installing uglify-js...")
+            (shell/sh "npm" "install" "uglify-js"))
+          (println "\nMinifying JS...")
+          (shell/sh "./node_modules/uglify-js/bin/uglifyjs"
+                    old-file
+                    "--screw-ie8"
+                    "-c" "-m"
+                    "-o" new-file)
+          (let [original-size (fs/size old-file)
+                new-size (fs/size new-file)]
+            (println
+              (format "Shaved off %.2f%%\n"
+                      (* 100 (- 1 (float (/ new-size original-size))))))))))))
 
 (deftask dev
   "Start dev environment"
