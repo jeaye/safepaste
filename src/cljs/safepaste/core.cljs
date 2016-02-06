@@ -6,9 +6,9 @@
 (enable-console-print!)
 
 (def about-post
-  "/about---#c92f48c6631086b2c193556ac639c186d195e029b0569cdcca49dd31b2a54ffa")
+  "/a828b669#cfc9d7219aaebf10454b5ca196a99f7bac90e4e44fb829bc552ccbb2cab72d4b")
 (def donate-post
-  "/donate--#634397c795e76b77627a356f5eb5d92e336ce1dc552f0c7bb28e2b306891f24f")
+  "/99c14048#623e8078679c1d53d141bab759380e2fbc4689c95861971c5d5c2517516b96aa")
 
 (defn view-post!
   "Puts the UI in readonly mode and changes the URL to load the post in place."
