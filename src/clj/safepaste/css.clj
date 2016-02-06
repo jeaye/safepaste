@@ -70,8 +70,10 @@
    [:textarea {:background-color content-background-color
                :color content-color
                :border "0px"
+               :box-sizing "border-box"
                :margin "0px"
                :padding "0px"
+               :padding-left "0.5em"
                :width "100%"
                :height "100%"
                :min-height "100%"
