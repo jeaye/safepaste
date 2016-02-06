@@ -1,0 +1,41 @@
+**** About ****
+
+safepaste is a security-conscious paste service for sharing private, encrypted
+data. All encryption is done client-side and it's impossible for the server,
+admin, or anyone without your 256 bit key to view the paste. All pastes are
+encrypted using AES-256.
+
+**** Features ****
+
+* AES-256 with random 256 bit secret keys
+* Always over HTTPS
+* Optional "burn after reading"
+* Always free
+
+**** Burn after reading ****
+
+When selected, "burn after reading" will ensure that only one person will ever
+read your paste. The paste will live for the default length of one day, but
+will be atomically destroyed should anyone view it. Use this to ensure your
+paste doesn't mingle after it's been read.
+
+**** How it works ****
+
+Upon posting, your browser will generate a random 256 bit secret key. Using
+that key, and AES-256, your paste is encrypted before it's sent to the server.
+The server will reply with a 64 bit identifier for your paste; from there, you
+share your paste by linking to the encrypted data and specifying your secret
+key as the hash in the URL.
+
+Here's a breakdown of an example link:
+
+https://safepaste.org/99c14048#623e8078679c1d53d141bab759380e2fbc4689c95861971c5d5c2517516b96aa
+
+Paste ID: 99c14048
+Secret key (hash): 623e8078679c1d53d141bab759380e2fbc4689c95861971c5d5c2517516b96aa
+
+The hash section of the URL, after the #, is never sent to the server; it's
+used only by the browser and safepaste takes advantage of that to store the
+secret key. Note, your paste is unreadable to anyone without that secret key.
+As soon as you share the link containing that key, however, anyone who sees it
+can read your paste. Share your links cautiously.
