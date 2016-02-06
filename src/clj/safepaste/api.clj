@@ -53,20 +53,26 @@
         (json/write-str {:data data :burned burn}))
       {:status 410})))
 
-(defn paste! [body]
+(defn paste! [body ip]
   (let [id (first (remove fs/exists? (repeatedly random-id)))
         json-body (json/read-str (slurp body))
         data (get json-body "data")
         expiry (get json-body "expiry")]
     (cond
       (>= (count data) max-paste-bytes)
-      {:status 413}
+      (do
+        (println "Paste from" ip "is too large.")
+        {:status 413})
 
       (not (expiry/valid? expiry))
-      {:status 400}
+      (do
+        (println "Paste from" ip "has invalid expiry.")
+        {:status 400})
 
       :else
       (do
+        (println "Paste" id "from" ip "is valid.")
+
         ; Each paste file also gets a .expire file which is dated for
         ; when it should be deleted.
         ; There's a bug where the modification time isn't set when it's
