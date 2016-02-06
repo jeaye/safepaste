@@ -7,10 +7,10 @@
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
 ; Sane default; provided by the server during login
-(def max-post-bytes (atom (* 2 1024 1024)))
+(def max-paste-bytes (atom (* 2 1024 1024)))
 (def key-size 64)
 
-; Unique session token required for posting
+; Unique session token required for pasting
 (def csrf-token (atom ""))
 
 (def error-from-status
@@ -34,12 +34,12 @@
           reply-json (.parse js/JSON (:body reply))]
       (when (not (check-error! reply))
         (swap! csrf-token (fn [_] (get (:headers reply) "x-csrf-token")))
-        (swap! max-post-bytes (fn [_] (.-max-post-size reply-json)))))))
+        (swap! max-paste-bytes (fn [_] (.-max-paste-size reply-json)))))))
 
-(defn post! [e]
+(defn paste! [e]
   (let [data (dommy/value (sel1 :#input))
         expiry (dommy/value (sel1 :#expiry))]
-    (if (>= (count data) max-post-bytes)
+    (if (>= (count data) max-paste-bytes)
       (dom/set-error! :too-large)
       (when (and (not-empty data) (not (dom/viewing?)))
         (dom/set-status! :encrypting)

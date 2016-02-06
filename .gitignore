@@ -11,4 +11,4 @@ pom.xml.asc
 .hg/
 /.nrepl-history
 /node_modules
-/post
+/paste

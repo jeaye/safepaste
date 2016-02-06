@@ -14,7 +14,7 @@
 
 (defn status [key-id]
   (condp #(= %1 %2) key-id
-    :editing "Your post will be encrypted using AES-256."
+    :editing "Your paste will be encrypted using AES-256."
     :encrypting "Encrypting paste..."
     :uploading "Uploading paste..."
     :uploaded "Your encrypted paste has been uploaded."
@@ -27,10 +27,10 @@
 (defn error [key-id]
   (condp #(= %1 %2) key-id
     :invalid-key "Invalid secret key."
-    :too-large "Post is too large."
+    :too-large "Paste is too large."
     :unable-to-decrypt "Unable to decrypt."
     :bad-request "Bad request."
-    :invalid-id "Invalid post ID."))
+    :invalid-id "Invalid paste ID."))
 
 (defn set-status! [key-id]
   (let [item (sel1 :#status)]

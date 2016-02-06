@@ -1,12 +1,10 @@
-Write proper about/donate posts
+Write proper about/donate pastes
 
-Compress posts?
+Compress pastes?
   lz-string (takes 1s for 2MB -- too long)
 
 prevent just anyone from using the api?
 
 rate limiting
-
-rename post button to paste?
 
 find the base cljs size; try to approach that

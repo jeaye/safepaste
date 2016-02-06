@@ -21,7 +21,7 @@ paste doesn't mingle after it's been read.
 
 **** How it works ****
 
-Upon posting, your browser will generate a random 256 bit secret key. Using
+Upon pasting, your browser will generate a random 256 bit secret key. Using
 that key, and AES-256, your paste is encrypted before it's sent to the server.
 The server will reply with a 64 bit identifier for your paste; from there, you
 share your paste by linking to the encrypted data and specifying your secret

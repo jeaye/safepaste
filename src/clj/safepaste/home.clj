@@ -26,7 +26,7 @@
                      {:selected "selected"}))
              (str "Expires after 1 " o)])]]
         [:nav
-         (for [a ["new" "about" "donate" "post"]]
+         (for [a ["new" "about" "donate" "paste"]]
            [:a {:id a} a])]]
        [:div.input
         [:textarea#input {:placeholder placeholder

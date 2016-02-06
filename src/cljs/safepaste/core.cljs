@@ -5,13 +5,13 @@
 
 (enable-console-print!)
 
-(def about-post
+(def about-paste
   "/a828b669#cfc9d7219aaebf10454b5ca196a99f7bac90e4e44fb829bc552ccbb2cab72d4b")
-(def donate-post
+(def donate-paste
   "/99c14048#623e8078679c1d53d141bab759380e2fbc4689c95861971c5d5c2517516b96aa")
 
-(defn view-post!
-  "Puts the UI in readonly mode and changes the URL to load the post in place."
+(defn view-paste!
+  "Puts the UI in readonly mode and changes the URL to load the paste in place."
   [path]
   (dom/set-url! path)
   (dom/update-inputs!)
@@ -21,12 +21,12 @@
   (remote/login!)
   (dom/update-inputs!)
   (if (dom/viewing?)
-    (view-post! (+ js/window.location.pathname js/window.location.hash))
+    (view-paste! (+ js/window.location.pathname js/window.location.hash))
     (dom/reset-status!))
   (dommy/listen! (sel1 :#new) :click dom/reset-page!)
-  (dommy/listen! (sel1 :#about) :click (fn [_] (view-post! about-post)))
-  (dommy/listen! (sel1 :#donate) :click (fn [_] (view-post! donate-post)))
-  (dommy/listen! (sel1 :#post) :click remote/post!))
+  (dommy/listen! (sel1 :#about) :click (fn [_] (view-paste! about-paste)))
+  (dommy/listen! (sel1 :#donate) :click (fn [_] (view-paste! donate-paste)))
+  (dommy/listen! (sel1 :#paste) :click remote/paste!))
 
 ; XXX: There's an issue with dommy which breaks this when :advanced
 ; optimizations are enabled. It seems to be affecting only :load.
