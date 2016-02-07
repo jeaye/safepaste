@@ -24,6 +24,8 @@
                   [ring/ring-defaults "0.1.5"]
                   [ring/ring-anti-forgery "1.0.0"]])
 
+(def target-dir "target/")
+
 (require '[safepaste core api]
          '[adzerk.boot-cljs :refer [cljs]]
          '[pandeiro.boot-http :refer [serve]]
@@ -37,8 +39,8 @@
   ; Oddly enough, its mangling and minifying shaves 20% off Closure's
   ; advanced compilation. So... huge wins. I'm ok with this.
   (with-post-wrap fileset
-    (let [old-file "target/js/main.js"
-          new-file "target/js/main.min.js"
+    (let [old-file (str target-dir "js/main.js")
+          new-file (str target-dir "js/main.min.js")
           node-modules "./node_modules"]
       (println)
       (if (= 1 (:exit (shell/sh "npm" "--version")))
@@ -66,12 +68,13 @@
 (deftask dev
   "Start dev environment"
   []
-  (fs/mkdir safepaste.api/output-dir)
+  (doseq [dir [safepaste.api/output-dir target-dir]]
+    (fs/mkdir dir))
   (comp
     (serve :handler 'safepaste.core/app
            :reload true
-           :resource-root "target")
+           :resource-root target-dir)
     (watch)
     (cljs :compiler-options {:optimizations :advanced})
-    (target :dir #{"target"})
+    (target :dir #{target-dir})
     (minify)))
