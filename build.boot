@@ -30,7 +30,9 @@
          '[adzerk.boot-cljs :refer [cljs]]
          '[pandeiro.boot-http :refer [serve]]
          '[me.raynes.fs :as fs]
-         '[clojure.java.shell :as shell])
+         '[clojure.java
+           [shell :as shell]
+           [io :as io]])
 
 (deftask minify
   "Minify the compiled JS"
@@ -38,33 +40,40 @@
   ; This is an awful hack which brings in an npm package to do the job.
   ; Oddly enough, its mangling and minifying shaves 20% off Closure's
   ; advanced compilation. So... huge wins. I'm ok with this.
-  (with-post-wrap fileset
-    (let [old-file (str target-dir "js/main.js")
-          new-file (str target-dir "js/main.min.js")
-          node-modules "./node_modules"]
-      (try
-        (println)
-        (when (not (fs/exists? node-modules))
-          (println "Installing uglify-js...")
-          (shell/sh "npm" "install" "uglify-js"))
+  (fn [next-task]
+    (fn [fileset]
+      (let [tmp (tmp-dir!)
+            old-file (tmp-get fileset "js/main.js")
+            old-file-path (-> old-file tmp-file .getPath)
+            new-file (io/file tmp "js/main.min.js")
+            new-file-path (.getPath new-file)
+            node-modules "./node_modules"]
+        (try
+          (io/make-parents new-file)
+          (println)
+          (when (not (fs/exists? node-modules))
+            (println "Installing uglify-js...")
+            (shell/sh "npm" "install" "uglify-js"))
 
-        (println "Minifying JS...")
-        (shell/sh (str node-modules "/uglify-js/bin/uglifyjs")
-                  old-file
-                  "--screw-ie8"
-                  "-c" "-m"
-                  "-o" new-file)
+          (println "Minifying JS...")
+          (shell/sh (str node-modules "/uglify-js/bin/uglifyjs")
+                    old-file-path
+                    "--screw-ie8"
+                    "-c" "-m"
+                    "-o" new-file-path)
 
-        ; TODO: Add to fileset
-        (let [original-size (fs/size old-file)
-              new-size (fs/size new-file)]
-          (println
-            (format "Shaved off %.2f%%\n"
-                    (float (* 100 (- 1 (/ new-size original-size)))))))
-        (catch Exception _
-          (println "npm isn't working; not minifying...")
-          (fs/delete new-file)
-          (fs/sym-link new-file old-file))))))
+          (let [original-size (fs/size old-file-path)
+                new-size (fs/size new-file-path)]
+            (println
+              (format "Shaved off %.2f%%\n"
+                      (float (* 100 (- 1 (/ new-size original-size)))))))
+          (catch Exception _
+            (println "npm isn't working; not minifying...")
+            (fs/copy old-file-path new-file-path)))
+        (next-task (-> fileset
+                       (add-resource tmp)
+                       (rm [old-file])
+                       commit!))))))
 
 (deftask dev
   "Start dev environment"
@@ -76,9 +85,9 @@
            :reload true
            :resource-root target-dir)
     (watch)
-    (cljs :compiler-options {:optimizations :advanced})
-    (target :dir #{target-dir})
-    (minify)))
+    (cljs :compiler-options {:optimizations :none})
+    (minify)
+    (target :dir #{target-dir})))
 
 (deftask build []
   (comp
@@ -92,5 +101,4 @@
           :manifest {"Description" "TODO"
                      "Url" "https://github.com/jeaye/safepaste"}
          :file "safepaste.jar")
-    (target :dir #{target-dir})
-    ))
+    (target :dir #{target-dir})))
