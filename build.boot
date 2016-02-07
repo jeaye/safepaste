@@ -55,6 +55,7 @@
                   "-c" "-m"
                   "-o" new-file)
 
+        ; TODO: Add to fileset
         (let [original-size (fs/size old-file)
               new-size (fs/size new-file)]
           (println
@@ -78,3 +79,18 @@
     (cljs :compiler-options {:optimizations :advanced})
     (target :dir #{target-dir})
     (minify)))
+
+(deftask build []
+  (comp
+    (cljs :compiler-options {:optimizations :advanced})
+    (minify)
+    (aot :namespace '#{safepaste.core})
+    (pom :project 'safepaste
+         :version "0.1.0")
+    (uber)
+    (jar :main 'safepaste.core
+          :manifest {"Description" "TODO"
+                     "Url" "https://github.com/jeaye/safepaste"}
+         :file "safepaste.jar")
+    (target :dir #{target-dir})
+    ))
