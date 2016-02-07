@@ -40,8 +40,10 @@
     (let [old-file "target/js/main.js"
           new-file "target/js/main.min.js"
           node-modules "./node_modules"]
-      (if (= 1 (:exit (shell/sh "which" "npm")))
-        (println "npm isn't installed; not minifying...")
+      (if (= 1 (:exit (shell/sh "npm" "--version")))
+        (do
+          (println "npm isn't installed; not minifying...")
+          (fs/copy old-file new-file))
         (do
           (when (not (fs/exists? node-modules))
             (println "Installing uglify-js...")
