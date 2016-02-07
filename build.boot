@@ -40,6 +40,7 @@
     (let [old-file "target/js/main.js"
           new-file "target/js/main.min.js"
           node-modules "./node_modules"]
+      (println)
       (if (= 1 (:exit (shell/sh "npm" "--version")))
         (do
           (println "npm isn't installed; not minifying...")
@@ -49,7 +50,7 @@
             (println "Installing uglify-js...")
             (shell/sh "npm" "install" "uglify-js"))
 
-          (println "\nMinifying JS...")
+          (println "Minifying JS...")
           (shell/sh (str node-modules "/uglify-js/bin/uglifyjs")
                     old-file
                     "--screw-ie8"
