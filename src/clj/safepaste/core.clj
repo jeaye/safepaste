@@ -6,6 +6,7 @@
              [api :as api]]
             [ring.middleware
              [defaults :refer [wrap-defaults secure-site-defaults]]]
+            [ring.adapter.jetty :as jetty]
             [compojure
              [core :refer :all]
              [route :as route]]
@@ -31,3 +32,6 @@
                    (assoc :session {})
                    (assoc-in [:security :hsts] false)
                    (assoc-in [:security :ssl-redirect] false)))))
+
+(defn -main []
+  (jetty/run-jetty app {:port 3000}))
