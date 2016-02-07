@@ -46,7 +46,7 @@
       (if (= 1 (:exit (shell/sh "npm" "--version")))
         (do
           (println "npm isn't installed; not minifying...")
-          (fs/copy old-file new-file))
+          (fs/sym-link old-file new-file))
         (do
           (when (not (fs/exists? node-modules))
             (println "Installing uglify-js...")
