@@ -42,28 +42,27 @@
     (let [old-file (str target-dir "js/main.js")
           new-file (str target-dir "js/main.min.js")
           node-modules "./node_modules"]
-      (println)
-      (if (= 1 (:exit (shell/sh "npm" "--version")))
-        (do
-          (println "npm isn't installed; not minifying...")
-          (fs/sym-link old-file new-file))
-        (do
-          (when (not (fs/exists? node-modules))
-            (println "Installing uglify-js...")
-            (shell/sh "npm" "install" "uglify-js"))
+      (try
+        (println)
+        (when (not (fs/exists? node-modules))
+          (println "Installing uglify-js...")
+          (shell/sh "npm" "install" "uglify-js"))
 
-          (println "Minifying JS...")
-          (shell/sh (str node-modules "/uglify-js/bin/uglifyjs")
-                    old-file
-                    "--screw-ie8"
-                    "-c" "-m"
-                    "-o" new-file)
+        (println "Minifying JS...")
+        (shell/sh (str node-modules "/uglify-js/bin/uglifyjs")
+                  old-file
+                  "--screw-ie8"
+                  "-c" "-m"
+                  "-o" new-file)
 
-          (let [original-size (fs/size old-file)
-                new-size (fs/size new-file)]
-            (println
-              (format "Shaved off %.2f%%\n"
-                      (float (* 100 (- 1 (/ new-size original-size))))))))))))
+        (let [original-size (fs/size old-file)
+              new-size (fs/size new-file)]
+          (println
+            (format "Shaved off %.2f%%\n"
+                    (float (* 100 (- 1 (/ new-size original-size)))))))
+        (catch Exception _
+          (println "npm isn't working; not minifying...")
+          (fs/sym-link new-file old-file))))))
 
 (deftask dev
   "Start dev environment"
