@@ -62,7 +62,7 @@
     (cond
       disable-pasting
       (do
-        (print "Pasting is disabled.")
+        (println "Pasting is disabled.")
         {:status 503})
 
       (>= (count data) max-paste-bytes)
