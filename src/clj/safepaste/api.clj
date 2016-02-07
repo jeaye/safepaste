@@ -8,6 +8,7 @@
             [clojure.data.json :as json]
             [clojure.java.io :as io]))
 
+(def disable-pasting false)
 (def output-dir "paste/")
 (def id-size 4)
 
@@ -59,6 +60,11 @@
         data (get json-body "data")
         expiry (get json-body "expiry")]
     (cond
+      disable-pasting
+      (do
+        (print "Pasting is disabled.")
+        {:status 503})
+
       (>= (count data) max-paste-bytes)
       (do
         (println "Paste from" ip "is too large.")

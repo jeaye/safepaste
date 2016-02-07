@@ -9,6 +9,8 @@ tool to encrypt about/donate posts given a key
 
 remote-addr used in log is wrong, due to the reverse proxy
 
+add option to diable posting server-side
+
 prevent just anyone from using the api?
 
 rate limiting

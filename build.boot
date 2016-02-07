@@ -62,6 +62,7 @@
                     (float (* 100 (- 1 (/ new-size original-size)))))))
         (catch Exception _
           (println "npm isn't working; not minifying...")
+          (fs/delete new-file)
           (fs/sym-link new-file old-file))))))
 
 (deftask dev
