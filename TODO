@@ -1,10 +1,6 @@
 Compress pastes?
   lz-string (takes 1s for 2MB -- too long)
 
-readme
-  mention legal bits
-  link to github
-
 tool to encrypt about/donate posts given a key
 
 remote-addr used in log is wrong, due to the reverse proxy

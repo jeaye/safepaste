@@ -39,3 +39,9 @@ used only by the browser and safepaste takes advantage of that to store the
 secret key. Note, your paste is unreadable to anyone without that secret key.
 As soon as you share the link containing that key, however, anyone who sees it
 can read your paste. Share your links cautiously.
+
+**** Freedom ****
+
+safepaste is MIT-licensed and available here:
+
+https://github.com/jeaye/safepaste
