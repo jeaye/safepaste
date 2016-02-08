@@ -30,6 +30,7 @@
                (-> secure-site-defaults
                    (assoc :cookies false)
                    (assoc :session {})
+                   (assoc :proxy true)
                    (assoc-in [:security :hsts] false)
                    (assoc-in [:security :ssl-redirect] false)))))
 
