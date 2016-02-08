@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+[ ! $# -eq 2 ] && echo "usage: $0 <in file> <out file>" && exit 1
+
+openssl aes-256-cbc -in $1 -out $2
