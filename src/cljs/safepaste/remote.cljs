@@ -45,7 +45,7 @@
       (when (and (not-empty data) (not (dom/viewing?)))
         (dom/set-status! :encrypting)
         (let [safe-key (.toString (.random js/CryptoJS.lib.WordArray 32))
-              encrypted (.encrypt js/CryptoJS.AES data safe-key)
+              encrypted (.encrypt js/CryptoJS.AES (str data "\n") safe-key)
               encoded (.toString encrypted)]
           (dom/set-status! :uploading)
 
