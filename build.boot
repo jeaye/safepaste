@@ -48,16 +48,16 @@
             old-file-path (-> old-file tmp-file .getPath)
             new-file (io/file tmp "js/main.min.js")
             new-file-path (.getPath new-file)
-            node-modules "./node_modules"]
+            node-modules "./node_modules/uglify-js"]
         (try
           (io/make-parents new-file)
           (println)
           (when (not (fs/exists? node-modules))
             (println "Installing uglify-js...")
-            (shell/sh "npm" "install" "uglify-js"))
+            (println (shell/sh "npm" "install" "uglify-js")))
 
           (println "Minifying JS...")
-          (shell/sh (str node-modules "/uglify-js/bin/uglifyjs")
+          (shell/sh (str node-modules "/bin/uglifyjs")
                     old-file-path
                     "--screw-ie8"
                     "-c" "-m"
