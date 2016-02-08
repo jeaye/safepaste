@@ -12,3 +12,5 @@ find the base cljs size; try to approach that
 have search engines not index pastes
 
 add a new line to each paste?
+
+have a file to determine when posting is disabled
