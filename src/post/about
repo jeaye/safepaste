@@ -10,7 +10,7 @@ encrypted using AES-256.
 * AES-256 with random 256 bit secret keys
 * Always over HTTPS
 * Optional "burn after reading"
-* Always free
+* Always free and open source
 
 **** Burn after reading ****
 
