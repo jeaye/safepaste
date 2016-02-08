@@ -54,7 +54,7 @@
           (println)
           (when (not (fs/exists? node-modules))
             (println "Installing uglify-js...")
-            (println (shell/sh "npm" "install" "uglify-js")))
+            (shell/sh "npm" "install" "uglify-js"))
 
           (println "Minifying JS...")
           (shell/sh (str node-modules "/bin/uglifyjs")
