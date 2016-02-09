@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+set -eu
+
+dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+function usage
+{
+  echo "usage: $0 <paste directory>"
+  exit 1
+}
+
+[ ! $# -eq 1 ] && usage
+
+for paste in $(find "$1" -mmin +0 -type f | grep -v burn);
+do
+  rm -fv "$paste" "$paste.burn"
+done
