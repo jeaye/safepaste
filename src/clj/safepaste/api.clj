@@ -33,7 +33,7 @@
 (defn delete!
   "Deletes a paste and all of its corresponding files. Only used when burning."
   [path]
-  (doseq [p [path (str path ".expire") (str path ".burn")]]
+  (doseq [p [path (str path ".burn")]]
     (fs/delete p)))
 
 (defn login []
@@ -58,11 +58,12 @@
         json-body (json/read-str (slurp body))
         data (get json-body "data")
         expiry (get json-body "expiry")
-        disable-pasting (fs/exists? "paste/.disable")]
+        disable-pasting (fs/exists? "paste/.disable")
+        output-file (str output-dir id)]
     (cond
       disable-pasting
       (do
-        (println "Pasting is disabled.")
+        (println "Pasting from" ip "is disabled.")
         {:status 503})
 
       (>= (count data) max-paste-bytes)
@@ -79,18 +80,13 @@
       (do
         (println "Paste" id "from" ip "is valid.")
 
-        ; Each paste file also gets a .expire file which is dated for
-        ; when it should be deleted.
-        ; There's a bug where the modification time isn't set when it's
-        ; creating a new file. I've opened an issue here:
-        ; https://github.com/Raynes/fs/issues/101
-        (dotimes [_ 2]
-          (fs/touch (str output-dir id ".expire") (expiry/offset expiry)))
-
         ; If the file needs to be burned after reading, a .burn file is
         ; also created.
         (when (= expiry "burn")
-          (fs/touch (str output-dir id ".burn")))
+          (fs/touch (str output-file ".burn")))
 
-        (spit-bytes (str output-dir id) (codecs/base64->bytes data))
+        (spit-bytes output-file (codecs/base64->bytes data))
+
+        ; Date the paste for its expiration
+        (fs/touch output-file (expiry/offset expiry))
         (json/write-str {:id id})))))
