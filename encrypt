@@ -2,6 +2,8 @@
 
 set -eu
 
+dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 function usage()
 {
   echo "usage: $0 about|donate"
@@ -13,11 +15,11 @@ function usage()
 case "$1" in
   'about')
     echo "371864573d2a445868316521cc3cc374413f3eb04978281c964527cdc79a64bb"
-    openssl aes-256-cbc -in src/paste/about -out paste/14e3c3ce
+    openssl aes-256-cbc -in "$dir/src/paste/about" -out "$dir/paste/14e3c3ce"
     ;;
   'donate')
     echo "31bcdb56b77528a3c1b540bc460ed07d5b74fcf65eb91733bc4d10884e764caf"
-    openssl aes-256-cbc -in src/paste/about -out paste/f1a8f535
+    openssl aes-256-cbc -in "$dir/src/paste/about" -out "$dir/paste/f1a8f535"
     ;;
   *)
     usage
