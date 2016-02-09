@@ -22,7 +22,7 @@
   (GET (str "/:id" id-regex) [id] (partial home/render id))
   (GET (str "/api/:id" id-regex) [id] (api/view id))
   (POST "/api/new" {body :body ip :remote-addr} (api/paste! body ip))
-  (route/files "/js" {:root "target/js"})
+  (route/resources "/")
   (route/not-found (partial home/render nil)))
 
 (def app (-> app-routes
@@ -31,6 +31,7 @@
                    (assoc :cookies false)
                    (assoc :session {})
                    (assoc :proxy true)
+                   (assoc-in [:static :resources] "/")
                    (assoc-in [:security :hsts] false)
                    (assoc-in [:security :ssl-redirect] false)))))
 
