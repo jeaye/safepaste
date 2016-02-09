@@ -8,6 +8,9 @@
   (let [placeholder "Enter your paste here…"]
     (page/html5
       [:head
+       ; Have search engines ignore everything but the home page
+       (when (not-empty id)
+         [:meta {:name "robots" :content "noindex"}])
        [:style (css/main)]
        (page/include-js "/js/main.min.js")
        [:title "safepaste"]]
