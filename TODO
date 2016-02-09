@@ -1,8 +1,6 @@
 Compress pastes?
   lz-string (takes 1s for 2MB -- too long)
 
-remote-addr used in log is wrong, due to the reverse proxy
-
 prevent just anyone from using the api?
 
 rate limiting
