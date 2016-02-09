@@ -8,7 +8,6 @@
             [clojure.data.json :as json]
             [clojure.java.io :as io]))
 
-(def disable-pasting false)
 (def output-dir "paste/")
 (def id-size 4)
 
@@ -58,7 +57,8 @@
   (let [id (first (remove fs/exists? (repeatedly random-id)))
         json-body (json/read-str (slurp body))
         data (get json-body "data")
-        expiry (get json-body "expiry")]
+        expiry (get json-body "expiry")
+        disable-pasting (fs/exists? "paste/.disable")]
     (cond
       disable-pasting
       (do

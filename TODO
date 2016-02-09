@@ -7,8 +7,6 @@ rate limiting
 
 find the base cljs size; try to approach that
 
-have a file to determine when posting is disabled
-
 continuous
   functional tests
   validation of html and css
