@@ -8,6 +8,8 @@ rate limiting
 
 find the base cljs size; try to approach that
 
+allow forking of posts
+
 continuous
   functional tests
   validation of html and css
