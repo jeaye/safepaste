@@ -28,12 +28,12 @@ function encrypt
 
 case "$paste" in
   'about')
-    encrypt "$in/about" \
+    encrypt "$in/$paste" \
             "$out/14e3c3ce" \
             "371864573d2a445868316521cc3cc374413f3eb04978281c964527cdc79a64bb"
     ;;
   'donate')
-    encrypt "$in/about" \
+    encrypt "$in/$paste" \
             "$out/f1a8f535" \
             "31bcdb56b77528a3c1b540bc460ed07d5b74fcf65eb91733bc4d10884e764caf"
     ;;
