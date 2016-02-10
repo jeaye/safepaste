@@ -6,15 +6,15 @@ dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 function usage
 {
-  echo "usage: $0 <about|donate> [<proj dir> <dest dir>]"
+  echo "usage: $0 <about|donate> [<in dir> <out dir>]"
   exit 1
 }
 
 [ $# -eq 1 -o $# -eq 3 ] || usage
 
 paste=$1
-proj=${2:-$dir/..}
-dest=${3:-$proj/paste}
+in=${2:-$dir/../src/paste}
+out=${3:-$dir/../paste}
 
 # $1 => input file
 # $2 => output file
@@ -28,13 +28,13 @@ function encrypt
 
 case "$paste" in
   'about')
-    encrypt "$proj/src/paste/about" \
-            "$dest/14e3c3ce" \
+    encrypt "$in/about" \
+            "$out/14e3c3ce" \
             "371864573d2a445868316521cc3cc374413f3eb04978281c964527cdc79a64bb"
     ;;
   'donate')
-    encrypt "$proj/src/paste/about" \
-            "$dest/f1a8f535" \
+    encrypt "$in/about" \
+            "$out/f1a8f535" \
             "31bcdb56b77528a3c1b540bc460ed07d5b74fcf65eb91733bc4d10884e764caf"
     ;;
   *)
