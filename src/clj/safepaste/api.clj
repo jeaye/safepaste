@@ -63,7 +63,7 @@
     (cond
       disable-pasting
       (do
-        (println "Pasting from" ip "is disabled.")
+        (println "Paste from" ip "is disabled.")
         {:status 503})
 
       (>= (count data) max-paste-bytes)
@@ -78,7 +78,7 @@
 
       :else
       (do
-        (println "Paste" id "from" ip "is valid.")
+        (println "Paste from" ip "for" id "is valid.")
 
         ; If the file needs to be burned after reading, a .burn file is
         ; also created.
