@@ -10,6 +10,9 @@ find the base cljs size; try to approach that
 
 allow forking of posts
 
+integrity check with hash
+  prevent tampering
+
 continuous
   functional tests
   validation of html and css
