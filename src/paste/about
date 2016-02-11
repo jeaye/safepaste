@@ -40,6 +40,13 @@ secret key. Note, your paste is unreadable to anyone without that secret key.
 As soon as you share the link containing that key, however, anyone who sees it
 can read your paste. Share your links cautiously.
 
+**** Rate limiting ****
+
+Due to the limited resources of the current server, and in hopes of minimizing
+spam, there is a limit to the number of pastes which can be made every 12
+hours. Donations would greatly help, in this regard, to allow the service to
+run on a larger server.
+
 **** Freedom ****
 
 safepaste is MIT-licensed and available here:
