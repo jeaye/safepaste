@@ -23,6 +23,7 @@
 (def status-error-color red)
 (def link-hover-color orange)
 
+; TODO: Make header size adjustable and drop to multiple rows when needed
 (defn header []
   [:.header {:background-color header-background-color
              :height header-height
