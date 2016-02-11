@@ -31,6 +31,7 @@
     :unable-to-decrypt "Unable to decrypt."
     :bad-request "Bad request."
     :pasting-disabled "Pasting is currently disabled."
+    :banned "You've been pasting a lot; try again later."
     :invalid-id "Invalid paste ID."))
 
 (defn set-status! [key-id]

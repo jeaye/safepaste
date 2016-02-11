@@ -17,6 +17,7 @@
   {400 :bad-request
    410 :invalid-id
    413 :too-large
+   429 :banned
    503 :pasting-disabled})
 
 (defn check-error!

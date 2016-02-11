@@ -6,12 +6,16 @@
             [me.raynes.fs :as fs]
             [ring.middleware.anti-forgery :refer [*anti-forgery-token*]]
             [clojure.data.json :as json]
-            [clojure.java.io :as io]))
+            [clojure.java
+             [shell :as shell]
+             [io :as io]]))
 
 (def output-dir "paste/")
 (def id-size 4)
 
 (def max-paste-bytes (* 2 1024 1024))
+
+(def ip-regex #"^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$")
 
 ; https://stackoverflow.com/questions/23018870/how-to-read-a-whole-binary-file-nippy-into-byte-array-in-clojure/26372677#26372677
 (defn slurp-bytes
@@ -35,6 +39,18 @@
   [path]
   (doseq [p [path (str path ".burn")]]
     (fs/delete p)))
+
+(defn banned?
+  "Returns whether or not the given ip has been banned for rate limiting.
+   This calls out to iptables, which is managed by fail2ban."
+  [ip]
+  ; Prevent code injection by validating the ip
+  (if (re-find ip-regex ip)
+    (= 0 (:exit (shell/sh "bash" "-c"
+                          "iptables -L f2b-safepaste -n | grep "
+                          ip
+                          " | grep REJECT")))
+    true))
 
 (defn login []
   {:status 200
@@ -65,6 +81,11 @@
       (do
         (println "Paste from" ip "is disabled.")
         {:status 503})
+
+      (banned? ip)
+      (do
+        (println "Paste from" ip "is banned.")
+        {:status 429})
 
       (>= (count data) max-paste-bytes)
       (do
