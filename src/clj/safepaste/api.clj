@@ -46,7 +46,7 @@
   [ip]
   ; Prevent code injection by validating the ip
   (if (re-find ip-regex ip)
-    (= 0 (:exit (shell/sh "bash" "-c"
+    (= 0 (:exit (shell/sh "/usr/bin/env" "bash" "-c"
                           "iptables-save | "
                           "egrep 'f2b-safepaste.*REJECT' | "
                           "grep " ip)))
