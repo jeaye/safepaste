@@ -3,9 +3,6 @@ Compress pastes?
 
 prevent just anyone from using the api
 
-rate limiting
-  mention in about
-
 find the base cljs size; try to approach that
 
 integrity check with hash
