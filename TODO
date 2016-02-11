@@ -8,11 +8,6 @@ rate limiting
 
 find the base cljs size; try to approach that
 
-allow forking of posts
-
-check ip tables in server
-  return error code for rate limiting
-
 integrity check with hash
   prevent tampering
 
