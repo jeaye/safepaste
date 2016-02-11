@@ -12,7 +12,7 @@ function usage
 
 [ ! $# -eq 1 ] && usage
 
-for paste in $(find "$1" -mmin +0 -type f | grep -v burn);
+for paste in $(find "$1" -mmin +0 -type f | egrep -v 'burn|disable');
 do
   rm -fv "$paste" "$paste.burn"
 done
