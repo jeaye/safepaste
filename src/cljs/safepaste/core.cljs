@@ -17,6 +17,14 @@
   (dom/update-inputs!)
   (remote/get!))
 
+(defn fork!
+  "Puts the UI in edit mode with the contents of the current paste."
+  [e]
+  (let [input (sel1 :#input)
+        data (dommy/value input)]
+    (dom/reset-page! e)
+    (dommy/set-value! input data)))
+
 (defn onload [e]
   (remote/login!)
   (dom/update-inputs!)
@@ -24,6 +32,7 @@
     (view-paste! (+ js/window.location.pathname js/window.location.hash))
     (dom/reset-status!))
   (dommy/listen! (sel1 :#new) :click dom/reset-page!)
+  (dommy/listen! (sel1 :#fork) :click fork!)
   (dommy/listen! (sel1 :#about) :click (fn [_] (view-paste! about-paste)))
   (dommy/listen! (sel1 :#donate) :click (fn [_] (view-paste! donate-paste)))
   (dommy/listen! (sel1 :#paste) :click remote/paste!))

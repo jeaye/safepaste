@@ -51,14 +51,17 @@
   "Updates the UI to enable or disable input, based on viewing mode."
   []
   (let [input (sel1 :#input)
-        expiry (sel1 :#expiry)]
+        expiry (sel1 :#expiry)
+        fork (sel1 :#fork)]
     (if (viewing?)
       (do
         (dommy/set-attr! input :readonly)
-        (dommy/set-attr! expiry :style "display:none;"))
+        (dommy/set-attr! expiry :style "display:none;")
+        (dommy/remove-attr! fork :style))
       (do
         (dommy/remove-attr! input :readonly)
-        (dommy/remove-attr! expiry :style)))))
+        (dommy/remove-attr! expiry :style)
+        (dommy/set-attr! fork :style "display:none;")))))
 
 (defn reset-input! []
   (dommy/set-value! (sel1 :#input) "")
