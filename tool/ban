@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+set -eu
+
+dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+function usage
+{
+  echo "usage: $0 <add|remove> <ip> [paste directory]"
+  exit 1
+}
+
+[ $# -eq 2 -o $# -eq 3 ] || usage
+
+action=$1
+ip=$2
+out=${3:-$dir/../paste}
+ban=$out/.ban
+
+case "$action" in
+  "add")
+    echo $2 >> "$ban"
+    ;;
+  "remove")
+    sed -i "/$ip/d" "$ban"
+    ;;
+  *)
+    usage
+    ;;
+esac
