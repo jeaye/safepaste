@@ -8,8 +8,8 @@ Find it online [here](https://safepaste.org).
 
 * AES-256 with random 256 bit secret keys
 * Always over HTTPS
-* Optional "Burn after reading"
-* Always free
+* Optional "burn after reading"
+* Always free and open source
 
 ## Donate
 Feel free to shoot Bitcoins my way: **1HaMvpDjy7QJBDkcZALJr3s26FxLpv5WtJ**
