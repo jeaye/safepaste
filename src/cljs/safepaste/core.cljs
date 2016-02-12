@@ -3,8 +3,6 @@
             [safepaste.dom :as dom]
             [dommy.core :as dommy :refer-macros [sel1]]))
 
-(enable-console-print!)
-
 (def about-paste
   "/14e3c3ce#371864573d2a445868316521cc3cc374413f3eb04978281c964527cdc79a64bb")
 (def donate-paste
