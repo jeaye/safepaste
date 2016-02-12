@@ -7,7 +7,6 @@
             [ring.middleware.anti-forgery :refer [*anti-forgery-token*]]
             [clojure.data.json :as json]
             [clojure.java
-             [shell :as shell]
              [io :as io]]))
 
 (def output-dir "paste/")
