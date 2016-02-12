@@ -36,12 +36,12 @@
           reply-json (.parse js/JSON (:body reply))]
       (when (not (check-error! reply))
         (swap! csrf-token (fn [_] (get (:headers reply) "x-csrf-token")))
-        (swap! max-paste-bytes (fn [_] (.-max-paste-size reply-json)))))))
+        (swap! max-paste-bytes (fn [_] (.-max reply-json)))))))
 
 (defn paste! [e]
   (let [data (dommy/value (sel1 :#input))
         expiry (dommy/value (sel1 :#expiry))]
-    (if (>= (count data) max-paste-bytes)
+    (if (>= (count data) @max-paste-bytes)
       (dom/set-error! :too-large)
       (when (and (not-empty data) (not (dom/viewing?)))
         (dom/set-status! :encrypting)
