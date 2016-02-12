@@ -36,7 +36,7 @@
           reply-json (.parse js/JSON (:body reply))]
       (when (not (check-error! reply))
         (swap! csrf-token (fn [_] (get (:headers reply) "x-csrf-token")))
-        (swap! max-paste-bytes (fn [_] (.-max reply-json)))))))
+        (swap! max-paste-bytes (fn [_] (aget reply-json "max_size")))))))
 
 (defn paste! [e]
   (let [data (dommy/value (sel1 :#input))
@@ -58,7 +58,7 @@
                                         :headers {"X-CSRF-Token" @csrf-token}}))]
               (when (not (check-error! reply))
                 (let [reply-json (.parse js/JSON (:body reply))]
-                  (dom/set-url! (str "/" (.-id reply-json) "#" safe-key))
+                  (dom/set-url! (str "/" (aget reply-json "id") "#" safe-key))
                   (dom/update-inputs!)
                   (if (= expiry "burn")
                     (dom/set-status! :uploaded-burn)
@@ -81,13 +81,13 @@
               (dom/set-status! :decrypting)
               (let [reply-json (.parse js/JSON (:body reply))
                     decrypted (.decrypt js/CryptoJS.AES
-                                        (.-data reply-json)
+                                        (aget reply-json "data")
                                         safe-key)
                     decrypted-str (.toString decrypted js/CryptoJS.enc.Utf8)]
                 (when (empty? decrypted-str)
                   (throw (js/Error.)))
                 (dommy/set-value! (sel1 :#input) decrypted-str)
-                (if (.-burned reply-json)
+                (if (aget reply-json "burned")
                   (dom/set-status! :viewing-burned)
                   (dom/set-status! :viewing)))
               (catch js/Error e

@@ -50,7 +50,7 @@
 (defn login []
   {:status 200
    :headers {"X-CSRF-Token" *anti-forgery-token*}
-   :body (json/write-str {:max max-paste-bytes})})
+   :body (json/write-str {:max-size max-paste-bytes})})
 
 (defn view [id]
   (let [path (str output-dir id)]
