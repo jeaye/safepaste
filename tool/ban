@@ -15,7 +15,7 @@ function usage
 action=$1
 ip=$2
 out=${3:-$dir/../paste}
-ban=$out/.ban
+ban=$out/safepaste.ban
 
 case "$action" in
   "add")

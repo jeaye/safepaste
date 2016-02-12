@@ -10,6 +10,7 @@
              [io :as io]]))
 
 (def output-dir "paste/")
+(def ban-file "/var/tmp/safepaste.ban")
 (def id-size 4)
 
 (def max-paste-bytes (* 2 1024 1024))
@@ -41,8 +42,10 @@
   "Returns whether or not the given ip has been banned for rate limiting.
    This reads a file which is managed by fail2ban."
   [ip]
-  (with-open [reader (clojure.java.io/reader (str output-dir ".ban"))]
-    (some #(= ip %) (line-seq reader))))
+  (if (fs/exists? ban-file)
+    (with-open [reader (clojure.java.io/reader ban-file)]
+      (some #(= ip %) (line-seq reader)))
+    false))
 
 (defn login []
   {:status 200
