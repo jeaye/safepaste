@@ -10,13 +10,13 @@
                   [prismatic/dommy "1.1.0"] ; DOM events
 
                   ; Back end
-                  [pandeiro/boot-http "0.7.0"] ; HTTP server
+                  [pandeiro/boot-http "0.7.2"] ; HTTP server
                   [ring/ring-jetty-adapter "1.4.0"] ; HTTP in jar
                   [compojure "1.4.0"] ; Routing
                   [org.clojure/data.json "0.2.6"] ; Reading client json
                   [buddy/buddy-core "0.9.0"] ; Encryption
                   [hiccup "1.0.5"] ; HTML generation
-                  [garden "1.3.0"] ; CSS generation
+                  [garden "1.3.1"] ; CSS generation
                   [me.raynes/fs "1.4.6"] ; Filesystem work
 
                   ; HTTP
