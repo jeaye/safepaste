@@ -15,8 +15,6 @@
 
 (def max-paste-bytes (* 2 1024 1024))
 
-(def ip-regex #"^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$")
-
 ; https://stackoverflow.com/questions/23018870/how-to-read-a-whole-binary-file-nippy-into-byte-array-in-clojure/26372677#26372677
 (defn slurp-bytes
   "Slurps the bytes from a slurpable thing."
@@ -42,16 +40,10 @@
 
 (defn banned?
   "Returns whether or not the given ip has been banned for rate limiting.
-   This calls out to iptables, which is managed by fail2ban."
+   This reads a file which is managed by fail2ban."
   [ip]
-  ; Prevent code injection by validating the ip
-  (if (re-find ip-regex ip)
-    ; TODO: We need a root process to write this data into a file. Fuck.
-    (= 0 (:exit (shell/sh "/usr/bin/env" "bash" "-c"
-                          "iptables-save | "
-                          "egrep 'f2b-safepaste.*REJECT' | "
-                          "grep " ip)))
-    true))
+  (with-open [reader (clojure.java.io/reader (str output-dir ".ban"))]
+    (some #(= ip %) (line-seq reader))))
 
 (defn login []
   {:status 200
