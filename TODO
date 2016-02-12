@@ -5,6 +5,8 @@ command line tool
 
 prevent just anyone from using the api
 
+double check client-side size check
+
 find the base cljs size; try to approach that
 
 integrity check with hash
