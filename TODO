@@ -7,6 +7,9 @@ prevent just anyone from using the api
 
 find the base cljs size; try to approach that
 
+make paste button more visible when there's a valid paste
+  scan left to right ; it's the last thing
+
 integrity check with hash
   prevent tampering
 
