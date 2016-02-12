@@ -29,7 +29,9 @@
   (with-open [w (io/output-stream f)]
     (.write w content)))
 
-(defn random-id []
+(defn random-id
+  "Generates a random id which will be the means of accessing a given paste."
+  []
   (codecs/bytes->hex (nonce/random-bytes id-size)))
 
 (defn delete!

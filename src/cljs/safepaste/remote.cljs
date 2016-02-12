@@ -30,7 +30,10 @@
       (dom/set-error! (error-from-status status :bad-request)))
     error?))
 
-(defn login! []
+(defn login!
+  "By logging in, we get some updated info from the server.
+   Anyone can login and it doesn't require credentials."
+  []
   (go
     (let [reply (<! (http/get "/api/login"))
           reply-json (.parse js/JSON (:body reply))]
