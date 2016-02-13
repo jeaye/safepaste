@@ -6,6 +6,9 @@ set -eu
 
 here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+url=https://safepaste.org
+url=http://localhost:3000
+
 log()
 { printf ">>> %s\n" "$*"; }
 log_start()
@@ -16,7 +19,7 @@ log_end()
 check_existence()
 {
   set +e
-  which "$1" > /dev/null 2>&1
+  found=$(which "$1")
   exists=$?
   if [ ! "$exists" == "0" ];
   then
@@ -24,11 +27,14 @@ check_existence()
     exit 1
   fi
   set -e
+  printf $found
 }
 
 ## Sanity-check
-check_existence "openssl"
-check_existence "curl"
+for p in openssl curl awk grep sed base64 head;
+do
+  export first_$p=$(check_existence "$p")
+done
 
 curl_error()
 {
@@ -36,14 +42,13 @@ curl_error()
   exit $2
 }
 
-checked_curl()
+cookies=$(mktemp)
+check_status()
 {
   set +e
-    ret=$(curl -is $@)
-    status=$(head -1 <<< "$ret" | awk '{print $2;}')
+    status=$($first_head -1 <<< "$1" | $first_awk '{print $2;}')
     case "$status" in
       '200')
-        echo "$ret"
         ;;
       '400')
         curl_error "bad request" $status
@@ -66,10 +71,31 @@ checked_curl()
     esac
   set -e
 }
+curl_constants="-b $cookies -c $cookies -is"
 
-login=$(checked_curl "https://safepaste.org/api/login")
-token=$(grep "X-CSRF-Token:" <<< "$login")
-max_size=$(grep "max-size" <<< "$login" | grep -Po '\d+')
+login=$($first_curl $curl_constants "$url/api/login")
+check_status "$login"
+token=$($first_grep "X-CSRF-Token:" <<< "$login" \
+          | $first_head -1 \
+          | $first_sed 's/\r//g')
+max_size=$($first_grep "max-size" <<< "$login" \
+          | $first_grep -Po '\d+')
 
-log "token: $token"
+# TODO: read from options
+expiry="day"
+
+# TODO: read from stdin
+data=$(echo "meow!" | $first_base64)
+
+log "$token"
 log "max_size: $max_size"
+log "data: $data"
+log "expiry: $expiry"
+
+post=$($first_curl $curl_constants \
+        -H "Content-Type: application/json" \
+        -H "Accept: text/html,application/json" \
+        -H "$token" \
+        --data "{\"data\":\"$data\",\"expiry\":\"$expiry\"}" \
+        "$url/api/new")
+check_status "$post"
