@@ -48,6 +48,8 @@ check_status()
   set +e
     status=$($which_head -1 <<< "$1" | $which_awk '{print $2;}')
     case "$status" in
+      '100')
+        ;;
       '200')
         ;;
       '400')
@@ -85,7 +87,9 @@ max_size=$($which_grep "max-size" <<< "$login" \
 expiry="day"
 
 # TODO: read from stdin
-data=$(echo "meow!" | $which_base64)
+tmp_stdin=$(mktemp)
+cat >> "$tmp_stdin"
+data=$($which_base64 < "$tmp_stdin")
 
 log "$token"
 log "max_size: $max_size"
@@ -105,7 +109,7 @@ log "$final_url"
 
 get=$($which_curl $curl_constants "$url/api/$id")
 check_status "$get"
-data=$($which_tail -1 <<< "$get" | $which_sed 's/.*"data":"\(\w\+\)".*/\1/')
+data=$($which_tail -1 <<< "$get" | $which_sed 's/.*"data":"\(.\+\)".*/\1/')
 burned=$($which_tail -1 <<< "$get" | $which_sed 's/.*"burned":\(true\|false\).*/\1/')
 log "$($which_base64 -d <<< $data)"
 log "$burned"
