@@ -9,9 +9,12 @@ here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 url=https://safepaste.org
 url=http://localhost:3000
+expiry="day"
 
 log()
 { printf "%s\n" "$*"; }
+log_start()
+{ printf "%s" "$*"; }
 
 check_existence()
 {
@@ -111,42 +114,52 @@ while getopts ":u:e:bh" opt; do
       ;;
   esac
 done
+# Remove handled opts
+shift $(expr $OPTIND - 1 )
 
-login=$($which_curl $curl_constants "$url/api/login")
-check_status "$login"
-token=$($which_grep "X-CSRF-Token:" <<< "$login" \
-          | $which_head -1 \
-          | $which_sed 's/\r//g')
-max_size=$($which_grep "max-size" <<< "$login" \
-          | $which_grep -Po '\d+')
+if [ $# -eq 1 ];
+then
+  groups=$($which_sed 's_\(.\+\)/\(.\+\)/\?\#\(.\+\)_\1\n\2\n\3_' <<< "$1")
+  url=$($which_head -1 <<< "$groups")
+  id=$($which_head -2 <<< "$groups" | $which_tail -1)
+  key=$($which_tail -1 <<< "$groups")
 
-# TODO: read from options
-expiry="day"
+  get=$($which_curl $curl_constants "$url/api/$id")
+  check_status "$get"
 
-# TODO: read from stdin
-tmp_stdin=$(mktemp)
-cat >> "$tmp_stdin"
-data=$($which_base64 < "$tmp_stdin")
+  data=$($which_tail -1 <<< "$get" | $which_sed 's/.*"data":"\([a-zA-Z0-9\+\/\=]\+\)".*/\1/')
+  burned=$($which_tail -1 <<< "$get" | $which_sed 's/.*"burned":\(true\|false\).*/\1/')
 
-log "$token"
-log "max_size: $max_size"
-log "data: $data"
-log "expiry: $expiry"
+  log "$data"
+  log "$burned"
+  #log "$($which_base64 -d <<< $data)"
+else
+  # TODO: Generate a secret key and encrypt data
+  login=$($which_curl $curl_constants "$url/api/login")
+  check_status "$login"
+  token=$($which_grep "X-CSRF-Token:" <<< "$login" \
+            | $which_head -1 \
+            | $which_sed 's/\r//g')
+  max_size=$($which_grep "max-size" <<< "$login" \
+            | $which_grep -Po '\d+')
 
-post=$($which_curl $curl_constants \
-        -H "Content-Type: application/json" \
-        -H "Accept: text/html,application/json" \
-        -H "$token" \
-        --data "{\"data\":\"$data\",\"expiry\":\"$expiry\"}" \
-        "$url/api/new")
-check_status "$post"
-id=$($which_tail -1 <<< "$post" | $which_sed 's/.*"id":"\([a-f0-9]\+\)".*/\1/')
-final_url="$url/$id#secret-key"
-log "$final_url"
+  tmp_stdin=$(mktemp)
+  cat >> "$tmp_stdin"
+  data=$($which_base64 < "$tmp_stdin")
 
-get=$($which_curl $curl_constants "$url/api/$id")
-check_status "$get"
-data=$($which_tail -1 <<< "$get" | $which_sed 's/.*"data":"\(.\+\)".*/\1/')
-burned=$($which_tail -1 <<< "$get" | $which_sed 's/.*"burned":\(true\|false\).*/\1/')
-log "$($which_base64 -d <<< $data)"
-log "$burned"
+  log "$token"
+  log "max_size: $max_size"
+  log "data: $data"
+  log "expiry: $expiry"
+
+  post=$($which_curl $curl_constants \
+          -H "Content-Type: application/json" \
+          -H "Accept: text/html,application/json" \
+          -H "$token" \
+          --data "{\"data\":\"$data\",\"expiry\":\"$expiry\"}" \
+          "$url/api/new")
+  check_status "$post"
+  id=$($which_tail -1 <<< "$post" | $which_sed 's/.*"id":"\([a-f0-9]\+\)".*/\1/')
+  final_url="$url/$id#secret-key"
+  log "$final_url"
+fi
