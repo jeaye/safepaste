@@ -31,9 +31,9 @@ check_existence()
 }
 
 ## Sanity-check
-for p in openssl curl awk grep sed base64 head;
+for p in openssl curl awk grep sed base64 head tail;
 do
-  export first_$p=$(check_existence "$p")
+  export which_$p=$(check_existence "$p")
 done
 
 curl_error()
@@ -46,7 +46,7 @@ cookies=$(mktemp)
 check_status()
 {
   set +e
-    status=$($first_head -1 <<< "$1" | $first_awk '{print $2;}')
+    status=$($which_head -1 <<< "$1" | $which_awk '{print $2;}')
     case "$status" in
       '200')
         ;;
@@ -73,39 +73,39 @@ check_status()
 }
 curl_constants="-b $cookies -c $cookies -is"
 
-login=$($first_curl $curl_constants "$url/api/login")
+login=$($which_curl $curl_constants "$url/api/login")
 check_status "$login"
-token=$($first_grep "X-CSRF-Token:" <<< "$login" \
-          | $first_head -1 \
-          | $first_sed 's/\r//g')
-max_size=$($first_grep "max-size" <<< "$login" \
-          | $first_grep -Po '\d+')
+token=$($which_grep "X-CSRF-Token:" <<< "$login" \
+          | $which_head -1 \
+          | $which_sed 's/\r//g')
+max_size=$($which_grep "max-size" <<< "$login" \
+          | $which_grep -Po '\d+')
 
 # TODO: read from options
 expiry="day"
 
 # TODO: read from stdin
-data=$(echo "meow!" | $first_base64)
+data=$(echo "meow!" | $which_base64)
 
 log "$token"
 log "max_size: $max_size"
 log "data: $data"
 log "expiry: $expiry"
 
-post=$($first_curl $curl_constants \
+post=$($which_curl $curl_constants \
         -H "Content-Type: application/json" \
         -H "Accept: text/html,application/json" \
         -H "$token" \
         --data "{\"data\":\"$data\",\"expiry\":\"$expiry\"}" \
         "$url/api/new")
 check_status "$post"
-id=$(tail -1 <<< "$post" | sed 's/.*"id":"\([a-f0-9]\+\)".*/\1/')
+id=$($which_tail -1 <<< "$post" | $which_sed 's/.*"id":"\([a-f0-9]\+\)".*/\1/')
 final_url="$url/$id#secret-key"
 log "$final_url"
 
-get=$($first_curl $curl_constants "$url/api/$id")
+get=$($which_curl $curl_constants "$url/api/$id")
 check_status "$get"
-data=$(tail -1 <<< "$get" | sed 's/.*"data":"\(\w\+\)".*/\1/')
-burned=$(tail -1 <<< "$get" | sed 's/.*"burned":\(true\|false\).*/\1/')
-log "$($first_base64 -d <<< $data)"
+data=$($which_tail -1 <<< "$get" | $which_sed 's/.*"data":"\(\w\+\)".*/\1/')
+burned=$($which_tail -1 <<< "$get" | $which_sed 's/.*"burned":\(true\|false\).*/\1/')
+log "$($which_base64 -d <<< $data)"
 log "$burned"
