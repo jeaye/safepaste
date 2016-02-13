@@ -3,6 +3,7 @@
 set -eu
 
 # TODO: proper option parsing
+# TODO: clean up tmp files
 
 here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
@@ -10,10 +11,6 @@ url=https://safepaste.org
 url=http://localhost:3000
 
 log()
-{ printf ">>> %s\n" "$*"; }
-log_start()
-{ printf ">>> %s" "$*"; }
-log_end()
 { printf "%s\n" "$*"; }
 
 check_existence()
@@ -23,7 +20,7 @@ check_existence()
   exists=$?
   if [ ! "$exists" == "0" ];
   then
-    log_end "$1 not found; please install it." 1>&2
+    log "$1 not found; please install it." 1>&2
     exit 1
   fi
   set -e
@@ -38,7 +35,7 @@ done
 
 curl_error()
 {
-  log_end "error: $1"
+  log "error: $1"
   exit $2
 }
 
@@ -74,6 +71,46 @@ check_status()
   set -e
 }
 curl_constants="-b $cookies -c $cookies -is"
+
+show_help()
+{
+  log "safepaste usage:\n"
+  log " upload (from command):  some-command | $0 [option...]"
+  log " upload (from file):     $0 [option...] < my-file"
+  log " download (to stdout):   $0 [option...] <url>"
+  log " download (to file):     $0 [option...] <url> > my-file"
+  log
+  log "  -h            Show this help message"
+  log "  -e <expiry>   Set paste expiry: burn, hour, day, week, month (default: day)"
+  log "  -b            Shortcut for -e burn"
+  log "  -u <url>      Set the url of the safepaste service (default: https://safepaste.org)"
+  exit 1
+}
+
+while getopts ":u:e:bh" opt; do
+  case $opt in
+    u)
+      url=$OPTARG
+      ;;
+    e)
+      expiry=$OPTARG
+      ;;
+    b)
+      expiry=burn
+      ;;
+    h)
+      show_help "$0"
+      ;;
+    \?)
+      log "ERROR invalid option: -$OPTARG" >&2
+      exit 1
+      ;;
+    :)
+      log "ERROR option -$OPTARG requires an argument." >&2
+      exit 1
+      ;;
+  esac
+done
 
 login=$($which_curl $curl_constants "$url/api/login")
 check_status "$login"
