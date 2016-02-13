@@ -99,3 +99,13 @@ post=$($first_curl $curl_constants \
         --data "{\"data\":\"$data\",\"expiry\":\"$expiry\"}" \
         "$url/api/new")
 check_status "$post"
+id=$(tail -1 <<< "$post" | sed 's/.*"id":"\([a-f0-9]\+\)".*/\1/')
+final_url="$url/$id#secret-key"
+log "$final_url"
+
+get=$($first_curl $curl_constants "$url/api/$id")
+check_status "$get"
+data=$(tail -1 <<< "$get" | sed 's/.*"data":"\(\w\+\)".*/\1/')
+burned=$(tail -1 <<< "$get" | sed 's/.*"burned":\(true\|false\).*/\1/')
+log "$($first_base64 -d <<< $data)"
+log "$burned"
