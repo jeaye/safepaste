@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+
+set -eu
+
+# TODO: proper option parsing
+
+here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+log()
+{ printf ">>> %s\n" "$*"; }
+log_start()
+{ printf ">>> %s" "$*"; }
+log_end()
+{ printf "%s\n" "$*"; }
+
+check_existence()
+{
+  set +e
+  which "$1" > /dev/null 2>&1
+  exists=$?
+  if [ ! "$exists" == "0" ];
+  then
+    log_end "$1 not found; please install it." 1>&2
+    exit 1
+  fi
+  set -e
+}
+
+## Sanity-check
+check_existence "openssl"
+check_existence "curl"
+
+curl_error()
+{
+  log_end "error: $1"
+  exit $2
+}
+
+checked_curl()
+{
+  set +e
+    ret=$(curl -is $@)
+    status=$(head -1 <<< "$ret" | awk '{print $2;}')
+    case "$status" in
+      '200')
+        echo "$ret"
+        ;;
+      '400')
+        curl_error "bad request" $status
+        ;;
+      '410')
+        curl_error "invalid paste id" $status
+        ;;
+      '413')
+        curl_error "paste is too large" $status
+        ;;
+      '429')
+        curl_error "you've been pasting a lot; try again later" $status
+        ;;
+      '503')
+        curl_error "pasting is currently disabled" $status
+        ;;
+      *)
+        curl_error "unknown" $status
+        ;;
+    esac
+  set -e
+}
+
+login=$(checked_curl "https://safepaste.org/api/login")
+token=$(grep "X-CSRF-Token:" <<< "$login")
+max_size=$(grep "max-size" <<< "$login" | grep -Po '\d+')
+
+log "token: $token"
+log "max_size: $max_size"
