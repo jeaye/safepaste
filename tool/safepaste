@@ -2,7 +2,6 @@
 
 set -eu
 
-# TODO: proper option parsing
 # TODO: clean up tmp files
 
 here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -13,8 +12,6 @@ expiry="day"
 
 log()
 { printf "%s\n" "$*"; }
-log_start()
-{ printf "%s" "$*"; }
 
 check_existence()
 {
@@ -31,7 +28,7 @@ check_existence()
 }
 
 ## Sanity-check
-for p in openssl curl awk grep sed base64 head tail;
+for p in openssl curl awk grep sed base64 head tail mktemp dd hexdump;
 do
   export which_$p=$(check_existence "$p")
 done
@@ -42,7 +39,7 @@ curl_error()
   exit $2
 }
 
-cookies=$(mktemp)
+cookies=$($which_mktemp)
 check_status()
 {
   set +e
@@ -136,7 +133,6 @@ then
             | $which_openssl aes-256-cbc -d -pass pass:"$key")
   log "$plain"
 else
-  # TODO: Generate a secret key and encrypt data
   login=$($which_curl $curl_constants "$url/api/login")
   check_status "$login"
   token=$($which_grep "X-CSRF-Token:" <<< "$login" \
@@ -145,14 +141,13 @@ else
   max_size=$($which_grep "max-size" <<< "$login" \
             | $which_grep -Po '\d+')
 
-  tmp_stdin=$(mktemp)
-  cat >> "$tmp_stdin"
-  data=$($which_base64 < "$tmp_stdin")
+  key=$($which_dd if=/dev/urandom bs=32 count=1 status=none \
+            | $which_hexdump -e '"%x"')
 
-  log "$token"
-  log "max_size: $max_size"
-  log "data: $data"
-  log "expiry: $expiry"
+  tmp_stdin=$($which_mktemp)
+  cat >> "$tmp_stdin"
+  data=$($which_openssl aes-256-cbc -pass pass:"$key" -in "$tmp_stdin" \
+            | $which_base64)
 
   post=$($which_curl $curl_constants \
           -H "Content-Type: application/json" \
@@ -162,6 +157,6 @@ else
           "$url/api/new")
   check_status "$post"
   id=$($which_tail -1 <<< "$post" | $which_sed 's/.*"id":"\([a-f0-9]\+\)".*/\1/')
-  final_url="$url/$id#secret-key"
+  final_url="$url/$id#$key"
   log "$final_url"
 fi
