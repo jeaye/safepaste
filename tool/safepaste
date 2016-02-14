@@ -2,7 +2,13 @@
 
 set -eu
 
-# TODO: clean up tmp files
+# The most important item
+cleanup()
+{
+  [ -z ${cookies+x} ] || rm -f "$cookies"
+  [ -z ${tmp_stdin+x} ] || rm -f "$tmp_stdin"
+}
+trap cleanup EXIT
 
 here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
@@ -39,10 +45,10 @@ curl_error()
   exit $2
 }
 
-cookies=$($which_mktemp)
 check_status()
 {
   set +e
+    # TODO: Collect all status codes and loop through them
     status=$($which_head -1 <<< "$1" | $which_awk '{print $2;}')
     case "$status" in
       '100')
@@ -70,6 +76,7 @@ check_status()
     esac
   set -e
 }
+cookies=$($which_mktemp)
 curl_constants="-b $cookies -c $cookies -is"
 
 show_help()
