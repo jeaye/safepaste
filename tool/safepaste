@@ -127,12 +127,14 @@ then
   get=$($which_curl $curl_constants "$url/api/$id")
   check_status "$get"
 
-  data=$($which_tail -1 <<< "$get" | $which_sed 's/.*"data":"\([a-zA-Z0-9\+\/\=]\+\)".*/\1/')
+  data=$($which_tail -1 <<< "$get" \
+            | $which_sed 's/.*"data":"\([a-zA-Z0-9\+\/\=]\+\)".*/\1/' \
+            | $which_sed 's_\\__g')
   burned=$($which_tail -1 <<< "$get" | $which_sed 's/.*"burned":\(true\|false\).*/\1/')
 
-  log "$data"
-  log "$burned"
-  #log "$($which_base64 -d <<< $data)"
+  plain=$($which_base64 -d <<< "$data" \
+            | $which_openssl aes-256-cbc -d -pass pass:"$key")
+  log "$plain"
 else
   # TODO: Generate a secret key and encrypt data
   login=$($which_curl $curl_constants "$url/api/login")
