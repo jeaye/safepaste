@@ -48,32 +48,37 @@ curl_error()
 check_status()
 {
   set +e
-    # TODO: Collect all status codes and loop through them
-    status=$($which_head -1 <<< "$1" | $which_awk '{print $2;}')
-    case "$status" in
-      '100')
-        ;;
-      '200')
-        ;;
-      '400')
-        curl_error "bad request" $status
-        ;;
-      '410')
-        curl_error "invalid paste id" $status
-        ;;
-      '413')
-        curl_error "paste is too large" $status
-        ;;
-      '429')
-        curl_error "you've been pasting a lot; try again later" $status
-        ;;
-      '503')
-        curl_error "pasting is currently disabled" $status
-        ;;
-      *)
-        curl_error "unknown" $status
-        ;;
-    esac
+    statuses=$(grep -P "HTTP/(?:1\.1|2)" <<< "$1" \
+                  | tr '\n' ' ' \
+                  | grep -Po "\d{3}" \
+                  | tr '\n' ' ')
+    for status in $statuses;
+    do
+      case "$status" in
+        '100')
+          ;;
+        '200')
+          ;;
+        '400')
+          curl_error "bad request (check the expiry)" $status
+          ;;
+        '410')
+          curl_error "invalid paste id" $status
+          ;;
+        '413')
+          curl_error "paste is too large" $status
+          ;;
+        '429')
+          curl_error "you've been pasting a lot; try again later" $status
+          ;;
+        '503')
+          curl_error "pasting is currently disabled" $status
+          ;;
+        *)
+          curl_error "unknown" $status
+          ;;
+      esac
+    done
   set -e
 }
 cookies=$($which_mktemp)
@@ -94,6 +99,7 @@ show_help()
   exit 1
 }
 
+# TODO: Test these
 while getopts ":u:e:bh" opt; do
   case $opt in
     u)
@@ -138,6 +144,7 @@ then
 
   plain=$($which_base64 -d <<< "$data" \
             | $which_openssl aes-256-cbc -d -pass pass:"$key")
+  # TODO: Log if burned
   log "$plain"
 else
   login=$($which_curl $curl_constants "$url/api/login")
