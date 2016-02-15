@@ -86,7 +86,8 @@ curl_constants="-b $cookies -c $cookies -is"
 
 show_help()
 {
-  log "safepaste usage:\n"
+  log "safepaste usage:"
+  log
   log " upload (from command):  some-command | $0 [option...]"
   log " upload (from file):     $0 [option...] < my-file"
   log " download (to stdout):   $0 [option...] <url>"
