@@ -163,7 +163,7 @@ else
 
   post=$($which_curl $curl_constants \
           -H "Content-Type: application/json" \
-          -H "Accept: text/html,application/json" \
+          -H "Accept: application/json" \
           -H "$token" \
           --data "{\"data\":\"$data\",\"expiry\":\"$expiry\"}" \
           "$url/api/new")
