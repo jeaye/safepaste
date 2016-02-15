@@ -30,7 +30,7 @@ $ safepaste < my-file
 # To paste command output:
 $ some-command | safepaste
 
-# To download an decrypt a paste:
+# To download and decrypt a paste:
 $ safepaste https://safepaste.org/14e3c3ce#371864573d2a445868316521cc3cc374413f3eb04978281c964527cdc79a64bb
 ```
 
