@@ -14,6 +14,26 @@ Find it online [here](https://safepaste.org).
 Learn more about the service
 [here](https://safepaste.org/14e3c3ce#371864573d2a445868316521cc3cc374413f3eb04978281c964527cdc79a64bb).
 
+## Command-line tool
+
+There is a command line tool for uploading and downloading pastes, written in
+bash, included in the repo. It supports all of the options as the web page and
+performs the client-side encryption using openssl. To install it, use:
+
+```bash
+$ wget https://raw.githubusercontent.com/jeaye/safepaste/master/tool/safepaste
+$ chmod +x ./safepaste
+
+# To paste file (assuming safepate script is within PATH):
+$ safepaste < my-file
+
+# To paste command output:
+$ some-command | safepaste
+
+# To download an decrypt a paste:
+$ safepaste https://safepaste.org/14e3c3ce#371864573d2a445868316521cc3cc374413f3eb04978281c964527cdc79a64bb
+```
+
 ## Donate
 Feel free to shoot Bitcoins my way: **1HaMvpDjy7QJBDkcZALJr3s26FxLpv5WtJ**
 
