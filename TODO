@@ -3,6 +3,8 @@ Compress pastes?
 
 prevent just anyone from using the api
 
+test cli tool on more platforms
+
 find the base cljs size; try to approach that
 
 make paste button more visible when there's a valid paste
