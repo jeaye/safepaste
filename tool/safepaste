@@ -13,7 +13,6 @@ trap cleanup EXIT
 here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 url=https://safepaste.org
-url=http://localhost:3000
 expiry="day"
 
 log()
