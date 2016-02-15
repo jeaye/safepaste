@@ -153,7 +153,7 @@ else
   max_size=$($which_grep "max-size" <<< "$login" \
             | $which_grep -Eo '[0-9]+')
 
-  key=$($which_dd if=/dev/urandom bs=32 count=1 status=none \
+  key=$($which_dd if=/dev/urandom bs=32 count=1 2>/dev/null \
             | $which_hexdump -n 32 -v -e '1/1 "%02x"')
 
   tmp_stdin=$($which_mktemp)
