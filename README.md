@@ -32,6 +32,9 @@ $ some-command | safepaste
 
 # To download and decrypt a paste:
 $ safepaste https://safepaste.org/f1a8f535#31bcdb56b77528a3c1b540bc460ed07d5b74fcf65eb91733bc4d10884e764caf
+
+# To see more options:
+$ safepaste -h
 ```
 
 ## Donate
