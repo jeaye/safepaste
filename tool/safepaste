@@ -99,7 +99,6 @@ show_help()
   exit 1
 }
 
-# TODO: Test these
 while getopts ":u:e:bh" opt; do
   case $opt in
     u)
