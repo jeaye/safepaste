@@ -1,8 +1,6 @@
 Compress pastes?
   lz-string (takes 1s for 2MB -- too long)
 
-command line tool
-
 prevent just anyone from using the api
 
 find the base cljs size; try to approach that
