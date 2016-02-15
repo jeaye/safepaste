@@ -47,9 +47,9 @@ curl_error()
 check_status()
 {
   set +e
-    statuses=$(grep -P "HTTP/(?:1\.1|2)" <<< "$1" \
+    statuses=$(grep -E "HTTP/(?:1\.1|2)" <<< "$1" \
                   | tr '\n' ' ' \
-                  | grep -Po "\d{3}" \
+                  | grep -Eo "\d{3}" \
                   | tr '\n' ' ')
     for status in $statuses;
     do
@@ -151,7 +151,7 @@ else
             | $which_head -1 \
             | $which_sed 's/\r//g')
   max_size=$($which_grep "max-size" <<< "$login" \
-            | $which_grep -Po '\d+')
+            | $which_grep -Eo '[0-9]+')
 
   key=$($which_dd if=/dev/urandom bs=32 count=1 status=none \
             | $which_hexdump -n 32 -v -e '1/1 "%02x"')
