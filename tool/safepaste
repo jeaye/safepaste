@@ -144,7 +144,6 @@ then
 
   plain=$($which_base64 -d <<< "$data" \
             | $which_openssl aes-256-cbc -d -pass pass:"$key")
-  # TODO: Log if burned
   log "$plain"
 else
   login=$($which_curl $curl_constants "$url/api/login")
@@ -156,7 +155,7 @@ else
             | $which_grep -Po '\d+')
 
   key=$($which_dd if=/dev/urandom bs=32 count=1 status=none \
-            | $which_hexdump -e '"%x"')
+            | $which_hexdump -n 32 -v -e '1/1 "%02x"')
 
   tmp_stdin=$($which_mktemp)
   cat >> "$tmp_stdin"
@@ -172,5 +171,5 @@ else
   check_status "$post"
   id=$($which_tail -1 <<< "$post" | $which_sed 's/.*"id":"\([a-f0-9]\+\)".*/\1/')
   final_url="$url/$id#$key"
-  log "$final_url"
+  log "$final_url$([ "$expiry" == "burn" ] && log " (burn after reading)")"
 fi
