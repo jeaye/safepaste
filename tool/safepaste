@@ -33,7 +33,7 @@ check_existence()
 }
 
 ## Sanity-check
-for p in openssl curl awk grep sed base64 head tail mktemp dd hexdump;
+for p in openssl curl awk grep sed base64 head tail mktemp dd hexdump tr;
 do
   export which_$p=$(check_existence "$p")
 done
@@ -47,10 +47,9 @@ curl_error()
 check_status()
 {
   set +e
-    statuses=$(grep -E "HTTP/(1\.1|2)" <<< "$1" \
-                  | tr '\n' ' ' \
-                  | grep -Eo "[0-9]{3}" \
-                  | tr '\n' ' ')
+    statuses=$($which_grep -E "HTTP/(1\.1|2)" <<< "$1" \
+                  | $which_awk '{print $2;}' \
+                  | $which_tr '\n' ' ')
     for status in $statuses;
     do
       case "$status" in
