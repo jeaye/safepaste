@@ -22,7 +22,7 @@ out=${3:-$dir/../paste}
 function encrypt
 {
   openssl aes-256-cbc -pass pass:$3 -in "$1" -out "$2"
-  touch -c -m -t 205012250000 "$2" # Christmas, year 2050
+  chmod a-w "$2" # Tell the cleanup script to leave this alone
   echo "encrypted paste written to $2"
 }
 

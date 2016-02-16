@@ -14,5 +14,6 @@ function usage
 
 for paste in $(find "$1" -mmin +0 -type f | egrep -v 'burn|disable');
 do
-  rm -fv "$paste" "$paste.burn"
+  # Only remove if it's writeable
+  [ -w "$paste" ] && rm -fv "$paste" "$paste.burn"
 done
