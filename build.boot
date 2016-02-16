@@ -99,7 +99,7 @@
          :version "0.1.0")
     (uber)
     (jar :main 'safepaste.core
-          :manifest {"Description" "TODO"
+          :manifest {"Description" "A security-conscious paste service"
                      "Url" "https://github.com/jeaye/safepaste"}
          :file "safepaste.jar")
     (target :dir #{target-dir})))
