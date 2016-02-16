@@ -18,6 +18,7 @@
                   [hiccup "1.0.5"] ; HTML generation
                   [garden "1.3.1"] ; CSS generation
                   [me.raynes/fs "1.4.6"] ; Filesystem work
+                  [bk/ring-gzip "0.1.1"] ; On-the-fly gzipping
 
                   ; HTTP
                   [ring/ring-core "1.4.0"]

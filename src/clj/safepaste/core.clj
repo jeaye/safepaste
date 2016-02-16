@@ -5,7 +5,8 @@
              [css :as css]
              [api :as api]]
             [ring.middleware
-             [defaults :refer [wrap-defaults secure-site-defaults]]]
+             [defaults :refer [wrap-defaults secure-site-defaults]]
+             [gzip :as gzip]]
             [ring.adapter.jetty :as jetty]
             [compojure
              [core :refer :all]
@@ -33,7 +34,8 @@
                    (assoc :proxy true)
                    (assoc-in [:static :resources] "/")
                    (assoc-in [:security :hsts] false)
-                   (assoc-in [:security :ssl-redirect] false)))))
+                   (assoc-in [:security :ssl-redirect] false)))
+             (gzip/wrap-gzip)))
 
 (defn -main []
   (jetty/run-jetty app {:port 3000}))
