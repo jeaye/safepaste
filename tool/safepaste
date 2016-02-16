@@ -47,9 +47,9 @@ curl_error()
 check_status()
 {
   set +e
-    statuses=$(grep -E "HTTP/(?:1\.1|2)" <<< "$1" \
+    statuses=$(grep -E "HTTP/(1\.1|2)" <<< "$1" \
                   | tr '\n' ' ' \
-                  | grep -Eo "\d{3}" \
+                  | grep -Eo "[0-9]{3}" \
                   | tr '\n' ' ')
     for status in $statuses;
     do
