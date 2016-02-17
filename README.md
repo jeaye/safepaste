@@ -17,8 +17,8 @@ Learn more about the service
 ## Command-line tool
 
 There is a command line tool for uploading and downloading pastes, written in
-bash, included in the repo. It supports all of the options as the web page and
-performs the client-side encryption using openssl. To install it, use:
+bash, included in the repo. It supports all of the same options as the web page
+and performs the client-side encryption using openssl. To install it, use:
 
 ```bash
 $ wget https://raw.githubusercontent.com/jeaye/safepaste/master/tool/safepaste

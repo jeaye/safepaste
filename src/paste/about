@@ -29,16 +29,23 @@ key as the hash in the URL.
 
 Here's a breakdown of an example link:
 
-https://safepaste.org/99c14048#623e8078679c1d53d141bab759380e2fbc4689c95861971c5d5c2517516b96aa
+https://safepaste.org/f1a8f535#31bcdb56b77528a3c1b540bc460ed07d5b74fcf65eb91733bc4d10884e764caf
 
-Paste ID: 99c14048
-Secret key (hash): 623e8078679c1d53d141bab759380e2fbc4689c95861971c5d5c2517516b96aa
+Paste ID: f1a8f535
+Secret key (hash): 31bcdb56b77528a3c1b540bc460ed07d5b74fcf65eb91733bc4d10884e764caf
 
 The hash section of the URL, after the #, is never sent to the server; it's
 used only by the browser and safepaste takes advantage of that to store the
 secret key. Note, your paste is unreadable to anyone without that secret key.
 As soon as you share the link containing that key, however, anyone who sees it
 can read your paste. Share your links cautiously.
+
+**** Command-line tool ****
+
+There is a command line tool for uploading and downloading pastes, written in
+bash, included in the repo. See the link below.
+
+https://github.com/jeaye/safepaste#command-line-tool
 
 **** Rate limiting ****
 
