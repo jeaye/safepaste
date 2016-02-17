@@ -156,7 +156,8 @@ then
   plain=$($which_base64 --decode <<< "$data" \
             | $which_openssl aes-256-cbc -d -pass pass:"$key")
   log "$plain"
-else
+elif [ $# -eq 0 ];
+then
   login=$($which_curl $curl_constants "$url/api/login")
   check_status "$login"
   token=$($which_grep "X-CSRF-Token:" <<< "$login" \
@@ -183,4 +184,6 @@ else
   id=$($which_tail -1 <<< "$post" | $which_sed 's/.*"id":"([a-f0-9]+)".*/\1/')
   final_url="$url/$id#$key"
   log "$final_url$([ "$expiry" == "burn" ] && log " (burn after reading)")"
+else
+  show_help
 fi
