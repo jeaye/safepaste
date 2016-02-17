@@ -21,6 +21,7 @@ out=${3:-$dir/../paste}
 # $3 => secret key
 function encrypt
 {
+  rm -f "$2"
   openssl aes-256-cbc -pass pass:$3 -in "$1" -out "$2"
   chmod a-w "$2" # Tell the cleanup script to leave this alone
   echo "encrypted paste written to $2"
