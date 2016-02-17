@@ -38,6 +38,18 @@ do
   export which_$p=$(check_existence "$p")
 done
 
+# Tweak flags based on GNU or BSD
+uname=$(uname -s)
+case "$uname" in
+  Darwin|*BSD)
+    export which_sed="$which_sed -E"
+    ;;
+  *)
+    # Assume GNU-compatible
+    export which_sed="$which_sed -r"
+    ;;
+esac
+
 curl_error()
 {
   log "error: $1"
@@ -127,7 +139,8 @@ shift $(expr $OPTIND - 1 )
 
 if [ $# -eq 1 ];
 then
-  groups=$($which_sed 's_\(.\+\)/\(.\+\)/\?\#\(.\+\)_\1\n\2\n\3_' <<< "$1")
+  groups=$($which_sed 's_(.+)/(.+)/?\#(.+)_\1|\2|\3_' <<< "$1" \
+            | $which_tr '|' '\n')
   url=$($which_head -1 <<< "$groups")
   id=$($which_head -2 <<< "$groups" | $which_tail -1)
   key=$($which_tail -1 <<< "$groups")
@@ -136,9 +149,9 @@ then
   check_status "$get"
 
   data=$($which_tail -1 <<< "$get" \
-            | $which_sed 's/.*"data":"\([a-zA-Z0-9\+\/\=]\+\)".*/\1/' \
+            | $which_sed 's/.*"data":"([a-zA-Z0-9\+\/\=]+)".*/\1/' \
             | $which_sed 's_\\__g')
-  burned=$($which_tail -1 <<< "$get" | $which_sed 's/.*"burned":\(true\|false\).*/\1/')
+  burned=$($which_tail -1 <<< "$get" | $which_sed 's/.*"burned":(true|false).*/\1/')
 
   plain=$($which_base64 --decode <<< "$data" \
             | $which_openssl aes-256-cbc -d -pass pass:"$key")
@@ -161,13 +174,13 @@ else
             | $which_base64)
 
   post=$($which_curl $curl_constants \
-          -H "Content-Type: application/json" \
-          -H "Accept: application/json" \
-          -H "$token" \
-          --data "{\"data\":\"$data\",\"expiry\":\"$expiry\"}" \
-          "$url/api/new")
+            -H "Content-Type: application/json" \
+            -H "Accept: application/json" \
+            -H "$token" \
+            --data "{\"data\":\"$data\",\"expiry\":\"$expiry\"}" \
+            "$url/api/new")
   check_status "$post"
-  id=$($which_tail -1 <<< "$post" | $which_sed 's/.*"id":"\([a-f0-9]\+\)".*/\1/')
+  id=$($which_tail -1 <<< "$post" | $which_sed 's/.*"id":"([a-f0-9]+)".*/\1/')
   final_url="$url/$id#$key"
   log "$final_url$([ "$expiry" == "burn" ] && log " (burn after reading)")"
 fi
