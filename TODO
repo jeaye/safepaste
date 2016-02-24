@@ -11,6 +11,8 @@ make paste button more visible when there's a valid paste
 integrity check with hash
   prevent tampering
 
+code signing
+
 continuous
   functional tests
   validation of html and css
