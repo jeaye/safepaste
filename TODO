@@ -11,6 +11,8 @@ make paste button more visible when there's a valid paste
 integrity check with hash
   prevent tampering
 
+load js last to speed up initial render
+
 code signing
 
 continuous
