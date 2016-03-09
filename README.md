@@ -44,4 +44,5 @@ For more information regarding how I use donations, see
 [here](http://jeaye.com/donate/).
 
 ## License
-safepaste is under a strict copyleft license; see the `LICENSE` file.
+safepaste is under a strict copyleft license; see the
+[LICENSE](https://github.com/jeaye/safepaste/blob/master/LICENSE) file.
