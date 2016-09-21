@@ -12,7 +12,7 @@
   "Puts the UI in readonly mode and changes the URL to load the paste in place."
   [path]
   (dom/set-url! path)
-  (dom/update-inputs!)
+  (dom/reset-input!)
   (remote/get!))
 
 (defn fork!
