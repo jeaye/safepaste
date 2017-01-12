@@ -38,7 +38,7 @@ $ safepaste -h
 ```
 
 ## Donate
-Feel free to shoot Bitcoins my way: **1HaMvpDjy7QJBDkcZALJr3s26FxLpv5WtJ**
+Feel free to shoot Bitcoins my way: **124EzSWUedcyU4DcQf9ts2BxxaUb5gPuqH**
 
 For more information regarding how I use donations, see
 [here](http://jeaye.com/donate/).
