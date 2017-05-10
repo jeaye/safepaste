@@ -1,8 +1,8 @@
 (ns safepaste.api
   (:require [safepaste.expiry :as expiry]
             [buddy.core
-             [nonce :as nonce]
-             [codecs :as codecs]]
+             [nonce :as nonce]]
+            [buddy.core.codecs.base64 :as b64]
             [me.raynes.fs :as fs]
             [ring.middleware.anti-forgery :refer [*anti-forgery-token*]]
             [clojure.data.json :as json]
@@ -32,7 +32,7 @@
 (defn random-id
   "Generates a random id which will be the means of accessing a given paste."
   []
-  (codecs/bytes->hex (nonce/random-bytes id-size)))
+  (b64/decode (nonce/random-bytes id-size)))
 
 (defn delete!
   "Deletes a paste and all of its corresponding files. Only used when burning."
@@ -57,7 +57,7 @@
 (defn view [id]
   (let [path (str output-dir id)]
     (if (fs/exists? path)
-      (let [data (codecs/bytes->base64 (slurp-bytes path))
+      (let [data (b64/encode (slurp-bytes path))
             burn (fs/exists? (str path ".burn"))]
         ; If a .burn file exists, we'll delete the paste immediately
         (when burn
@@ -102,7 +102,7 @@
         (when (= expiry "burn")
           (fs/touch (str output-file ".burn")))
 
-        (spit-bytes output-file (codecs/base64->bytes data))
+        (spit-bytes output-file (b64/decode data))
 
         ; Date the paste for its expiration
         (fs/touch output-file (expiry/offset expiry))
