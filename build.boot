@@ -5,7 +5,7 @@
                   [org.clojure/clojurescript "1.9.521"]
 
                   ; Front end
-                  [adzerk/boot-cljs "2.0.0"] ; CLJS compiler
+                  [adzerk/boot-cljs "1.7.228-1"] ; CLJS compiler
                   [cljs-http "0.1.43"] ; Communication with back end
                   [prismatic/dommy "1.1.0"] ; DOM events
 
@@ -21,8 +21,8 @@
                   [bk/ring-gzip "0.2.1"] ; On-the-fly gzipping
 
                   ; HTTP
-                  [ring/ring-core "1.6.0"]
-                  [ring/ring-servlet "1.6.0"]
+                  [ring/ring-core "1.4.0"]
+                  [ring/ring-servlet "1.4.0"]
                   [ring/ring-defaults "0.3.0"]
                   [ring/ring-anti-forgery "1.1.0"]])
 
