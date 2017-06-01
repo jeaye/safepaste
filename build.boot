@@ -1,7 +1,7 @@
 (set-env!
   :source-paths #{"src/clj" "src/cljs" "src/js"}
 
-  :dependencies '[[org.clojure/clojure "1.9.0-alpha16"]
+  :dependencies '[[org.clojure/clojure "1.9.0-alpha17"]
                   [org.clojure/clojurescript "1.9.521"]
 
                   ; Front end
