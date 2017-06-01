@@ -1,30 +1,30 @@
 (set-env!
   :source-paths #{"src/clj" "src/cljs" "src/js"}
 
-  :dependencies '[[org.clojure/clojure "1.9.0-alpha17"]
-                  [org.clojure/clojurescript "1.9.521"]
+  :dependencies '[[org.clojure/clojure "1.8.0"]
+                  [org.clojure/clojurescript "1.7.228"]
 
                   ; Front end
                   [adzerk/boot-cljs "1.7.228-1"] ; CLJS compiler
-                  [cljs-http "0.1.43"] ; Communication with back end
+                  [cljs-http "0.1.39"] ; Communication with back end
                   [prismatic/dommy "1.1.0"] ; DOM events
 
                   ; Back end
-                  [pandeiro/boot-http "0.8.0"] ; HTTP server
-                  [ring/ring-jetty-adapter "1.6.0"] ; HTTP in jar
-                  [compojure "1.6.0"] ; Routing
+                  [pandeiro/boot-http "0.7.2"] ; HTTP server
+                  [ring/ring-jetty-adapter "1.4.0"] ; HTTP in jar
+                  [compojure "1.4.0"] ; Routing
                   [org.clojure/data.json "0.2.6"] ; Reading client json
-                  [buddy/buddy-core "1.2.0"] ; Encryption
-                  [hiccup "2.0.0-alpha1"] ; HTML generation
-                  [garden "1.3.2"] ; CSS generation
+                  [buddy/buddy-core "0.9.0"] ; Encryption
+                  [hiccup "1.0.5"] ; HTML generation
+                  [garden "1.3.1"] ; CSS generation
                   [me.raynes/fs "1.4.6"] ; Filesystem work
-                  [bk/ring-gzip "0.2.1"] ; On-the-fly gzipping
+                  [bk/ring-gzip "0.1.1"] ; On-the-fly gzipping
 
                   ; HTTP
                   [ring/ring-core "1.4.0"]
                   [ring/ring-servlet "1.4.0"]
-                  [ring/ring-defaults "0.3.0"]
-                  [ring/ring-anti-forgery "1.1.0"]])
+                  [ring/ring-defaults "0.1.5"]
+                  [ring/ring-anti-forgery "1.0.0"]])
 
 (def target-dir "target/")
 
