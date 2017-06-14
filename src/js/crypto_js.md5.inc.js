@@ -1,1 +1,1 @@
-../../lib/crypto-js/src/md5.js
+../../lib/crypto-js/md5.js

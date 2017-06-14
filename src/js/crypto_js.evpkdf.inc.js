@@ -1,1 +1,1 @@
-../../lib/crypto-js/src/evpkdf.js
+../../lib/crypto-js/evpkdf.js

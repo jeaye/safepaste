@@ -1,1 +1,1 @@
-../../lib/crypto-js/src/cipher-core.js
+../../lib/crypto-js/cipher-core.js

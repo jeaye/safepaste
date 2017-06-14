@@ -1,1 +1,1 @@
-../../lib/crypto-js/src/aes.js
+../../lib/crypto-js/aes.js

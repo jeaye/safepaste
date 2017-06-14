@@ -1,1 +1,1 @@
-../../lib/crypto-js/src/enc-base64.js
+../../lib/crypto-js/enc-base64.js
