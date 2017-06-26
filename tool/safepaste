@@ -154,7 +154,7 @@ then
   burned=$($which_tail -1 <<< "$get" | $which_sed 's/.*"burned":(true|false).*/\1/')
 
   plain=$($which_base64 --decode <<< "$data" \
-            | $which_openssl aes-256-cbc -d -pass pass:"$key")
+            | $which_openssl aes-256-cbc -md md5 -d -pass pass:"$key")
   log "$plain"
 elif [ $# -eq 0 ];
 then
@@ -168,11 +168,12 @@ then
 
   key=$($which_dd if=/dev/urandom bs=32 count=1 2>/dev/null \
             | $which_hexdump -n 32 -v -e '1/1 "%02x"')
+  key=9142c0d056d94de8b8cdd741bc790b0b33c717f1af1a00ad497039d661d22207
 
   tmp_stdin=$($which_mktemp)
   cat >> "$tmp_stdin"
-  data=$($which_openssl aes-256-cbc -pass pass:"$key" -in "$tmp_stdin" \
-            | $which_base64)
+  data=$($which_openssl aes-256-cbc -md md5 -pass pass:"$key" -in "$tmp_stdin" \
+            | $which_base64 -w 0)
 
   post=$($which_curl $curl_constants \
             -H "Content-Type: application/json" \
