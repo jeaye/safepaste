@@ -88,10 +88,11 @@
                                         safe-key)
                     decrypted-str (.toString decrypted js/CryptoJS.enc.Utf8)]
                 (when (empty? decrypted-str)
-                  (throw (js/Error.)))
+                  (throw (js/Error. reply)))
                 (dommy/set-value! (sel1 :#input) decrypted-str)
                 (if (aget reply-json "burned")
                   (dom/set-status! :viewing-burned)
                   (dom/set-status! :viewing)))
               (catch js/Error e
+                (dommy/set-value! (sel1 :#input) (str e "\n\n" reply))
                 (dom/set-error! :unable-to-decrypt)))))))))
