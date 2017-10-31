@@ -37,12 +37,6 @@ $ safepaste https://safepaste.org/f1a8f535#31bcdb56b77528a3c1b540bc460ed07d5b74f
 $ safepaste -h
 ```
 
-## Donate
-Feel free to shoot Bitcoins my way: **124EzSWUedcyU4DcQf9ts2BxxaUb5gPuqH**
-
-For more information regarding how I use donations, see
-[here](http://jeaye.com/donate/).
-
 ## License
 safepaste is under a strict copyleft license; see the
 [LICENSE](https://github.com/jeaye/safepaste/blob/master/LICENSE) file.
