@@ -78,7 +78,7 @@
       (go
         (let [reply (<! (http/get (str "/api/" id)))]
           (when (not (check-error! reply))
-            ; crytpo-js doesn't always throw, even when things are blatantly
+            ; crypto-js doesn't always throw, even when things are blatantly
             ; wrong. Given the same wrong data, it throws about 10% of the time.
             (try
               (dom/set-status! :decrypting)
