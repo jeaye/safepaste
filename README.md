@@ -24,7 +24,7 @@ and performs the client-side encryption using openssl. To install it, use:
 $ wget https://raw.githubusercontent.com/jeaye/safepaste/master/tool/safepaste
 $ chmod +x ./safepaste
 
-# To paste file (assuming safepate script is within PATH):
+# To paste file (assuming safepaste script is within PATH):
 $ safepaste < my-file
 
 # To paste command output:
