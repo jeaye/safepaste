@@ -160,7 +160,7 @@ elif [ $# -eq 0 ];
 then
   login=$($which_curl $curl_constants "$url/api/login")
   check_status "$login"
-  token=$($which_grep "X-CSRF-Token:" <<< "$login" \
+  token=$($which_grep -i "X-CSRF-Token:" <<< "$login" \
             | $which_head -1 \
             | $which_tr -d '\r')
   max_size=$($which_grep "max-size" <<< "$login" \
