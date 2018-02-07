@@ -1,3 +1,6 @@
 [submodule "lib/crypto-js"]
 	path = lib/crypto-js
 	url = https://github.com/brix/crypto-js.git
+[submodule "lib/cljs-promises"]
+	path = lib/cljs-promises
+	url = https://github.com/pupeno/cljs-promises.git
