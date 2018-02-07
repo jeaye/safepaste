@@ -1,7 +1,13 @@
 (ns safepaste.core
   (:require [safepaste.remote :as remote]
             [safepaste.dom :as dom]
+            [cljs-promises.async]
             [dommy.core :as dommy :refer-macros [sel1]]))
+
+(enable-console-print!)
+(println "WORKING")
+
+(cljs-promises.async/extend-promises-as-pair-channels!)
 
 (def about-paste
   "/14e3c3ce#371864573d2a445868316521cc3cc374413f3eb04978281c964527cdc79a64bb")
