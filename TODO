@@ -1,3 +1,5 @@
+WebCrypto
+
 Compress pastes?
   lz-string (takes 1s for 2MB -- too long)
 
@@ -7,6 +9,8 @@ optional integrity check with hash
 load js last to speed up initial render
 
 code signing
+
+hsts + site security grade
 
 continuous
   functional tests
