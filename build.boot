@@ -1,5 +1,6 @@
 (set-env!
-  :source-paths #{"src/clj" "src/cljs" "src/js"}
+  :source-paths #{"src/clj" "src/cljs" "src/js"
+                  "lib/cljs-promises/src"}
 
   :dependencies '[[org.clojure/clojure "1.8.0"]
                   [org.clojure/clojurescript "1.7.228"]
