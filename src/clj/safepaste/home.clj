@@ -12,7 +12,7 @@
        (when (not-empty id)
          [:meta {:name "robots" :content "noindex"}])
        [:style (css/main)]
-       (page/include-js "/js/main.min.js")
+       (page/include-js "/js/compiled/safepaste.js")
        [:title "safepaste"]]
       [:body
        [:div.header

@@ -1,4 +1,4 @@
-(ns safepaste.dom
+(ns com.jeaye.safepaste.dom
   (:require [dommy.core :as dommy :refer-macros [sel1]]))
 
 (def title js/window.title)

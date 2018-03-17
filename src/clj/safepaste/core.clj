@@ -7,7 +7,6 @@
             [ring.middleware
              [defaults :refer [wrap-defaults secure-site-defaults]]
              [gzip :as gzip]]
-            [ring.adapter.jetty :as jetty]
             [compojure
              [core :refer :all]
              [route :as route]]
@@ -23,7 +22,7 @@
   (GET (str "/:id" id-regex) [id] (partial home/render id))
   (GET (str "/api/:id" id-regex) [id] (api/view id))
   (POST "/api/new" {body :body ip :remote-addr} (api/paste! body ip))
-  (route/resources "/")
+  (route/files "resources/public/")
   (route/not-found (partial home/render nil)))
 
 (def app (-> app-routes
@@ -36,6 +35,3 @@
                    (assoc-in [:security :hsts] false)
                    (assoc-in [:security :ssl-redirect] false)))
              (gzip/wrap-gzip)))
-
-(defn -main []
-  (jetty/run-jetty app {:port 3000}))

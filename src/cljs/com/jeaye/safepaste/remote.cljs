@@ -1,10 +1,9 @@
-(ns safepaste.remote
-  (:require [safepaste.dom :as dom]
+(ns com.jeaye.safepaste.remote
+  (:require [com.jeaye.safepaste.dom :as dom]
             [cljs-http.client :as http]
             [cljs.core.async :refer [<!]]
             [dommy.core :as dommy :refer-macros [sel1]]
-            [cljs-promises.async :refer-macros [<?]]
-            [crypto-js.aes])
+            [cljs-promises.async :refer-macros [<?]])
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
 ; Sane default; provided by the server during login

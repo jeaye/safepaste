@@ -1,6 +1,6 @@
-(ns safepaste.core
-  (:require [safepaste.remote :as remote]
-            [safepaste.dom :as dom]
+(ns com.jeaye.safepaste.core
+  (:require [com.jeaye.safepaste.remote :as remote]
+            [com.jeaye.safepaste.dom :as dom]
             [cljs-promises.async]
             [dommy.core :as dommy :refer-macros [sel1]]))
 
