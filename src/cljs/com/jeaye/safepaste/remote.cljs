@@ -92,8 +92,9 @@
                     #_:iv #_(.getRandomValues js/window.crypto
                                           (js/Uint8Array. 16))}
                 aes-key
-                (js/Uint8Array. data))
+                (.encode (js/TextEncoder.) data))
       (.then (fn [encrypted]
+               (println "my encrypted raw" encrypted)
                (println "my encrypted" (js/Uint8Array. encrypted))
                encrypted))
       (.catch (fn [error]
@@ -120,10 +121,15 @@
                     :iv (.from js/Uint8Array (range 16))
                     }
                 aes-key
-                (js/Uint8Array. data))
+                data
+                )
       (.then (fn [decrypted]
+               (println "my decrypted length" (.-byteLength decrypted))
+               (println "my decrypted raw" decrypted)
                (println "my decrypted" (js/Uint8Array. decrypted))
-               encrypted))
+               (println "my test" (.apply js/String.fromCharCode nil (js/Uint8Array. decrypted)))
+               (let [decoder (js/TextDecoder. "utf-8")]
+                 (.decode decoder (js/Uint8Array. decrypted)))))
       (.catch (fn [error]
                (println "decryption error" error)))))
 
@@ -151,7 +157,7 @@
                 decrypted (<? (decrypt (<? key-promise) encrypted))]
             (println "my encoded" (encode encrypted))
             (println "my decrypted" decrypted)))
-        (let [safe-key (.toString (.random js/CryptoJS.lib.WordArray 32))
+        #_(let [safe-key (.toString (.random js/CryptoJS.lib.WordArray 32))
               encrypted (.encrypt js/CryptoJS.AES (str data "\n") safe-key)
               encoded (.toString encrypted)]
           (println "encoded" encoded)
@@ -186,7 +192,7 @@
             ; wrong. Given the same wrong data, it throws about 10% of the time.
             (try
               (dom/set-status! :decrypting)
-              (let [reply-json (.parse js/JSON (:body reply))
+              #_(let [reply-json (.parse js/JSON (:body reply))
                     decrypted (.decrypt js/CryptoJS.AES
                                         (aget reply-json "data")
                                         safe-key)
