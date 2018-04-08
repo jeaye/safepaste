@@ -8,7 +8,7 @@
 
 ; Sane default; provided by the server during login
 (def max-paste-bytes (atom (* 2 1024 1024)))
-(def key-size 64)
+(def key-size 44) ;  TODO: Right?
 
 ; Unique session token required for pasting
 (def csrf-token (atom ""))
@@ -58,6 +58,7 @@
                   "raw"
                   key-data)
       (.then (fn [exported-key]
+               (println "my key length" (.-byteLength exported-key))
                (println "my exported key" exported-key)
                exported-key))
       (.catch (fn [error]
@@ -110,12 +111,21 @@
       (.catch (fn [error]
                (println "decryption error" error)))))
 
-(defn encode [encrypted]
-  (-> (js/Uint8Array. encrypted)
-      (.reduce (fn [acc e]
+(defn encode [data]
+  (-> data
+      #_(js/Uint8Array. data)
+      #_(.reduce (fn [acc e]
                  (+ acc (.fromCharCode js/String e)))
                "")
       js/btoa))
+
+(defn decode [encoded]
+  (-> encoded
+      #_(js/Uint8Array. encoded)
+      #_(.reduce (fn [acc e]
+                 (+ acc (.fromCharCode js/String e)))
+               "")
+      js/atob))
 
 (defn paste! [e]
   (let [data (dommy/value (sel1 :#input))
@@ -126,28 +136,20 @@
         (dom/set-status! :encrypting)
         (go
           (let [key-promise (generate-key!)
-                exported-key (export-key (<? key-promise))
-                imported-key (<? (import-key (<? exported-key)))
-                encrypted (<? (encrypt! imported-key #_(<? key-promise) (str data "\n")))
-                decrypted (<? (decrypt imported-key #_(<? key-promise) encrypted))]
-            (println "encoded (exported) key" (encode (<? exported-key)))
-            (println "my encoded" (encode encrypted))
-            (println "my decrypted" decrypted)))
-        #_(let [safe-key (.toString (.random js/CryptoJS.lib.WordArray 32))
-              encrypted (.encrypt js/CryptoJS.AES (str data "\n") safe-key)
-              encoded (.toString encrypted)]
-          (println "encoded" encoded)
-          (dom/set-status! :uploading)
+                exported-key (<? (export-key (<? key-promise)))
+                encoded-key (encode exported-key)
+                encrypted (<? (encrypt! (<? key-promise) (str data "\n")))
+                encoded (encode encrypted)]
+            (println "encoded" encoded)
 
-          ; This is an async post; we won't block.
-          (go
+            (dom/set-status! :uploading)
             (let [reply (<! (http/post "/api/new"
                                        {:json-params {:data encoded
                                                       :expiry expiry}
                                         :headers {"X-CSRF-Token" @csrf-token}}))]
               (when (not (check-error! reply))
                 (let [reply-json (.parse js/JSON (:body reply))]
-                  (dom/set-url! (str "/" (aget reply-json "id") "#" safe-key))
+                  (dom/set-url! (str "/" (aget reply-json "id") "#" encoded-key))
                   (dom/update-inputs!)
                   (if (= expiry "burn")
                     (dom/set-status! :uploaded-burn)
@@ -159,23 +161,17 @@
         safe-key (.substring js/window.location.hash 1)]
     (if (not= key-size (count safe-key))
       (dom/set-error! :invalid-key)
-
-      ; This is an async get; we won't block.
       (go
         (let [reply (<! (http/get (str "/api/" id)))]
           (when (not (check-error! reply))
-            ; crypto-js doesn't always throw, even when things are blatantly
-            ; wrong. Given the same wrong data, it throws about 10% of the time.
             (try
               (dom/set-status! :decrypting)
-              #_(let [reply-json (.parse js/JSON (:body reply))
-                    decrypted (.decrypt js/CryptoJS.AES
-                                        (aget reply-json "data")
-                                        safe-key)
-                    decrypted-str (.toString decrypted js/CryptoJS.enc.Utf8)]
-                (when (empty? decrypted-str)
+              (let [reply-json (.parse js/JSON (:body reply))
+                    imported-key (<? (import-key (js/Uint8Array. (decode safe-key))))
+                    decrypted (<? (decrypt imported-key (aget reply-json "data")))]
+                (when (empty? decrypted)
                   (throw (js/Error. reply)))
-                (dommy/set-value! (sel1 :#input) decrypted-str)
+                (dommy/set-value! (sel1 :#input) decrypted)
                 (if (aget reply-json "burned")
                   (dom/set-status! :viewing-burned)
                   (dom/set-status! :viewing)))
