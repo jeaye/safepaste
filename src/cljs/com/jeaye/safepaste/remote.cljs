@@ -44,13 +44,38 @@
 (defn generate-key! []
    (-> (.generateKey js/window.crypto.subtle
                  #js{:name "AES-CBC" :length 256}
-                 false ; Not extractable
+                 true ; Extractable
                  ["encrypt" "decrypt"])
        (.then (fn [generated-key]
                 (println "my generated key" generated-key)
                 generated-key))
        (.catch (fn [error]
                  (println "error" error)))))
+
+(defn export-key [key-data]
+  (println "exporting key" key-data)
+  (-> (.exportKey js/window.crypto.subtle
+                  "raw"
+                  key-data)
+      (.then (fn [exported-key]
+               (println "my exported key" exported-key)
+               exported-key))
+      (.catch (fn [error]
+                (println "key export error" error)))))
+
+(defn import-key [raw-key]
+  (println "importing key" raw-key)
+  (-> (.importKey js/window.crypto.subtle
+                  "raw"
+                  raw-key
+                  #js{:name "AES-CBC"}
+                  true ; Extractable
+                  ["encrypt" "decrypt"])
+      (.then (fn [imported-key]
+               (println "my imported key" imported-key)
+               imported-key))
+      (.catch (fn [error]
+                (println "key import error" error)))))
 
 (defn encrypt! [aes-key data]
   (-> (.encrypt js/window.crypto.subtle
@@ -86,10 +111,6 @@
                (println "decryption error" error)))))
 
 (defn encode [encrypted]
-;var base64 = btoa(
-;  new Uint8Array(arrayBuffer)
-;    .reduce((data, byte) => data + String.fromCharCode(byte), '')
-;)
   (-> (js/Uint8Array. encrypted)
       (.reduce (fn [acc e]
                  (+ acc (.fromCharCode js/String e)))
@@ -105,9 +126,11 @@
         (dom/set-status! :encrypting)
         (go
           (let [key-promise (generate-key!)
-                encrypted (<? (encrypt! (<? key-promise) (str data "\n")))
-                decrypted (<? (decrypt (<? key-promise) encrypted))]
-            (println "encoded key" (encode (<? key-promise)))
+                exported-key (export-key (<? key-promise))
+                imported-key (<? (import-key (<? exported-key)))
+                encrypted (<? (encrypt! imported-key #_(<? key-promise) (str data "\n")))
+                decrypted (<? (decrypt imported-key #_(<? key-promise) encrypted))]
+            (println "encoded (exported) key" (encode (<? exported-key)))
             (println "my encoded" (encode encrypted))
             (println "my decrypted" decrypted)))
         #_(let [safe-key (.toString (.random js/CryptoJS.lib.WordArray 32))
