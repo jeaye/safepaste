@@ -1,1 +1,0 @@
-../../lib/crypto-js/core.js
