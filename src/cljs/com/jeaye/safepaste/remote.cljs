@@ -48,7 +48,6 @@
                  true ; Extractable
                  ["encrypt" "decrypt"])
        (.then (fn [generated-key]
-                (println "my generated key" generated-key)
                 generated-key))
        (.catch (fn [error]
                  (println "error" error)))))
@@ -59,8 +58,6 @@
                   "raw"
                   key-data)
       (.then (fn [exported-key]
-               (println "my key length" (.-byteLength exported-key))
-               (println "my exported key" exported-key)
                exported-key))
       (.catch (fn [error]
                 (println "key export error" error)))))
@@ -74,7 +71,6 @@
                   true ; Extractable
                   ["encrypt" "decrypt"])
       (.then (fn [imported-key]
-               (println "my imported key" imported-key)
                imported-key))
       (.catch (fn [error]
                 (println "key import error" error)))))
@@ -89,8 +85,6 @@
                 aes-key
                 (.encode (js/TextEncoder.) data))
       (.then (fn [encrypted]
-               (println "my encrypted raw" encrypted)
-               (println "my encrypted" (js/Uint8Array. encrypted))
                encrypted))
       (.catch (fn [error]
                (println "encryption error" error)))))
@@ -103,31 +97,16 @@
                 aes-key
                 data)
       (.then (fn [decrypted]
-               (println "my decrypted length" (.-byteLength decrypted))
-               (println "my decrypted raw" decrypted)
-               (println "my decrypted" (js/Uint8Array. decrypted))
-               (println "my test" (.apply js/String.fromCharCode nil (js/Uint8Array. decrypted)))
                (let [decoder (js/TextDecoder. "utf-8")]
                  (.decode decoder (js/Uint8Array. decrypted)))))
       (.catch (fn [error]
                (println "decryption error" error)))))
 
 (defn encode [data]
-  (b64/encodeByteArray data true)
-  ;(js/console.log "encoder" (.decode (js/TextDecoder. "utf-8") data))
-  #_(-> ;(.decode (js/TextDecoder. "utf-8") data)
-      (js/Uint8Array. data)
-      (.reduce (fn [acc e]
-                 (+ acc (.fromCharCode js/String e)))
-               "")
-      js/btoa))
+  (b64/encodeByteArray data true))
 
 (defn decode [encoded]
-  (b64/decodeStringToUint8Array encoded true)
-  #_(->> encoded
-       js/atob
-       js/Uint8Array.
-       #_(.decode (js/TextDecoder. "utf-8"))))
+  (b64/decodeStringToUint8Array encoded true))
 
 (defn paste! [e]
   (let [data (dommy/value (sel1 :#input))
@@ -139,20 +118,9 @@
         (go
           (let [key-promise (generate-key!)
                 exported-key (<? (export-key (<? key-promise)))
-                _ (js/console.log "exported key" exported-key)
                 encoded-key (encode (js/Uint8Array. exported-key))
-                _ (js/console.log "encoded key" encoded-key)
                 encrypted (<? (encrypt! (<? key-promise) (str data "\n")))
                 encoded (encode (js/Uint8Array. encrypted))]
-            (js/console.log "encoded" encoded)
-            (js/console.log "same?" (= encoded-key encoded))
-
-            (let [decoded-key (decode encoded-key)
-                  _ (js/console.log "decoded key" decoded-key)
-                  imported-key (<? (import-key decoded-key))
-                  ;imported-key (<? (import-key exported-key))
-                  decrypted (<? (decrypt imported-key encrypted))]
-              (js/console.log "decrypted" decrypted))
 
             (dom/set-status! :uploading)
             (let [reply (<! (http/post "/api/new"
@@ -179,11 +147,8 @@
             (try
               (dom/set-status! :decrypting)
               (let [reply-json (.parse js/JSON (:body reply))
-                    _ (js/console.log "safe-key" safe-key)
                     imported-key (<? (import-key (decode safe-key)))
-                    _ (js/console.log "data" (aget reply-json "data"))
                     encrypted (decode (aget reply-json "data"))
-                    _ (js/console.log "encrypted" encrypted)
                     decrypted (<? (decrypt imported-key encrypted))]
                 (when (empty? decrypted)
                   (throw (js/Error. reply)))
