@@ -1,5 +1,6 @@
 (ns com.jeaye.safepaste.remote
   (:require [com.jeaye.safepaste.dom :as dom]
+            [goog.crypt.base64 :as b64]
             [cljs-http.client :as http]
             [cljs.core.async :refer [<!]]
             [dommy.core :as dommy :refer-macros [sel1]]
@@ -112,20 +113,21 @@
                (println "decryption error" error)))))
 
 (defn encode [data]
-  (-> data
-      #_(js/Uint8Array. data)
-      #_(.reduce (fn [acc e]
+  (b64/encodeByteArray data true)
+  ;(js/console.log "encoder" (.decode (js/TextDecoder. "utf-8") data))
+  #_(-> ;(.decode (js/TextDecoder. "utf-8") data)
+      (js/Uint8Array. data)
+      (.reduce (fn [acc e]
                  (+ acc (.fromCharCode js/String e)))
                "")
       js/btoa))
 
 (defn decode [encoded]
-  (-> encoded
-      #_(js/Uint8Array. encoded)
-      #_(.reduce (fn [acc e]
-                 (+ acc (.fromCharCode js/String e)))
-               "")
-      js/atob))
+  (b64/decodeStringToUint8Array encoded true)
+  #_(->> encoded
+       js/atob
+       js/Uint8Array.
+       #_(.decode (js/TextDecoder. "utf-8"))))
 
 (defn paste! [e]
   (let [data (dommy/value (sel1 :#input))
@@ -137,10 +139,20 @@
         (go
           (let [key-promise (generate-key!)
                 exported-key (<? (export-key (<? key-promise)))
-                encoded-key (encode exported-key)
+                _ (js/console.log "exported key" exported-key)
+                encoded-key (encode (js/Uint8Array. exported-key))
+                _ (js/console.log "encoded key" encoded-key)
                 encrypted (<? (encrypt! (<? key-promise) (str data "\n")))
-                encoded (encode encrypted)]
-            (println "encoded" encoded)
+                encoded (encode (js/Uint8Array. encrypted))]
+            (js/console.log "encoded" encoded)
+            (js/console.log "same?" (= encoded-key encoded))
+
+            (let [decoded-key (decode encoded-key)
+                  _ (js/console.log "decoded key" decoded-key)
+                  imported-key (<? (import-key decoded-key))
+                  ;imported-key (<? (import-key exported-key))
+                  decrypted (<? (decrypt imported-key encrypted))]
+              (js/console.log "decrypted" decrypted))
 
             (dom/set-status! :uploading)
             (let [reply (<! (http/post "/api/new"
@@ -167,8 +179,12 @@
             (try
               (dom/set-status! :decrypting)
               (let [reply-json (.parse js/JSON (:body reply))
-                    imported-key (<? (import-key (js/Uint8Array. (decode safe-key))))
-                    decrypted (<? (decrypt imported-key (aget reply-json "data")))]
+                    _ (js/console.log "safe-key" safe-key)
+                    imported-key (<? (import-key (decode safe-key)))
+                    _ (js/console.log "data" (aget reply-json "data"))
+                    encrypted (decode (aget reply-json "data"))
+                    _ (js/console.log "encrypted" encrypted)
+                    decrypted (<? (decrypt imported-key encrypted))]
                 (when (empty? decrypted)
                   (throw (js/Error. reply)))
                 (dommy/set-value! (sel1 :#input) decrypted)
