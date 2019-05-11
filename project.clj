@@ -6,33 +6,33 @@
 
   :min-lein-version "2.7.1"
 
-  :dependencies [[org.clojure/clojure "1.9.0"]
-                 [org.clojure/clojurescript "1.10.191"]
-                 [org.clojure/core.async  "0.4.474"]
+  :dependencies [[org.clojure/clojure "1.10.0"]
+                 [org.clojure/clojurescript "1.10.520"]
+                 [org.clojure/core.async  "0.4.490"]
 
                  ; Front end
-                 [cljs-http "0.1.44"] ; Communication with back end
+                 [cljs-http "0.1.46"] ; Communication with back end
                  [prismatic/dommy "1.1.0"] ; DOM events
 
                  ; Back end
-                 [ring/ring-jetty-adapter "1.6.3"] ; HTTP in jar
-                 [compojure "1.6.0"] ; Routing
+                 [ring/ring-jetty-adapter "1.7.1"] ; HTTP in jar
+                 [compojure "1.6.1"] ; Routing
                  [org.clojure/data.json "0.2.6"] ; Reading client json
                  [buddy/buddy-core "0.9.0"] ; Encryption
                  [hiccup "1.0.5"] ; HTML generation
-                 [garden "1.3.4"] ; CSS generation
+                 [garden "1.3.9"] ; CSS generation
                  [me.raynes/fs "1.4.6"] ; Filesystem work
                  [bk/ring-gzip "0.3.0"] ; On-the-fly gzipping
 
                  ; HTTP
-                 [ring/ring-core "1.6.3"]
-                 [ring/ring-defaults "0.3.1"]
-                 [ring/ring-jetty-adapter "1.6.3"]
-                 [ring/ring-anti-forgery "1.2.0"]]
+                 [ring/ring-core "1.7.1"]
+                 [ring/ring-defaults "0.3.2"]
+                 [ring/ring-jetty-adapter "1.7.1"]
+                 [ring/ring-anti-forgery "1.3.0"]]
 
-  :plugins [[lein-figwheel "0.5.15"]
+  :plugins [[lein-figwheel "0.5.18"]
             [lein-cljsbuild "1.1.7" :exclusions [org.clojure/clojure]]
-            [lein-ring "0.12.3" :exclusions [org.clojure/clojure]]]
+            [lein-ring "0.12.5" :exclusions [org.clojure/clojure]]]
 
   :source-paths ["src/clj/"]
 
@@ -75,8 +75,8 @@
 
              :css-dirs ["resources/public/css"]}
 
-  :profiles {:dev {:dependencies [[binaryage/devtools "0.9.9"]
-                                  [figwheel-sidecar "0.5.15"]
+  :profiles {:dev {:dependencies [[binaryage/devtools "0.9.10"]
+                                  [figwheel-sidecar "0.5.18"]
                                   [com.cemerick/piggieback "0.2.2"]]
                    :source-paths ["src/cljs/" "dev"]
                    :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
