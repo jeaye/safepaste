@@ -38,9 +38,9 @@
   (go
     (let [reply (<! (http/get "/api/login"))
           reply-json (.parse js/JSON (:body reply))]
-      (when (not (check-error! reply))
-        (swap! csrf-token (fn [_] (get (:headers reply) "x-csrf-token")))
-        (swap! max-paste-bytes (fn [_] (aget reply-json "max_size")))))))
+      (when-not (check-error! reply)
+        (reset! csrf-token (get (:headers reply) "x-csrf-token"))
+        (reset! max-paste-bytes (aget reply-json "max_size"))))))
 
 (defn generate-key! []
    (-> (.generateKey js/window.crypto.subtle
@@ -92,8 +92,7 @@
 (defn decrypt [aes-key data]
   (-> (.decrypt js/window.crypto.subtle
                 #js{:name "AES-CBC"
-                    :iv (.from js/Uint8Array (range 16))
-                    }
+                    :iv (.from js/Uint8Array (range 16))}
                 aes-key
                 data)
       (.then (fn [decrypted]

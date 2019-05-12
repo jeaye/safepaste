@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+lein clean
+lein ring uberjar
+lein with-profile prod cljsbuild once
+rm -rf resources/public/js/out

@@ -32,6 +32,7 @@
                    (assoc :session {})
                    (assoc :proxy true)
                    (assoc-in [:static :resources] "/")
+                   ; TODO
                    (assoc-in [:security :hsts] false)
                    (assoc-in [:security :ssl-redirect] false)))
              (gzip/wrap-gzip)))

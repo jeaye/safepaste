@@ -12,7 +12,7 @@
        (when (not-empty id)
          [:meta {:name "robots" :content "noindex"}])
        [:style (css/main)]
-       (page/include-js "/js/compiled/safepaste.js")
+       (page/include-js "/js/safepaste.js")
        [:title "safepaste"]]
       [:body
        [:div.header
@@ -29,7 +29,7 @@
                      {:selected "selected"}))
              (str "Expires after 1 " o)])]]
         [:nav
-         (for [a ["new" "fork" "about" "donate" "paste"]]
+         (for [a ["new" "fork" #_"about" "paste"]]
            [:a {:id a} a])]]
        [:div.input
         [:textarea#input {:placeholder placeholder
