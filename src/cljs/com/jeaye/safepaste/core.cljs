@@ -9,7 +9,7 @@
 (cljs-promises.async/extend-promises-as-pair-channels!)
 
 (def about-paste
-  "/1a89ff06#rB9s3jsXA7rdd_SiSWO0JTSlD7wF3qlTFlkWJkeFTX8.")
+  "/14e3c3ce#371864573d2a445868316521cc3cc374413f3eb04978281c964527cdc79a64bb")
 
 (defn view-paste!
   "Puts the UI in readonly mode and changes the URL to load the paste in place."
@@ -34,7 +34,7 @@
     (dom/reset-status!))
   (dommy/listen! (sel1 :#new) :click dom/reset-page!)
   (dommy/listen! (sel1 :#fork) :click fork!)
-  ;(dommy/listen! (sel1 :#about) :click (fn [_] (view-paste! about-paste)))
+  (dommy/listen! (sel1 :#about) :click (fn [_] (view-paste! about-paste)))
   (dommy/listen! (sel1 :#paste) :click remote/paste!))
 
 (aset js/window "onload" onload)
