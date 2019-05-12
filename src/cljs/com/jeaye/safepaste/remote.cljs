@@ -53,7 +53,7 @@
                  (println "error" error)))))
 
 (defn export-key [key-data]
-  (println "exporting key" key-data)
+  ;(println "exporting key" key-data)
   (-> (.exportKey js/window.crypto.subtle
                   "raw"
                   key-data)

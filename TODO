@@ -1,4 +1,4 @@
-WebCrypto
+Change commandline tools to use headless browser for encryption
 
 Compress pastes?
   lz-string (takes 1s for 2MB -- too long)

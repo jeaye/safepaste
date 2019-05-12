@@ -22,7 +22,7 @@ out=${3:-$dir/../paste}
 function encrypt
 {
   rm -f "$2"
-  openssl aes-256-cbc -pass pass:$3 -in "$1" -out "$2"
+  openssl aes-256-cbc -pass pass:"$3" -in "$1" -out "$2"
   chmod a-w "$2" # Tell the cleanup script to leave this alone
   echo "encrypted paste written to $2"
 }
@@ -31,7 +31,7 @@ case "$paste" in
   'about')
     encrypt "$in/$paste" \
             "$out/14e3c3ce" \
-            "371864573d2a445868316521cc3cc374413f3eb04978281c964527cdc79a64bb"
+            "j57yDcJIVkDgsoz6bP2oxT9PWUjz2xaiAhnoGQssz1Y."
     ;;
   *)
     usage
